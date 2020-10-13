@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="Codeforces Round #355 (Div. 2) D"/><meta name="keywords" content="codeforces, Reku" /><link rel="alternate" href="/default" title="Reku" ><link rel="shortcut icon" type="image/x-icon" href="/reku.ico?v=2.11.0" />
+<link rel="canonical" href="https://reku1997.gitee.io/2016/06/03/codeforces-round-355-div-2-d/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "MWLzM550UOu69h3dgvbbLSsF-gzGzoHsz",
+      appKey: "gkKnwm9FK0cu3ysJbcggsCDz"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"MWLzM550UOu69h3dgvbbLSsF-gzGzoHsz","app_key":"gkKnwm9FK0cu3ysJbcggsCDz"},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>Codeforces Round #355 (Div. 2) D - Reku</title>
+  <meta name="generator" content="Hexo 5.2.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Reku</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Reku</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">Codeforces Round #355 (Div. 2) D
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-06-03
+        </span><span class="post-category">
+            <a href="/categories/acm/">acm</a>
+            </span>
+        <span class="post-visits"
+             data-url="/2016/06/03/codeforces-round-355-div-2-d/"
+             data-title="Codeforces Round #355 (Div. 2) D">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><p><a target="_blank" rel="noopener" href="http://codeforces.com/problemset/problem/677/D">http://codeforces.com/problemset/problem/677/D</a> </p>
+<a id="more"></a>
+<p>这题比赛的时候，我感觉是一个分层的最小曼哈顿生成树，或者是用最小曼哈顿生成树的思想，四个方向扫一扫，再用树状数组搞一搞… 然而事实上是我根本不会写最小曼哈顿生成树…于是我上网找了个模板，调了一个多小时也没调出来… 确实有人写了这个做法，有空的时候补一补吧…先mark一下…<br>然而这个题因为数据范围比较小，所以有一个神秘的分类讨论做法 这道题一个非常直观的做法就是，从一个颜色直接枚举转移到下一个颜色，然而这样的话，如果一个图一半颜色是1，另一半颜色是2，转移的循环就是45000*45000，时间显然不够…<br>还有一个比较直观的做法就是从一个颜色转移到下一个颜色，做一个spfa，这道题spfa的时间复杂度大概是O(n*m)？，如果颜色的数目为90000的时候，时间又不够了… 那就把这两个做法结合起来！<br>如果cnt[颜色1]*cnt[颜色2]&lt;=n*m的话，就直接进行转移 如果cnt[颜色1]*cnt[颜色2]&gt;n*m的话，就做一个spfa 这样似乎可以数学证明，整个时间复杂度是O(n*m*sqrt(n*m))<br>当然证明只是有人在评论区里面提了一句，我也没有看懂orz 不过这题分类的思想确实值得借鉴</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> e[<span class="number">310</span>][<span class="number">310</span>]=&#123;&#125;;</span><br><span class="line"><span class="keyword">int</span> n,m,p;</span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="built_in">pair</span>&lt;<span class="keyword">int</span>,<span class="keyword">int</span>&gt;&gt; q[<span class="number">90010</span>];</span><br><span class="line"><span class="keyword">int</span> u[<span class="number">310</span>][<span class="number">310</span>]=&#123;&#125;;</span><br><span class="line"><span class="keyword">int</span> d[<span class="number">310</span>][<span class="number">310</span>]=&#123;&#125;;</span><br><span class="line"><span class="keyword">bool</span> v[<span class="number">310</span>][<span class="number">310</span>]=&#123;&#125;;</span><br><span class="line"><span class="keyword">int</span> c[<span class="number">4</span>][<span class="number">2</span>]=&#123;&#123;<span class="number">1</span>,<span class="number">0</span>&#125;,&#123;<span class="number">0</span>,<span class="number">1</span>&#125;,&#123;<span class="number">-1</span>,<span class="number">0</span>&#125;,&#123;<span class="number">0</span>,<span class="number">-1</span>&#125;&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d%d%d&quot;</span>,&amp;n,&amp;m,&amp;p);</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=m;j++)</span><br><span class="line">		&#123;</span><br><span class="line">			u[i][j]=<span class="number">2147483600</span>;</span><br><span class="line">			<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;e[i][j]);</span><br><span class="line">			q[e[i][j]].push_back(<span class="built_in">make_pair</span>(i,j));</span><br><span class="line">			<span class="keyword">if</span>(e[i][j]==<span class="number">1</span>) u[i][j]=i+j<span class="number">-2</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;p;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(q[i].size()*q[i+<span class="number">1</span>].size()&lt;=n*m)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;q[i].size();j++)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">0</span>;k&lt;q[i+<span class="number">1</span>].size();k++)</span><br><span class="line">				&#123;</span><br><span class="line">					u[q[i+<span class="number">1</span>][k].first][q[i+<span class="number">1</span>][k].second]=min(u[q[i+<span class="number">1</span>][k].first][q[i+<span class="number">1</span>][k].second],u[q[i][j].first][q[i][j].second]+<span class="built_in">abs</span>(q[i][j].first-q[i+<span class="number">1</span>][k].first)+<span class="built_in">abs</span>(q[i][j].second-q[i+<span class="number">1</span>][k].second));</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">queue</span>&lt;<span class="built_in">pair</span>&lt;<span class="keyword">int</span>,<span class="keyword">int</span>&gt;&gt; o;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=n;j++)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">1</span>;k&lt;=m;k++)</span><br><span class="line">				&#123;</span><br><span class="line">					d[j][k]=<span class="number">2147483600</span>;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;q[i].size();j++)</span><br><span class="line">			&#123;</span><br><span class="line">				d[q[i][j].first][q[i][j].second]=u[q[i][j].first][q[i][j].second];</span><br><span class="line">				v[q[i][j].first][q[i][j].second]=<span class="number">1</span>;</span><br><span class="line">				o.push(q[i][j]);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">while</span>(!o.empty())</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">int</span> x,y,a,b;</span><br><span class="line">				x=o.front().first;</span><br><span class="line">				y=o.front().second;</span><br><span class="line">				o.pop();</span><br><span class="line">				v[x][y]=<span class="number">0</span>;</span><br><span class="line">				<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;<span class="number">4</span>;j++)</span><br><span class="line">				&#123;</span><br><span class="line">					a=x+c[j][<span class="number">0</span>];</span><br><span class="line">					b=y+c[j][<span class="number">1</span>];</span><br><span class="line">					<span class="keyword">if</span>(a&gt;=<span class="number">1</span>&amp;&amp;a&lt;=n&amp;&amp;b&gt;=<span class="number">1</span>&amp;&amp;b&lt;=m)</span><br><span class="line">					&#123;</span><br><span class="line">						<span class="keyword">if</span>(d[a][b]&gt;d[x][y]+<span class="number">1</span>)</span><br><span class="line">						&#123;</span><br><span class="line">							d[a][b]=d[x][y]+<span class="number">1</span>;</span><br><span class="line">							<span class="keyword">if</span>(v[a][b]==<span class="number">0</span>)</span><br><span class="line">							&#123;</span><br><span class="line">								v[a][b]=<span class="number">1</span>;</span><br><span class="line">								o.push(<span class="built_in">make_pair</span>(a,b));</span><br><span class="line">							&#125;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;q[i+<span class="number">1</span>].size();j++)</span><br><span class="line">			&#123;</span><br><span class="line">				u[q[i+<span class="number">1</span>][j].first][q[i+<span class="number">1</span>][j].second]=d[q[i+<span class="number">1</span>][j].first][q[i+<span class="number">1</span>][j].second];</span><br><span class="line">				<span class="comment">//cout&lt;&lt;q[i+1][j].first&lt;&lt;&quot; &quot;&lt;&lt;q[i+1][j].second&lt;&lt;&quot; &quot;&lt;&lt;u[q[i+1][j].first][q[i+1][j].second]&lt;&lt;endl;</span></span><br><span class="line">			&#125;</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> ans=<span class="number">2147483600</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;q[p].size();i++)</span><br><span class="line">	&#123;</span><br><span class="line">		ans=min(ans,u[q[p][i].first][q[p][i].second]);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">cout</span>&lt;&lt;ans;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://reku1997.gitee.io">Reku</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://reku1997.gitee.io/2016/06/03/codeforces-round-355-div-2-d/">https://reku1997.gitee.io/2016/06/03/codeforces-round-355-div-2-d/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/codeforces/">codeforces</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2016/06/03/codeforces-div-2-d-46-50/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Codeforces Div 2 D 天梯 46——50</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2016/05/31/codeforces-div-2-d-41-45/">
+        <span class="next-text nav-default">Codeforces Div 2 D 天梯 41——45</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"><div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:906799571@qq.com" class="iconfont icon-email" title="email"></a>
+        <a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker" class="iconfont icon-github" title="github"></a>
+        <a target="_blank" rel="noopener" href="https://www.zhihu.com/people/reku1997" class="iconfont icon-zhihu" title="zhihu"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2016 - 2020<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Reku</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://reku1997.gitee.io/2016/06/03/codeforces-round-355-div-2-d/';
+        this.page.identifier = '2016/06/03/codeforces-round-355-div-2-d/';
+        this.page.title = 'Codeforces Round #355 (Div. 2) D';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//reku.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+</body>
+</html>

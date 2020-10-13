@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="Codeforces Div 2 C 天梯  1——5"/><meta name="keywords" content="acm, codeforces, 贪心, 动态规划, Reku" /><link rel="alternate" href="/default" title="Reku" ><link rel="shortcut icon" type="image/x-icon" href="/reku.ico?v=2.11.0" />
+<link rel="canonical" href="https://reku1997.gitee.io/2016/05/04/codeforces-div-2-c-1-5/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "MWLzM550UOu69h3dgvbbLSsF-gzGzoHsz",
+      appKey: "gkKnwm9FK0cu3ysJbcggsCDz"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"MWLzM550UOu69h3dgvbbLSsF-gzGzoHsz","app_key":"gkKnwm9FK0cu3ysJbcggsCDz"},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>Codeforces Div 2 C 天梯  1——5 - Reku</title>
+  <meta name="generator" content="Hexo 5.2.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Reku</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Reku</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">Codeforces Div 2 C 天梯  1——5
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-05-04
+        </span><span class="post-category">
+            <a href="/categories/acm/">acm</a>
+            </span>
+        <span class="post-visits"
+             data-url="/2016/05/04/codeforces-div-2-c-1-5/"
+             data-title="Codeforces Div 2 C 天梯  1——5">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><p><a target="_blank" rel="noopener" href="http://codeforces.com/problemset/problem/489/C">http://codeforces.com/problemset/problem/489/C</a> </p>
+<a id="more"></a>
+<p>贪心着选各个位数就行 最大和最小的贪心方法差不多，只是最小值倒着贪心的时候最后一位至少要留出1，而最大可以直接贪到0</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> m,s;</span><br><span class="line">	<span class="keyword">int</span> a;</span><br><span class="line">	<span class="keyword">int</span> p[<span class="number">101</span>]=&#123;&#125;;</span><br><span class="line">	<span class="built_in">cin</span>&gt;&gt;m&gt;&gt;s;</span><br><span class="line">	a=s;</span><br><span class="line">	<span class="keyword">if</span>(m==<span class="number">1</span>&amp;&amp;s==<span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;0&quot;</span>&lt;&lt;<span class="string">&quot; &quot;</span>&lt;&lt;<span class="string">&quot;0&quot;</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(m*<span class="number">9</span>&lt;s||s==<span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;-1&quot;</span>&lt;&lt;<span class="string">&quot; &quot;</span>&lt;&lt;<span class="string">&quot;-1&quot;</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> q=<span class="number">9</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=m;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">while</span>(s-q&lt;<span class="number">1</span>) q--;</span><br><span class="line">		s-=q;</span><br><span class="line">		p[i]=q;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(s!=<span class="number">0</span>) p[m]+=s;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=m;i&gt;=<span class="number">1</span>;i--) <span class="built_in">cout</span>&lt;&lt;p[i];</span><br><span class="line">	<span class="built_in">cout</span>&lt;&lt;<span class="string">&quot; &quot;</span>;</span><br><span class="line">	q=<span class="number">9</span>;</span><br><span class="line">	s=a;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=m;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">while</span>(s-q&lt;<span class="number">0</span>) q--;</span><br><span class="line">		s-=q;</span><br><span class="line">		p[i]=q;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=m;i++) <span class="built_in">cout</span>&lt;&lt;p[i];</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="http://codeforces.com/problemset/problem/466/C">http://codeforces.com/problemset/problem/466/C</a><br>找到所有可能的i值，再找到所有可能的j<br>因为是单调的，所以排序之后，寻找的指针只能向后移<br>所以扫一下就行啦</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> u[<span class="number">500010</span>]=&#123;&#125;;</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> h[<span class="number">500010</span>]=&#123;&#125;;</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> hh=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> f[<span class="number">500010</span>]=&#123;&#125;;</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> s[<span class="number">500010</span>]=&#123;&#125;;</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> nf=<span class="number">0</span>,ns=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> ans=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">cin</span>&gt;&gt;n;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cin</span>&gt;&gt;u[i];</span><br><span class="line">		h[i]=h[i<span class="number">-1</span>];</span><br><span class="line">		h[i]+=u[i];</span><br><span class="line">		hh+=u[i];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(hh%<span class="number">3</span>!=<span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span>&lt;&lt;ans;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(h[i]==hh/<span class="number">3</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			nf++;</span><br><span class="line">			f[nf]=i;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(h[i]==hh*<span class="number">2</span>/<span class="number">3</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			ns++;</span><br><span class="line">			s[ns]=i;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">long</span> <span class="keyword">long</span> r=<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=nf;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">while</span>(s[r]&lt;=f[i]&amp;&amp;r!=ns+<span class="number">1</span>) r++;</span><br><span class="line">		ans+=ns-r+<span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">cout</span>&lt;&lt;ans;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="http://codeforces.com/problemset/problem/401/C">http://codeforces.com/problemset/problem/401/C</a><br>就是一个简单的贪心…不能有超过连续3个1，不能连续超过两个0，那就110或者10这么贪就行了<br>不过各种特殊情况似乎比较多，一遍写对真是个奇迹</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> n,m;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">cin</span>&gt;&gt;n&gt;&gt;m;</span><br><span class="line">	<span class="keyword">if</span>(n&gt;m+<span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span>&lt;&lt;<span class="number">-1</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(m<span class="number">-2</span>*n&gt;=<span class="number">3</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span>&lt;&lt;<span class="number">-1</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(m==<span class="number">1</span>&amp;&amp;n==<span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span>&lt;&lt;<span class="number">1</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(m==<span class="number">2</span>&amp;&amp;n==<span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span>&lt;&lt;<span class="number">11</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(n==m+<span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		n--;</span><br><span class="line">		<span class="built_in">cout</span>&lt;&lt;<span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">while</span>(m&gt;n&amp;&amp;n!=<span class="number">0</span>&amp;&amp;m!=<span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		m-=<span class="number">2</span>;</span><br><span class="line">		n-=<span class="number">1</span>;</span><br><span class="line">		<span class="built_in">cout</span>&lt;&lt;<span class="number">110</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(m==<span class="number">1</span>&amp;&amp;n==<span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span>&lt;&lt;<span class="number">1</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(m==<span class="number">2</span>&amp;&amp;n==<span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span>&lt;&lt;<span class="number">11</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">while</span>(m==n&amp;&amp;m!=<span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		m--;</span><br><span class="line">		n--;</span><br><span class="line">		<span class="built_in">cout</span>&lt;&lt;<span class="number">10</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="http://codeforces.com/problemset/problem/479/C">http://codeforces.com/problemset/problem/479/C</a><br>也是一个简单的贪心…排个序瞎搞搞就行…</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="built_in">pair</span>&lt;<span class="keyword">int</span>,<span class="keyword">int</span>&gt; p[<span class="number">5010</span>];</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="built_in">pair</span>&lt;<span class="keyword">int</span>,<span class="keyword">int</span>&gt; a,<span class="built_in">pair</span>&lt;<span class="keyword">int</span>,<span class="keyword">int</span>&gt; b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> a&lt;b;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="keyword">int</span> a,b;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">cin</span>&gt;&gt;n;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cin</span>&gt;&gt;a&gt;&gt;b;</span><br><span class="line">		p[i]=<span class="built_in">make_pair</span>(a,b);</span><br><span class="line">	&#125;</span><br><span class="line">	sort(p+<span class="number">1</span>,p+n+<span class="number">1</span>,cmp);</span><br><span class="line">	<span class="keyword">int</span> ans=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(p[i].second&gt;=ans)</span><br><span class="line">		&#123;</span><br><span class="line">			ans=p[i].second;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">		&#123;</span><br><span class="line">			ans=p[i].first;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">cout</span>&lt;&lt;ans;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="http://codeforces.com/problemset/problem/455/A">http://codeforces.com/problemset/problem/455/A</a><br>动态规划<br>dp[i]代表≤i的值都消去了，所产生的最大答案<br>通过dp[i-1]和dp[i-2]来转移</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> a[<span class="number">100010</span>]=&#123;&#125;;</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> num[<span class="number">100010</span>]=&#123;&#125;;</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> dp[<span class="number">100010</span>]=&#123;&#125;;</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> ans;</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> n;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">cin</span>&gt;&gt;n;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cin</span>&gt;&gt;a[i];</span><br><span class="line">		num[a[i]]++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=<span class="number">100000</span>;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		dp[i+<span class="number">1</span>]=max(dp[i+<span class="number">1</span>],dp[i<span class="number">-1</span>]+i*num[i]);</span><br><span class="line">		<span class="keyword">if</span>(i<span class="number">-2</span>&gt;=<span class="number">0</span>) dp[i+<span class="number">1</span>]=max(dp[i+<span class="number">1</span>],dp[i<span class="number">-2</span>]+i*num[i]);</span><br><span class="line">		ans=max(dp[i+<span class="number">1</span>],ans);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">cout</span>&lt;&lt;ans;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://reku1997.gitee.io">Reku</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://reku1997.gitee.io/2016/05/04/codeforces-div-2-c-1-5/">https://reku1997.gitee.io/2016/05/04/codeforces-div-2-c-1-5/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/acm/">acm</a>
+            <a href="/tags/codeforces/">codeforces</a>
+            <a href="/tags/%E8%B4%AA%E5%BF%83/">贪心</a>
+            <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2016/05/05/codeforces-div-2-c-6-10/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Codeforces Div 2 C 天梯 6——10</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2016/04/28/codeforces-round-348-div2div1-c/">
+        <span class="next-text nav-default">Codeforces Round #348 Div 2+Div 1 C 题解</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"><div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:906799571@qq.com" class="iconfont icon-email" title="email"></a>
+        <a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker" class="iconfont icon-github" title="github"></a>
+        <a target="_blank" rel="noopener" href="https://www.zhihu.com/people/reku1997" class="iconfont icon-zhihu" title="zhihu"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2016 - 2020<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Reku</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://reku1997.gitee.io/2016/05/04/codeforces-div-2-c-1-5/';
+        this.page.identifier = '2016/05/04/codeforces-div-2-c-1-5/';
+        this.page.title = 'Codeforces Div 2 C 天梯  1——5';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//reku.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+</body>
+</html>

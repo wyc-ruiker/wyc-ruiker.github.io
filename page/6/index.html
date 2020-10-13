@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<link rel="alternate" href="/default" title="Reku" ><link rel="shortcut icon" type="image/x-icon" href="/reku.ico?v=2.11.0" />
+<link rel="canonical" href="https://reku1997.gitee.io/page/6/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "MWLzM550UOu69h3dgvbbLSsF-gzGzoHsz",
+      appKey: "gkKnwm9FK0cu3ysJbcggsCDz"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"MWLzM550UOu69h3dgvbbLSsF-gzGzoHsz","app_key":"gkKnwm9FK0cu3ysJbcggsCDz"},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>Reku</title>
+  <meta name="generator" content="Hexo 5.2.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Reku</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Reku</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><section id="posts" class="posts"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/2016/07/09/%E7%BB%84%E5%90%88%E6%95%B0%E5%8F%96%E6%A8%A1/">组合数取模</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-07-09
+        </span><span class="post-category">
+            <a href="/categories/acm/">acm</a>
+            </span>
+        <span class="post-visits"
+             data-url="/2016/07/09/%E7%BB%84%E5%90%88%E6%95%B0%E5%8F%96%E6%A8%A1/"
+             data-title="组合数取模">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><blockquote>
+<p>Long long ago, there was a beautiful boy, he was so lonely in the summer night. At his most lonely moment, he decided to invite his boyfriends to his bedroom, and they will be happy together. The beautiful boy owned n boyfriends,and he would be happy only with exactly m boyfriends in his bedroom. So how many ways he could be happy? As the beautiful boy had too many boyfriends, and he was so lonely, the answer could be very large. You just need give the answer module 10^18+7. Input There are multiple test cases(No more than 66). For each test case: There are two integers n,m (1&lt;=n,m&lt;=10^5) The last line contains two integers: 0 0 Output For each cases,output a line with a integer ,which is the answer module 1e18+7. If the beautiful could never be happy,you can just output his voice from heart: “How lonely night<del>“(without quotes) Sample Input 3 2 10 5 3 5 0 0 Sample Output 3 252 How lonely night</del> Hint For the first case: The beautiful boy had 3 friends :A,B,C He could invite A+B,A+C,B+C. So the answer should be 3 For the third case: The beautiful boy had 3 friends, but he wanted 5 friends,so he would never be happy.(So pity!) ‘~’ is shift+`</p>
+</blockquote>
+          <div class="read-more">
+            <a href="/2016/07/09/%E7%BB%84%E5%90%88%E6%95%B0%E5%8F%96%E6%A8%A1/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/2016/07/08/sg/">SG函数</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-07-08
+        </span><span class="post-category">
+            <a href="/categories/acm/">acm</a>
+            </span>
+        <span class="post-visits"
+             data-url="/2016/07/08/sg/"
+             data-title="SG函数">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><p>唉…今天又学习了一下SG函数…都是之前挖的坑QAQ</p>
+          <div class="read-more">
+            <a href="/2016/07/08/sg/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/2016/07/06/ac%E8%87%AA%E5%8A%A8%E6%9C%BA/">AC自动机</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-07-06
+        </span><span class="post-category">
+            <a href="/categories/acm/">acm</a>
+            </span>
+        <span class="post-visits"
+             data-url="/2016/07/06/ac%E8%87%AA%E5%8A%A8%E6%9C%BA/"
+             data-title="AC自动机">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><blockquote>
+<p>Recently Peter received m strings as a birthday gift. These strings only consist of lowercase letters. But Peter is not happy, as he hates all of these strings. So he wants to construct a new string of length n and it cannot contain any of the m strings as a substring. Of course,the new string is made up of lowercase letters too. Now he wonders how many strings he can construct. Input On the first line there is only one integer T(T is about 10), representing the number of cases. In each case: there are two integers n, m(n ≤ 1000, m ≤ 50) on the first line followed by m lines, representing the m strings Peter received. Note that the total length of the m strings won’t exceed 500 in each case. Output For each test case, output an integer in one line, which is the number of strings Peter can construct mod 1000000007. Sample Input 1 5 1 aaa Sample Output 11879400</p>
+</blockquote>
+          <div class="read-more">
+            <a href="/2016/07/06/ac%E8%87%AA%E5%8A%A8%E6%9C%BA/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/2016/07/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932016/">计蒜之道复赛 补题</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-07-04
+        </span><span class="post-category">
+            <a href="/categories/acm/">acm</a>
+            </span>
+        <span class="post-visits"
+             data-url="/2016/07/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932016/"
+             data-title="计蒜之道复赛 补题">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><p><a target="_blank" rel="noopener" href="https://nanti.jisuanke.com/t/11217">https://nanti.jisuanke.com/t/11217</a> </p>
+          <div class="read-more">
+            <a href="/2016/07/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932016/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/2016/06/08/codeforces-div-2-d-51-55/">Codeforces Div 2 D 天梯 51——55</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-06-08
+        </span><span class="post-category">
+            <a href="/categories/acm/">acm</a>
+            </span>
+        <span class="post-visits"
+             data-url="/2016/06/08/codeforces-div-2-d-51-55/"
+             data-title="Codeforces Div 2 D 天梯 51——55">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><p><a target="_blank" rel="noopener" href="http://codeforces.com/problemset/problem/167/B">http://codeforces.com/problemset/problem/167/B</a> </p>
+          <div class="read-more">
+            <a href="/2016/06/08/codeforces-div-2-d-51-55/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/2016/06/03/codeforces-div-2-d-46-50/">Codeforces Div 2 D 天梯 46——50</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-06-03
+        </span><span class="post-category">
+            <a href="/categories/acm/">acm</a>
+            </span>
+        <span class="post-visits"
+             data-url="/2016/06/03/codeforces-div-2-d-46-50/"
+             data-title="Codeforces Div 2 D 天梯 46——50">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><p><a target="_blank" rel="noopener" href="http://codeforces.com/problemset/problem/142/B">http://codeforces.com/problemset/problem/142/B</a> </p>
+          <div class="read-more">
+            <a href="/2016/06/03/codeforces-div-2-d-46-50/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/2016/06/03/codeforces-round-355-div-2-d/">Codeforces Round #355 (Div. 2) D</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-06-03
+        </span><span class="post-category">
+            <a href="/categories/acm/">acm</a>
+            </span>
+        <span class="post-visits"
+             data-url="/2016/06/03/codeforces-round-355-div-2-d/"
+             data-title="Codeforces Round #355 (Div. 2) D">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><p><a target="_blank" rel="noopener" href="http://codeforces.com/problemset/problem/677/D">http://codeforces.com/problemset/problem/677/D</a> </p>
+          <div class="read-more">
+            <a href="/2016/06/03/codeforces-round-355-div-2-d/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/2016/05/31/codeforces-div-2-d-41-45/">Codeforces Div 2 D 天梯 41——45</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-05-31
+        </span><span class="post-category">
+            <a href="/categories/acm/">acm</a>
+            </span>
+        <span class="post-visits"
+             data-url="/2016/05/31/codeforces-div-2-d-41-45/"
+             data-title="Codeforces Div 2 D 天梯 41——45">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><p><a target="_blank" rel="noopener" href="http://codeforces.com/problemset/problem/77/B">http://codeforces.com/problemset/problem/77/B</a> </p>
+          <div class="read-more">
+            <a href="/2016/05/31/codeforces-div-2-d-41-45/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/2016/05/24/codeforces-div-2-d-36-40/">Codeforces Div 2 D 天梯 36——40</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-05-24
+        </span><span class="post-category">
+            <a href="/categories/acm/">acm</a>
+            </span>
+        <span class="post-visits"
+             data-url="/2016/05/24/codeforces-div-2-d-36-40/"
+             data-title="Codeforces Div 2 D 天梯 36——40">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><p><a target="_blank" rel="noopener" href="http://codeforces.com/contest/111/problem/B">http://codeforces.com/contest/111/problem/B</a> </p>
+          <div class="read-more">
+            <a href="/2016/05/24/codeforces-div-2-d-36-40/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/2016/05/22/codeforces-div-2-d-31-35/">Codeforces Div 2 D 天梯 31——35</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-05-22
+        </span><span class="post-category">
+            <a href="/categories/acm/">acm</a>
+            </span>
+        <span class="post-visits"
+             data-url="/2016/05/22/codeforces-div-2-d-31-35/"
+             data-title="Codeforces Div 2 D 天梯 31——35">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><p><a target="_blank" rel="noopener" href="http://codeforces.com/problemset/problem/333/B">http://codeforces.com/problemset/problem/333/B</a> </p>
+          <div class="read-more">
+            <a href="/2016/05/22/codeforces-div-2-d-31-35/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <nav class="pagination"><a class="prev" href="/page/5/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text">Prev</span>
+      </a>
+    <a class="next" href="/page/7/">
+        <span class="next-text">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></section></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:906799571@qq.com" class="iconfont icon-email" title="email"></a>
+        <a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker" class="iconfont icon-github" title="github"></a>
+        <a target="_blank" rel="noopener" href="https://www.zhihu.com/people/reku1997" class="iconfont icon-zhihu" title="zhihu"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2016 - 2020<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Reku</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+</body>
+</html>

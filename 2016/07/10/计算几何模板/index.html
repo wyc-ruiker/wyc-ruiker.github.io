@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="计算几何模板题"/><meta name="keywords" content="计算几何, Reku" /><link rel="alternate" href="/default" title="Reku" ><link rel="shortcut icon" type="image/x-icon" href="/reku.ico?v=2.11.0" />
+<link rel="canonical" href="https://reku1997.gitee.io/2016/07/10/计算几何模板/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "MWLzM550UOu69h3dgvbbLSsF-gzGzoHsz",
+      appKey: "gkKnwm9FK0cu3ysJbcggsCDz"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"MWLzM550UOu69h3dgvbbLSsF-gzGzoHsz","app_key":"gkKnwm9FK0cu3ysJbcggsCDz"},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>计算几何模板题 - Reku</title>
+  <meta name="generator" content="Hexo 5.2.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Reku</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Reku</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">计算几何模板题
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-07-10
+        </span><span class="post-category">
+            <a href="/categories/acm/">acm</a>
+            </span>
+        <span class="post-visits"
+             data-url="/2016/07/10/%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E6%A8%A1%E6%9D%BF/"
+             data-title="计算几何模板题">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><blockquote>
+<p>There are n boys. All of them are friends. They live in all over the world. One day, one of them wants to know the farthest distance between two boys. Now, you are given the positions of boys. Two boys may in the same position. Your are required to tell boys the farthest distance. Input The first line is one integer n.(1 ≤ n ≤ 105) Each of next n lines has two integers xi and yi, which means the i-th boy’s position. (0 ≤ xi, yi ≤ 1010) There are multiple test cases, please stop when n = 0. Output One line for each test case containing a real number in three decimal places.</p>
+</blockquote>
+<a id="more"></a>
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> using namespace std;</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> rel_ops;</span><br><span class="line"></span><br><span class="line"><span class="comment">// typedef long long NUM;</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">double</span> NUM;</span><br><span class="line"><span class="keyword">const</span> NUM EPS = <span class="number">1e-12</span>, MAGIC = <span class="number">2.71828e18</span>;</span><br><span class="line"><span class="comment">// 因为有相对误差判断，所以EPS不要设得太宽</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> NUM <span class="title">sqr</span><span class="params">(NUM a)</span></span>&#123;<span class="keyword">return</span> a*a;&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> NUM <span class="title">cmp</span><span class="params">(NUM a, NUM b)</span></span>&#123;</span><br><span class="line">    <span class="comment">// return a-b; // 坐标为浮点数时，使用下面这行</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">fabs</span>(a-b)&gt;=EPS+<span class="built_in">fabs</span>(a)*EPS?a-b:<span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//--------------------------------------------------------------------//</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">VEC</span> &#123;</span>NUM x,y;&#125; NOVEC = &#123;MAGIC,MAGIC&#125;;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">RAY</span> &#123;</span>VEC u,v;&#125; NORAY = &#123;NOVEC,NOVEC&#125;;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">CIR</span> &#123;</span>VEC u; NUM r;&#125; NOCIR = &#123;NOVEC,MAGIC&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> NUM <span class="title">sqr</span><span class="params">(<span class="keyword">const</span> VEC&amp; a)</span></span>&#123;<span class="keyword">return</span> sqr(a.x)+sqr(a.y);&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">double</span> <span class="title">abs</span><span class="params">(<span class="keyword">const</span> VEC&amp; a)</span></span>&#123;<span class="keyword">return</span> <span class="built_in">sqrt</span>(sqr(a));&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> NUM <span class="title">cmp</span><span class="params">(<span class="keyword">const</span> VEC&amp; a, <span class="keyword">const</span> VEC&amp; b)</span></span>&#123;</span><br><span class="line">    NUM at=cmp(a.x,b.x);</span><br><span class="line">    <span class="keyword">return</span> !at?cmp(a.y,b.y):at;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">inline</span> VEC <span class="keyword">operator</span> +(<span class="keyword">const</span> VEC&amp; a, <span class="keyword">const</span> VEC&amp; b)</span><br><span class="line">    &#123;<span class="keyword">return</span> (VEC)&#123;a.x+b.x,a.y+b.y&#125;;&#125;</span><br><span class="line"><span class="keyword">inline</span> VEC <span class="keyword">operator</span> -(<span class="keyword">const</span> VEC&amp; a, <span class="keyword">const</span> VEC&amp; b)</span><br><span class="line">    &#123;<span class="keyword">return</span> (VEC)&#123;a.x-b.x,a.y-b.y&#125;;&#125;</span><br><span class="line"><span class="keyword">inline</span> NUM <span class="keyword">operator</span> *(<span class="keyword">const</span> VEC&amp; a, <span class="keyword">const</span> VEC&amp; b)</span><br><span class="line">    &#123;<span class="keyword">return</span> a.x*b.y-a.y*b.x;&#125;</span><br><span class="line"><span class="keyword">inline</span> NUM <span class="keyword">operator</span> %(<span class="keyword">const</span> VEC&amp; a, <span class="keyword">const</span> VEC&amp; b)</span><br><span class="line">    &#123;<span class="keyword">return</span> a.x*b.x+a.y*b.y;&#125;</span><br><span class="line"><span class="keyword">inline</span> VEC <span class="keyword">operator</span> -(<span class="keyword">const</span> VEC&amp; a)&#123;<span class="keyword">return</span> (VEC)&#123;-a.x,-a.y&#125;;&#125;</span><br><span class="line"><span class="keyword">inline</span> VEC <span class="keyword">operator</span> ~(<span class="keyword">const</span> VEC&amp; a)&#123;<span class="keyword">return</span> (VEC)&#123;-a.y,+a.x&#125;;&#125;</span><br><span class="line"><span class="keyword">inline</span> VEC <span class="keyword">operator</span> *(NUM u, <span class="keyword">const</span> VEC&amp; a)&#123;<span class="keyword">return</span> (VEC)&#123;u*a.x,u*a.y&#125;;&#125;</span><br><span class="line"><span class="keyword">inline</span> VEC <span class="keyword">operator</span> *(<span class="keyword">const</span> VEC&amp; a, NUM u)&#123;<span class="keyword">return</span> (VEC)&#123;a.x*u,a.y*u&#125;;&#125;</span><br><span class="line"><span class="keyword">inline</span> VEC <span class="keyword">operator</span> /(<span class="keyword">const</span> VEC&amp; a, NUM u)&#123;<span class="keyword">return</span> (VEC)&#123;a.x/u,a.y/u&#125;;&#125;</span><br><span class="line"><span class="keyword">inline</span> VEC <span class="keyword">operator</span> /(<span class="keyword">const</span> VEC&amp; a, <span class="keyword">const</span> VEC&amp; b)&#123;<span class="keyword">return</span> a%b/sqr(b)*b;&#125;</span><br><span class="line"><span class="keyword">inline</span> <span class="keyword">bool</span> <span class="keyword">operator</span> ==(<span class="keyword">const</span> VEC&amp; a, <span class="keyword">const</span> VEC&amp; b)&#123;<span class="keyword">return</span> !cmp(a,b);&#125;</span><br><span class="line"><span class="keyword">inline</span> <span class="keyword">bool</span> <span class="keyword">operator</span> &lt;(<span class="keyword">const</span> VEC&amp; a, <span class="keyword">const</span> VEC&amp; b)&#123;<span class="keyword">return</span> cmp(a,b)&lt;<span class="number">0</span>;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//  返回值        cmp_side             cmp_axis</span></span><br><span class="line"><span class="comment">//  ==  0       a和b相互平行    /    a和b相互垂直</span></span><br><span class="line"><span class="comment">//  &lt;= -EPS     a在b的左手侧    /    a和b朝向相反（内角大于90度）</span></span><br><span class="line"><span class="comment">//  &gt;= +EPS     a在b的右手侧    /    a和b朝向相同（内角小于90度）</span></span><br><span class="line"><span class="function">NUM <span class="title">cmp_side</span><span class="params">(<span class="keyword">const</span> VEC&amp; a, <span class="keyword">const</span> VEC&amp; b)</span></span>&#123;<span class="keyword">return</span> cmp(a.x*b.y,+a.y*b.x);&#125;</span><br><span class="line"><span class="function">NUM <span class="title">cmp_axis</span><span class="params">(<span class="keyword">const</span> VEC&amp; a, <span class="keyword">const</span> VEC&amp; b)</span></span>&#123;<span class="keyword">return</span> cmp(a.x*b.x,-a.y*b.y);&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//--------------------------------------------------------------------//</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 求向量a长度缩放至u单位后的新向量，a不能是零向量</span></span><br><span class="line"><span class="comment">// 求向量a绕坐标原点o，逆时针转u度后的新向量</span></span><br><span class="line"><span class="function">VEC <span class="title">resize</span><span class="params">(<span class="keyword">const</span> VEC&amp; a, NUM u)</span></span>&#123;<span class="keyword">return</span> u/<span class="built_in">abs</span>(a)*a;&#125;</span><br><span class="line"><span class="function">VEC <span class="title">rotate</span><span class="params">(<span class="keyword">const</span> VEC&amp; a, NUM u)</span></span></span><br><span class="line"><span class="function">    </span>&#123;<span class="keyword">return</span> (VEC)&#123;<span class="built_in">cos</span>(u)*a.x-<span class="built_in">sin</span>(u)*a.y,<span class="built_in">sin</span>(u)*a.x+<span class="built_in">cos</span>(u)*a.y&#125;;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 点在直线上的投影(到直线的最近点)</span></span><br><span class="line"><span class="comment">// 点在圆周上的投影(到圆周的最近点)</span></span><br><span class="line"><span class="function">VEC <span class="title">project</span><span class="params">(<span class="keyword">const</span> VEC&amp; p, <span class="keyword">const</span> RAY&amp; l)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (p-l.u)/(l.v-l.u)+l.u;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">VEC <span class="title">project</span><span class="params">(<span class="keyword">const</span> VEC&amp; p, <span class="keyword">const</span> CIR&amp; c)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!cmp(p,c.u)) <span class="keyword">return</span> NOVEC;</span><br><span class="line">    <span class="keyword">return</span> resize(p-c.u,c.r)+c.u;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 求两直线的交点</span></span><br><span class="line"><span class="comment">// 求直线与圆的交点，交线段的方向与原先直线相同</span></span><br><span class="line"><span class="comment">// 求两圆相交的交点，交线段的方向为圆心a到b连线方向逆指针转90度</span></span><br><span class="line"><span class="comment">// 求直线与凸多边形的交点，交线段的方向与原先直线相同，复杂度O(logn)</span></span><br><span class="line"><span class="function">VEC <span class="title">intersect</span><span class="params">(<span class="keyword">const</span> RAY&amp; a, <span class="keyword">const</span> RAY&amp; b)</span></span>&#123;</span><br><span class="line">    VEC s=a.u-a.v,t=b.u-b.v;</span><br><span class="line">    NUM at=cmp_side(s,t);</span><br><span class="line">    <span class="keyword">if</span>(!at) <span class="keyword">return</span> NOVEC;</span><br><span class="line">    <span class="keyword">return</span> a.u+(b.u-a.u)*t/at*s;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">RAY <span class="title">intersect</span><span class="params">(<span class="keyword">const</span> RAY&amp; l, <span class="keyword">const</span> CIR&amp; c)</span></span>&#123;</span><br><span class="line">    VEC s=l.u+(c.u-l.u)/(l.v-l.u);</span><br><span class="line">    NUM at=cmp(c.r*c.r,sqr(s-c.u));</span><br><span class="line">    <span class="keyword">if</span>(at&lt;<span class="number">0</span>) <span class="keyword">return</span> NORAY;</span><br><span class="line">    VEC t=resize(l.v-l.u,<span class="built_in">sqrt</span>(at));</span><br><span class="line">    <span class="keyword">return</span> (RAY)&#123;s-t,s+t&#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">RAY <span class="title">intersect</span><span class="params">(<span class="keyword">const</span> CIR&amp; a, <span class="keyword">const</span> CIR&amp; b)</span></span>&#123;</span><br><span class="line">    NUM l=sqr(b.u-a.u);</span><br><span class="line">    NUM w=(<span class="number">1</span>+(a.r*a.r-b.r*b.r)/l)*<span class="number">0.5</span>;</span><br><span class="line">    NUM e=cmp(a.r*a.r/l,w*w);</span><br><span class="line">    <span class="keyword">if</span>(e&lt;<span class="number">0</span>) <span class="keyword">return</span> NORAY;</span><br><span class="line">    VEC t=<span class="built_in">sqrt</span>(e)*~(b.u-a.u);</span><br><span class="line">    VEC s=a.u+w*(b.u-a.u);</span><br><span class="line">    <span class="keyword">return</span> (RAY)&#123;s-t,s+t&#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 判断三点是否共线</span></span><br><span class="line"><span class="comment">// 判断点在直线上的投影点，是否在线段上</span></span><br><span class="line"><span class="comment">// 判断点和线的位置关系，在外侧为0，在直线上为1或2(在线段上时为2)</span></span><br><span class="line"><span class="comment">// 判断点和圆的位置关系，在外侧为0，内部为1，边上为2</span></span><br><span class="line"><span class="comment">// 判断点和任意简单多边形的位置关系，在外侧为0，内部为1，边上为2</span></span><br><span class="line"><span class="comment">// 快速地判断点和凸多边形的位置关系，在外侧为0，内部为1，边上为2</span></span><br><span class="line"><span class="comment">// 判断两条线的位置关系，斜相交为0，垂直为1，平行为2，重合为3</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">collinear</span><span class="params">(<span class="keyword">const</span> VEC&amp; a, <span class="keyword">const</span> VEC&amp; b, <span class="keyword">const</span> VEC&amp; c)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> !cmp_side(a-b,b-c);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">seg_range</span><span class="params">(<span class="keyword">const</span> VEC&amp; p, <span class="keyword">const</span> RAY&amp; l)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> cmp_axis(p-l.u,p-l.v)&lt;=<span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">relation</span><span class="params">(<span class="keyword">const</span> VEC&amp; p, <span class="keyword">const</span> RAY&amp; l)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(cmp_side(p-l.u,p-l.v)) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> cmp_axis(p-l.u,p-l.v)&gt;<span class="number">0</span>?<span class="number">1</span>:<span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">relation</span><span class="params">(<span class="keyword">const</span> VEC&amp; p, <span class="keyword">const</span> CIR&amp; c)</span></span>&#123;</span><br><span class="line">    NUM at=cmp(sqr(c.r),sqr(c.u-p));</span><br><span class="line">    <span class="keyword">return</span> at?at&lt;<span class="number">0</span>?<span class="number">0</span>:<span class="number">1</span>:<span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">relation</span><span class="params">(<span class="keyword">const</span> VEC&amp; p, <span class="keyword">const</span> <span class="built_in">vector</span>&amp; u)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n=u.size(),ret=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i0</span><br><span class="line">        &amp;&amp; cmp_side(s,t)&gt;<span class="number">0</span>) ret^=<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">relation_convex</span><span class="params">(<span class="keyword">const</span> VEC&amp; p, <span class="keyword">const</span> <span class="built_in">vector</span>&amp; u)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n=u.size(),l=<span class="number">0</span>,r=n<span class="number">-1</span>,o=cmp_side(u[<span class="number">1</span>]-u[<span class="number">0</span>],u[r]-u[<span class="number">0</span>])&lt;<span class="number">0</span>?<span class="number">-1</span>:<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(relation(p,(RAY)&#123;u[<span class="number">0</span>],u[<span class="number">1</span>]&#125;)==<span class="number">2</span></span><br><span class="line">    || relation(p,(RAY)&#123;u[<span class="number">0</span>],u[r]&#125;)==<span class="number">2</span>) <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">while</span>(l tangent(<span class="keyword">const</span> CIR&amp; a, <span class="keyword">const</span> CIR&amp; b)&#123;</span><br><span class="line">    NUM o=a.r-b.r,l=sqr(b.u-a.u),e=cmp(l,o*o);</span><br><span class="line">    <span class="keyword">if</span>(e&lt;<span class="number">0</span>) <span class="keyword">return</span> <span class="built_in">make_pair</span>(NORAY,NORAY);</span><br><span class="line">    NUM x=o/<span class="built_in">sqrt</span>(l),y=<span class="built_in">sqrt</span>(e/l);</span><br><span class="line">    VEC s=resize(b.u-a.u,<span class="number">1</span>),t=~s;</span><br><span class="line">    RAY ll=&#123;a.u+a.r*x*s+a.r*y*t,</span><br><span class="line">            b.u+b.r*x*s+b.r*y*t&#125;;</span><br><span class="line">    RAY rr=&#123;a.u+a.r*x*s-a.r*y*t,</span><br><span class="line">            b.u+b.r*x*s-b.r*y*t&#125;;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">make_pair</span>(ll,rr);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 由散点集构造一个最小覆盖圆，期望复杂度O(n)</span></span><br><span class="line">CIR min_covering_circle(<span class="built_in">vector</span> u)&#123;</span><br><span class="line">    random_shuffle(u.begin(),u.end());</span><br><span class="line">    <span class="keyword">int</span> n=u.size(),i,j,k,z=<span class="number">1</span>%n;</span><br><span class="line">    CIR ret;</span><br><span class="line">    <span class="keyword">for</span>(ret=make_circle(u[<span class="number">0</span>],u[z]),i=<span class="number">2</span>;i convex_hull(<span class="built_in">vector</span> u)&#123;</span><br><span class="line">    sort(u.begin(),u.end()); <span class="comment">// 这两行是排序+去重，如果数据已经有保证</span></span><br><span class="line">    u.erase(unique(u.begin(),u.end()),u.end()); <span class="comment">// 则可省略相应的操作</span></span><br><span class="line">    <span class="keyword">if</span>(u.size()&lt;<span class="number">3</span>) <span class="keyword">return</span> u;</span><br><span class="line">    <span class="built_in">vector</span> c;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">size_t</span> i=<span class="number">0</span>,o=<span class="number">1</span>,m=<span class="number">1</span>;~i;i+=o)&#123;</span><br><span class="line">        <span class="keyword">while</span>(c.size()&gt;m)&#123;</span><br><span class="line">            VEC a=c.back()-c[c.size()<span class="number">-2</span>];</span><br><span class="line">            VEC b=c.back()-u[i];</span><br><span class="line">            <span class="keyword">if</span>(cmp_side(a,b)&lt;<span class="number">0</span>) <span class="keyword">break</span>; <span class="comment">// 改成&lt;=0则保留共线点</span></span><br><span class="line">            c.pop_back();</span><br><span class="line">        &#125;</span><br><span class="line">        c.push_back(u[i]);</span><br><span class="line">        <span class="keyword">if</span>(i+<span class="number">1</span>==u.size()) m=c.size(),o=<span class="number">-1</span>; <span class="comment">// 条件成立时切换至上凸壳</span></span><br><span class="line">    &#125;</span><br><span class="line">    c.pop_back();</span><br><span class="line">    <span class="keyword">return</span> c;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//两个点的距离</span></span><br><span class="line"><span class="keyword">double</span> ff(VEC a,VEC b)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">double</span> l=<span class="built_in">fabs</span>(a.x-b.x);</span><br><span class="line">    <span class="keyword">double</span> r=<span class="built_in">fabs</span>(a.y-b.y);</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sqrt</span>(l*l+r*r);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//叉积</span></span><br><span class="line"><span class="keyword">double</span> Cross(VEC A,VEC B,VEC C)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> (B-A)*(C-B);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//旋转卡壳</span></span><br><span class="line"><span class="keyword">double</span> rr(<span class="built_in">vector</span> u)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">int</span> q=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">double</span> ans=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> n=u.size();</span><br><span class="line">    u.push_back(u[<span class="number">0</span>]);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> p=<span class="number">0</span>;pCross(u[p],u[q+<span class="number">1</span>],u[p+<span class="number">1</span>])) q=(q+<span class="number">1</span>)%n;</span><br><span class="line">        ans=max(ans,max(ff(u[p],u[q]),ff(u[p+<span class="number">1</span>],u[q])));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="keyword">void</span> work()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">vector</span> u;</span><br><span class="line">    VEC p;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%lf%lf&quot;</span>,&amp;p.x,&amp;p.y);</span><br><span class="line">        u.push_back(p);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">vector</span> ans;</span><br><span class="line">    ans=convex_hull(u);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%.3lf\n&quot;</span>,rr(ans));</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> main()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;n);</span><br><span class="line">        <span class="keyword">if</span>(n==<span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        work();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://reku1997.gitee.io">Reku</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://reku1997.gitee.io/2016/07/10/%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E6%A8%A1%E6%9D%BF/">https://reku1997.gitee.io/2016/07/10/%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E6%A8%A1%E6%9D%BF/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95/">计算几何</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2016/07/15/%E5%BF%AB%E9%80%9F%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">快速傅里叶变换</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2016/07/09/%E7%BB%84%E5%90%88%E6%95%B0%E5%8F%96%E6%A8%A1/">
+        <span class="next-text nav-default">组合数取模</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"><div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:906799571@qq.com" class="iconfont icon-email" title="email"></a>
+        <a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker" class="iconfont icon-github" title="github"></a>
+        <a target="_blank" rel="noopener" href="https://www.zhihu.com/people/reku1997" class="iconfont icon-zhihu" title="zhihu"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2016 - 2020<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Reku</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://reku1997.gitee.io/2016/07/10/%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E6%A8%A1%E6%9D%BF/';
+        this.page.identifier = '2016/07/10/计算几何模板/';
+        this.page.title = '计算几何模板题';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//reku.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+</body>
+</html>

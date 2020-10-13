@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="组合数取模"/><meta name="keywords" content="数论, 乘法逆元, 卢卡斯定理, 组合数, 费马小定理, Reku" /><link rel="alternate" href="/default" title="Reku" ><link rel="shortcut icon" type="image/x-icon" href="/reku.ico?v=2.11.0" />
+<link rel="canonical" href="https://reku1997.gitee.io/2016/07/09/组合数取模/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "MWLzM550UOu69h3dgvbbLSsF-gzGzoHsz",
+      appKey: "gkKnwm9FK0cu3ysJbcggsCDz"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"MWLzM550UOu69h3dgvbbLSsF-gzGzoHsz","app_key":"gkKnwm9FK0cu3ysJbcggsCDz"},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>组合数取模 - Reku</title>
+  <meta name="generator" content="Hexo 5.2.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Reku</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Reku</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">组合数取模
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-07-09
+        </span><span class="post-category">
+            <a href="/categories/acm/">acm</a>
+            </span>
+        <span class="post-visits"
+             data-url="/2016/07/09/%E7%BB%84%E5%90%88%E6%95%B0%E5%8F%96%E6%A8%A1/"
+             data-title="组合数取模">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><blockquote>
+<p>Long long ago, there was a beautiful boy, he was so lonely in the summer night. At his most lonely moment, he decided to invite his boyfriends to his bedroom, and they will be happy together. The beautiful boy owned n boyfriends,and he would be happy only with exactly m boyfriends in his bedroom. So how many ways he could be happy? As the beautiful boy had too many boyfriends, and he was so lonely, the answer could be very large. You just need give the answer module 10^18+7. Input There are multiple test cases(No more than 66). For each test case: There are two integers n,m (1&lt;=n,m&lt;=10^5) The last line contains two integers: 0 0 Output For each cases,output a line with a integer ,which is the answer module 1e18+7. If the beautiful could never be happy,you can just output his voice from heart: “How lonely night<del>“(without quotes) Sample Input 3 2 10 5 3 5 0 0 Sample Output 3 252 How lonely night</del> Hint For the first case: The beautiful boy had 3 friends :A,B,C He could invite A+B,A+C,B+C. So the answer should be 3 For the third case: The beautiful boy had 3 friends, but he wanted 5 friends,so he would never be happy.(So pity!) ‘~’ is shift+`</p>
+</blockquote>
+<a id="more"></a>
+
+<p>之前一直不会乘法逆元，不过现在会了… 如果a和n互质，ax+ny=1，用扩展欧几里得算法求出的x就是a对于n的乘法逆元，即ax同余1(mod n) 证明比较显然… 然后计算组合数过程中的除法就变成了乘法… 但是这道题的中间结果爆long long，用一个快速乘的技巧即可</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> LL;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line">LL t[<span class="number">100010</span>]=&#123;&#125;;</span><br><span class="line"><span class="function">LL <span class="title">cheng</span><span class="params">(LL a,LL b,LL p)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(b==<span class="number">1</span>) <span class="keyword">return</span> a%p;</span><br><span class="line">    LL e;</span><br><span class="line">    e=cheng(a,b/<span class="number">2</span>,p);</span><br><span class="line">    e=e+e;</span><br><span class="line">    e%=p;</span><br><span class="line">    <span class="keyword">if</span>(b%<span class="number">2</span>==<span class="number">1</span>) e+=a;</span><br><span class="line">    e%=p;</span><br><span class="line">    <span class="keyword">return</span> e;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ex_gcd</span><span class="params">(LL a,LL b,LL &amp;x,LL &amp;y,LL &amp;d)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(!b)</span><br><span class="line">	&#123;</span><br><span class="line">		d=a;</span><br><span class="line">		x=<span class="number">1</span>;</span><br><span class="line">		y=<span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		ex_gcd(b,a%b,y,x,d);</span><br><span class="line">		y-=x*(a/b);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">LL <span class="title">inv</span><span class="params">(LL t,LL p)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	LL d,x,y;</span><br><span class="line">	ex_gcd(t,p,x,y,d);</span><br><span class="line">	<span class="keyword">return</span> d==<span class="number">1</span>?(x%p+p)%p:<span class="number">-1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">LL <span class="title">C</span><span class="params">(LL n,LL m,LL p)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	m=min(m,n-m);</span><br><span class="line">	<span class="keyword">if</span>(m==<span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	LL ans=<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">for</span>(LL i=n;i&gt;=n-m+<span class="number">1</span>;i--)</span><br><span class="line">	&#123;</span><br><span class="line">		ans=cheng(ans,i,p);</span><br><span class="line">	&#125;</span><br><span class="line">	ans=cheng(ans,t[m],p);</span><br><span class="line">	<span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	LL p;</span><br><span class="line">	p=<span class="number">1e18</span>;</span><br><span class="line">	p+=<span class="number">7</span>;</span><br><span class="line">	LL a,b;</span><br><span class="line">	t[<span class="number">0</span>]=<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=<span class="number">100000</span>;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		t[i]=cheng(t[i<span class="number">-1</span>],inv(i,p),p);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">&quot;%lld%lld&quot;</span>,&amp;a,&amp;b);</span><br><span class="line">		<span class="keyword">if</span>(a==b&amp;&amp;a==<span class="number">0</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(a&lt;b)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;How lonely night~\n&quot;</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;%lld\n&quot;</span>,C(a,b,p));</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+<p>当然，逆元也可以不使用扩展欧几里得，也可以使用递推法<br>inv(a) = (p - p / a) * inv(p % a) % p<br>这个方法理论上是O(n)的，时间复杂度比扩展欧几里得好一些</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> LL;</span><br><span class="line">LL inv[<span class="number">100010</span>]=&#123;&#125;;</span><br><span class="line"><span class="function">LL <span class="title">cheng</span><span class="params">(LL a,LL b,LL p)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(b==<span class="number">1</span>) <span class="keyword">return</span> a%p;</span><br><span class="line">    LL e;</span><br><span class="line">    e=cheng(a,b/<span class="number">2</span>,p);</span><br><span class="line">    e=e+e;</span><br><span class="line">    e%=p;</span><br><span class="line">    <span class="keyword">if</span>(b%<span class="number">2</span>==<span class="number">1</span>) e+=a;</span><br><span class="line">    e%=p;</span><br><span class="line">    <span class="keyword">return</span> e;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">LL <span class="title">C</span><span class="params">(LL n,LL m,LL p)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	m=min(m,n-m);</span><br><span class="line">	<span class="keyword">if</span>(m==<span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	LL ans=<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">for</span>(LL i=n;i&gt;=n-m+<span class="number">1</span>;i--)</span><br><span class="line">	&#123;</span><br><span class="line">		ans=cheng(ans,i,p);</span><br><span class="line">	&#125;</span><br><span class="line">	ans=cheng(ans,inv[m],p);</span><br><span class="line">	<span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	LL p;</span><br><span class="line">	p=<span class="number">1e18</span>;</span><br><span class="line">	p+=<span class="number">7</span>;</span><br><span class="line">	LL a,b;</span><br><span class="line">	inv[<span class="number">0</span>]=inv[<span class="number">1</span>]=<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">2</span>;i&lt;=<span class="number">100000</span>;i++) inv[i]=cheng(p-p/i,inv[p%i],p);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">2</span>;i&lt;=<span class="number">100000</span>;i++) inv[i]=cheng(inv[i],inv[i<span class="number">-1</span>],p);</span><br><span class="line">	<span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">&quot;%lld%lld&quot;</span>,&amp;a,&amp;b);</span><br><span class="line">		<span class="keyword">if</span>(a==b&amp;&amp;a==<span class="number">0</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(a&lt;b)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;How lonely night~\n&quot;</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;%lld\n&quot;</span>,C(a,b,p));</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="http://www.lydsy.com/JudgeOnline/problem.php?id=2982">http://www.lydsy.com/JudgeOnline/problem.php?id=2982</a></p>
+<blockquote>
+<p>Description</p>
+<p>LMZ有n个不同的基友，他每天晚上要选m个进行[河蟹]，而且要求每天晚上的选择都不一样。那么LMZ能够持续多少个这样的夜晚呢？当然，LMZ的一年有10007天，所以他想知道答案mod 10007的值。(1&lt;=m&lt;=n&lt;=200,000,000)<br>Input</p>
+<p>  第一行一个整数t，表示有t组数据。(t&lt;=200)<br>  接下来t行每行两个整数n, m，如题意。<br>Output</p>
+<p>T行，每行一个数，为C(n, m) mod 10007的答案。</p>
+</blockquote>
+<p>这道题使用的方法是Lucas定理，然后逆元是用费马小定理求的…</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> LL;</span><br><span class="line">LL n,m,p;</span><br><span class="line"><span class="function">LL <span class="title">quick_mod</span><span class="params">(LL a,LL b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	LL ans=<span class="number">1</span>;</span><br><span class="line">	a%=p;</span><br><span class="line">	<span class="keyword">while</span>(b)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(b&amp;<span class="number">1</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			ans=ans*a%p;</span><br><span class="line">			b--;</span><br><span class="line">		&#125;</span><br><span class="line">		b&gt;&gt;=<span class="number">1</span>;</span><br><span class="line">		a=a*a%p;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">LL <span class="title">C</span><span class="params">(LL n,LL m)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(m&gt;n) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	LL ans=<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=m;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		LL a=(n+i-m)%p;</span><br><span class="line">		LL b=i%p;</span><br><span class="line">		ans=ans*(a*quick_mod(b,p<span class="number">-2</span>)%p)%p;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">LL <span class="title">Lucas</span><span class="params">(LL n,LL m)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(m==<span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">return</span> C(n%p,m%p)*Lucas(n/p,m/p)%p;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> T;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;T);</span><br><span class="line">	p=<span class="number">10007</span>;</span><br><span class="line">	<span class="keyword">while</span>(T--)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">&quot;%lld%lld&quot;</span>,&amp;n,&amp;m);</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%lld\n&quot;</span>,Lucas(n,m));</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>组合数范围较小时，还有传统的杨辉三角求法</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">2000</span> + <span class="number">5</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> MOD = (<span class="keyword">int</span>)<span class="number">1e9</span> + <span class="number">7</span>;</span><br><span class="line"><span class="keyword">int</span> comb[N][N];<span class="comment">//comb[n][m]就是C(n,m)</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i ++)&#123;</span><br><span class="line">        comb[i][<span class="number">0</span>] = comb[i][i] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; i; j ++)&#123;</span><br><span class="line">            comb[i][j] = comb[i<span class="number">-1</span>][j] + comb[i<span class="number">-1</span>][j<span class="number">-1</span>];</span><br><span class="line">            comb[i][j] %= MOD;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    init();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上就是一些基本的组合数取模的方法，但是如果我们取模的数和其他数不互质怎么办？<br>在组合数范围比较小时（小于1000000？）<br>我们可以用一个数组a[1000000]<br>a[i]代表我们最后结果需要乘a[i]个i，因为最后组合数的结果为整数，所以我们把所有的i进行质因数分解，然后把a[i]分配到对应的质因子中，最后我们就可以保证a数组中所有的值都为非负数，即我们进行的还是乘法运算，不会有精度问题，就是时间复杂度和空间复杂度比较大，但是还可以接受</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LL unsigned long long</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> n,m;</span><br><span class="line"><span class="keyword">const</span> LL mod=<span class="number">1000000000000000007l</span>l;</span><br><span class="line">LL a[<span class="number">100011</span>];</span><br><span class="line"><span class="function">LL <span class="title">qadd</span><span class="params">(LL a,LL t)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (t==<span class="number">1</span>) <span class="keyword">return</span> a;</span><br><span class="line">	LL tem;</span><br><span class="line">	tem=qadd(a,t/<span class="number">2</span>);</span><br><span class="line">	tem=tem+tem;</span><br><span class="line">	tem%=mod;</span><br><span class="line">	<span class="keyword">if</span> (t%<span class="number">2</span>==<span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		tem+=a;</span><br><span class="line">		tem%=mod;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> tem;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">LL <span class="title">qpow</span><span class="params">(LL a,LL t)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (t==<span class="number">1</span>) <span class="keyword">return</span> a;</span><br><span class="line">	LL tem;</span><br><span class="line">	tem=qpow(a,t/<span class="number">2</span>);</span><br><span class="line">	tem=qadd(tem,tem);</span><br><span class="line">	<span class="keyword">if</span> (t%<span class="number">2</span>==<span class="number">1</span>) tem=qadd(tem,a);</span><br><span class="line">	<span class="keyword">return</span> tem;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">work</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">memset</span>(a,<span class="number">0l</span>l,<span class="keyword">sizeof</span>(a));</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">2</span>;i&lt;=n;i++) a[i]++;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">2</span>;i&lt;=m;i++) a[i]--;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">2</span>;i&lt;=n-m;i++) a[i]--;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i=n;i&gt;<span class="number">1</span>;i--)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (a[i]!=<span class="number">0</span>)</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">2</span>;j&lt;=<span class="built_in">sqrt</span>(i);j++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (i%j==<span class="number">0</span>)</span><br><span class="line">			&#123;</span><br><span class="line">				a[j]+=a[i];</span><br><span class="line">				a[i/j]+=a[i];</span><br><span class="line">				a[i]=<span class="number">0</span>;</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//for (int i=1;i&lt;=n;i++) cout&lt;&lt;a[i]&lt;&lt;&quot; &quot;;</span></span><br><span class="line">	<span class="comment">//cout&lt;&lt;endl;</span></span><br><span class="line">	LL ans=<span class="number">1l</span>l;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">2</span>;i&lt;=n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (a[i]!=<span class="number">0</span>)</span><br><span class="line">		ans=qadd(ans,qpow(i,a[i]));</span><br><span class="line">		ans%=mod;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">cout</span>&lt;&lt;ans&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> T;</span><br><span class="line">	<span class="keyword">while</span> (<span class="built_in">cin</span>&gt;&gt;n&gt;&gt;m,n!=<span class="number">0</span>&amp;&amp;m!=<span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (n&lt;m)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;How lonely night~&quot;</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">		&#123;</span><br><span class="line">			work();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://reku1997.gitee.io">Reku</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://reku1997.gitee.io/2016/07/09/%E7%BB%84%E5%90%88%E6%95%B0%E5%8F%96%E6%A8%A1/">https://reku1997.gitee.io/2016/07/09/%E7%BB%84%E5%90%88%E6%95%B0%E5%8F%96%E6%A8%A1/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/%E6%95%B0%E8%AE%BA/">数论</a>
+            <a href="/tags/%E4%B9%98%E6%B3%95%E9%80%86%E5%85%83/">乘法逆元</a>
+            <a href="/tags/%E5%8D%A2%E5%8D%A1%E6%96%AF%E5%AE%9A%E7%90%86/">卢卡斯定理</a>
+            <a href="/tags/%E7%BB%84%E5%90%88%E6%95%B0/">组合数</a>
+            <a href="/tags/%E8%B4%B9%E9%A9%AC%E5%B0%8F%E5%AE%9A%E7%90%86/">费马小定理</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2016/07/10/%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E6%A8%A1%E6%9D%BF/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">计算几何模板题</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2016/07/08/sg/">
+        <span class="next-text nav-default">SG函数</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"><div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:906799571@qq.com" class="iconfont icon-email" title="email"></a>
+        <a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker" class="iconfont icon-github" title="github"></a>
+        <a target="_blank" rel="noopener" href="https://www.zhihu.com/people/reku1997" class="iconfont icon-zhihu" title="zhihu"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2016 - 2020<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Reku</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://reku1997.gitee.io/2016/07/09/%E7%BB%84%E5%90%88%E6%95%B0%E5%8F%96%E6%A8%A1/';
+        this.page.identifier = '2016/07/09/组合数取模/';
+        this.page.title = '组合数取模';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//reku.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+</body>
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="CSE 599W: Systems for ML 课程笔记 1-6"/><meta name="keywords" content="learning, system, 课程笔记, Reku" /><link rel="alternate" href="/default" title="Reku" ><link rel="shortcut icon" type="image/x-icon" href="/reku.ico?v=2.11.0" />
+<link rel="canonical" href="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "MWLzM550UOu69h3dgvbbLSsF-gzGzoHsz",
+      appKey: "gkKnwm9FK0cu3ysJbcggsCDz"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"MWLzM550UOu69h3dgvbbLSsF-gzGzoHsz","app_key":"gkKnwm9FK0cu3ysJbcggsCDz"},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>CSE 599W: Systems for ML 课程笔记 1-6 - Reku</title>
+  <meta name="generator" content="Hexo 5.2.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Reku</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Reku</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">CSE 599W: Systems for ML 课程笔记 1-6
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2019-11-08
+        </span><span class="post-category">
+            <a href="/categories/system/">system</a>
+            <a href="/categories/system/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+            </span>
+        <span class="post-visits"
+             data-url="/2019/11/08/cse-599w-systems-for-ml-1-6/"
+             data-title="CSE 599W: Systems for ML 课程笔记 1-6">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Lecture-1-2"><span class="toc-text">Lecture 1-2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lecture-3-Overview-of-Deep-Learning-System"><span class="toc-text">Lecture 3: Overview of Deep Learning System</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lecture-4-Backpropagation-and-Automatic-Differentiation"><span class="toc-text">Lecture 4: Backpropagation and Automatic Differentiation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lecture-5-GPU-Programming"><span class="toc-text">Lecture 5: GPU Programming</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lecture-6-Optimize-for-Hardware-Backends"><span class="toc-text">Lecture 6: Optimize for Hardware Backends</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><p><a target="_blank" rel="noopener" href="http://dlsys.cs.washington.edu/">课程网站</a> 在头条 AML 实习的时候就觉得这个 AI system 方向非常有趣，但是苦于实验室不是搞这一套的，自己拖延症也非常严重，所以一直在入门的边缘徘徊。但是在今天——研一秋学期考试周的前一周，我决定开始学习 AI system 方向最著名的必学课程，Tianqi Chen 在 UW 开设的 CSE599W。 这个课程其实资料并不是很完善，只有 github 上面的几个 repo 和课程网站上面的 slide，缺乏讲课的视频资源。而且在开始学习之前就听说很多地方 slide 写的非常简陋，只能通过 tvm 和 tinyflow 代码慢慢学习。我在学习之前也找了一些 blog 资源，开个坑，希望可以努力坚持下来！ 本人的作业也开源到 <a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker/CSE-599W-2018">github</a> 上面了，希望大家多多指导。</p>
+<a id="more"></a>
+
+<p><a target="_blank" rel="noopener" href="http://jcf94.com/2018/10/04/2018-10-04-cse559w/">Chenfan Blog——CSE 599W： Systems for ML</a> </p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/c_186688444">知乎专栏：SysML/DL机器学习系统</a> </p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/50529704">手把手带你遨游TVM</a> </p>
+<p>不过上面这两个参考资料，第一个有点过于简略，第二个虽然写的很好但是已经五个月没有更新了…可能是坑了，所以后面的内容还是要靠自己慢慢研究了… 第三篇是蓝色大大的 TVM 入门文章，写的非常赞，可以清晰的理解 TVM 存在的意义与解决的问题。</p>
+<h2 id="Lecture-1-2"><a href="#Lecture-1-2" class="headerlink" title="Lecture 1-2"></a>Lecture 1-2</h2><p>介绍了一波深度学习的基本概念，常见的各种 CNN、RNN、激活函数、BatchNormal、梯度消失与梯度爆炸都用一节课介绍了一通。因为我之前学过 Ng 在 coursera 上面的 Deep learing 专项，所以对这些都很了解了，而且这些内容的资源满大街都是，就不在这里继续介绍了。 第二讲是一个实验课，用 mxnet 搭建一个基础的网络，虽然我之前系统看过沐神的《动手深度学习》，但是我看的是 github 上面的 pytorch 魔改版，mxnet 只在上半年的华为软挑的时候用过一下，不是特别了解。但是这个 gluon api 似乎跟 pytorch 大同小异，这里也不多废话了，有兴趣自己看看原版《动手深度学习》就好了。</p>
+<h2 id="Lecture-3-Overview-of-Deep-Learning-System"><a href="#Lecture-3-Overview-of-Deep-Learning-System" class="headerlink" title="Lecture 3: Overview of Deep Learning System"></a>Lecture 3: Overview of Deep Learning System</h2><p>学习过什么是 Deep Learning 了，那么啥是 Deep Learning System 呢？ 在我的理解其实就是从调包到真正计算出结果的全过程，就是 Deep Learning System，也就是通常所说的算法的真正落地。 在这个课程中，Deep Learning System 从高层到底层分成了三个部分： </p>
+<p><img src="3-1.png"> </p>
+<p>第一部分就是调包的封装 API，第二部分表示调完包后对调包代码的优化与 Scheduling，第三部分就是最下面的一些高效的 GPU kernel 实现、不同硬件后端的部署等等。 那么一个 Deep Learning 框架在 API 层需要包括什么内容呢？为什么大家要用框架而不是自己从头写呢？ 下面这个图就回答了这个问题，现在的模型越来越大，实现起来需要注意的内容也就越来越多，如果每步都由我们自己来进行链式求导算梯度的话，可能就没有这么多转行深度学习的大哥了（ </p>
+<p><img src="3-2.png"> </p>
+<p>计算图是一个 Deep Learning 框架的基本概念，节点表示运算操作，边表示数据依赖，这里展示了一个最简单的 Logistic Regression 计算图实例： 首先是计算 loss 之前的前向传播，其实就是一个最简单的矩阵乘法加一个 softmax： </p>
+<p><img src="3-3.png"> </p>
+<p>然后是将 softmax 输出的东西搞一个交叉熵作为 loss，相当于最大化 liklihood: </p>
+<p><img src="3-4.png"> </p>
+<p>然后是自动微分： </p>
+<p><img src="3-5.png"> </p>
+<p>最后通过 SGD 来更新梯度： </p>
+<p><img src="3-6.png"> </p>
+<p>结合上面的所有步骤，我们就得到了一个计算图： </p>
+<p><img src="3-7.png"> </p>
+<p>最上层的 API 做了最简单的介绍，下面就是中间的 System 部分，讲的是对计算图的优化和对计算的调度。 计算优化最简单的一种就是 memory 优化，比如增加 cache 利用率之类的。因为我们的代码通常跑在多个线程甚至多个计算设备上面，所以并行调度也是非常重要的。最简单的一种并行调度如下图，这是一个 mxnet 代码，因为计算 C 和计算 B 是完全独立的，所以这两个部分可以并行化。 </p>
+<p><img src="3-8.png"> </p>
+<p>然后简单介绍一下最底层的情况，我们训练完了 model，要部署到不同的设备上。想必大家也都听过各种各样的厂商搞出过各种各样的部署方法，为了产生更好的模型性能： </p>
+<p><img src="3-9.png"> </p>
+<p>TVM 就是为了解决这样的问题而诞生的，只要我们都搞成中间代码，全栈自动编译优化，这样 model 就可以非常简单的部署到不同的设备上了： </p>
+<p><img src="3-10.png"> </p>
+<p>这门课将在接下来详细介绍 Deep Learning System 的三个部分。</p>
+<h2 id="Lecture-4-Backpropagation-and-Automatic-Differentiation"><a href="#Lecture-4-Backpropagation-and-Automatic-Differentiation" class="headerlink" title="Lecture 4: Backpropagation and Automatic Differentiation"></a>Lecture 4: Backpropagation and Automatic Differentiation</h2><p>第四节课讲的是 Deep Learning 中的求导方式——Auto-Diff. 首先我们要了解现代计算机实现求导通常有哪些方式。 第一种叫做 Symbolic Differentiation，如图所示： </p>
+<p><img src="4-1.png"> </p>
+<p>通过程序来维护整个求导的式子，然后把变量带入就得到最终的导数。这种做法的缺点在于表达式是一个很难维护的东西，最后要维护的东西就会越来越多。正常 Deep Learning 框架显然不应该选择这种求导方式… 第二种叫做 Numerical Differentiation，这种求导形式非常简单，看起来很适合计算机： </p>
+<p><img src="4-2.png"> </p>
+<p>但是有个很关键的问题是，这种求导方法要进行两次正向传播，跑起来很慢，而且误差会比较大。但是因为其实现方式的简单，所以这是一个非常好的 grad check 工具。Ng 在 DL 专项里面也是用这种方式去进行 grad check 的。 第三种叫做 Backpropagation，现代 Deep Learning 的核心： </p>
+<p><img src="4-3.png"> </p>
+<p>虽然这种做法很适合计算机，效率也不错。但有一个关键的问题，我们在做正向传播的时候要记录中间结果，这样才能在后面进行反向传播，内存耗费很大。而且难以形成计算图，无法进行通用的并行化。 这时候就需要掏出第四种方法，叫做 Automatic Differentiation： </p>
+<p><img src="4-5.png"> </p>
+<p><img src="4-4.png"> </p>
+<p>其实思路非常简单，看伪代码就看的出来。这种方法就是通过反拓扑序去生成一个反向的计算图，因为是计算图所以不用保存任何中间变量；也因为是计算图，所以可以进行通用的并行化与代码优化，两全其美！ 接下来就是 Auto-diff 的具体实现，也就是 assignment 1。这次作业的难度不是太大，前面就是一些算子的简单实现，后面有两段重要的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> node <span class="keyword">in</span> topo_order:</span><br><span class="line">    <span class="keyword">if</span> isinstance(node.op, PlaceholderOp):</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    input_vals = [node_to_val_map[x] <span class="keyword">for</span> x <span class="keyword">in</span> node.inputs]</span><br><span class="line">    res = node.op.compute(node, input_vals)</span><br><span class="line">    <span class="keyword">if</span> isinstance(res, np.ndarray) == <span class="literal">False</span>:</span><br><span class="line">        res = np.array(res)</span><br><span class="line">    node_to_val_map[node] = res</span><br></pre></td></tr></table></figure>
+
+<p>这段是前向传播的部分，记录每个节点计算出来的结果。前向传播需要正向拓扑序。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> node <span class="keyword">in</span> reverse_topo_order:</span><br><span class="line">    grad = sum_node_list(node_to_output_grads_list[node])</span><br><span class="line">    node_to_output_grad[node] = grad</span><br><span class="line">    input_grads = node.op.gradient(node, grad)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(node.inputs)):</span><br><span class="line">        node_to_output_grads_list[node.inputs[i]] = node_to_output_grads_list.get(node.inputs[i], [])</span><br><span class="line">        node_to_output_grads_list[node.inputs[i]].append(input_grads[i])</span><br></pre></td></tr></table></figure>
+
+<p>这段是反向形成 Auto-diff 计算图的过程，跟伪代码很像。进一步解释一下：按照反拓扑序来遍历节点，计算到这个节点就代表着所有相关的梯度都计算完了。现在需要把相关的梯度都加起来，然后加起来的梯度作为这个节点向后面传播的梯度。整个过程很容易理解。</p>
+<h2 id="Lecture-5-GPU-Programming"><a href="#Lecture-5-GPU-Programming" class="headerlink" title="Lecture 5: GPU Programming"></a>Lecture 5: GPU Programming</h2><p>这一讲涉及到的部分比较底层，虽然浙大本科的硬件三连质量非常高，但是对于 GPU 架构接触还是非常少的，又没有视频，只能尽力看一看了… 首先讲的是 CPU 的架构，很容易理解，CPU 跟内存有关的操作都很慢，所以才有各种指令预测、cache 优化算法之类的折磨着一代有一代的计算机学子： </p>
+<p><img src="5-1.png"> </p>
+<p>而 GPU 则是给 CPU 加了一大堆计算资源，比普通的指令向量化更加强劲： </p>
+<p><img src="5-2.png"> </p>
+<p>从这个图可以看出来，GPU 的寄存器数量非常大，所以他可以开很多线程去并行计算，但是从这个图也可以看出来，GPU 的 cache 小的可怜，所以 GPU 适用于那种轻内存读写、重计算的任务，也就是大量的并行计算任务。 </p>
+<p><img src="5-3.png"> </p>
+<p>然后讲了 CUDA Programming Model，因为我完全不懂 CUDA 编程，所以后面的东西都是我瞎理解的，不一定对。 这个叫做 SIMT 的 Model 就是把几个 thread group 成一个 block，再把几个 block group 成一个 grid，block 可以以任何顺序在 GPU 上面调度。 </p>
+<p><img src="5-3.5.png"> </p>
+<p>然后是个最简单的 cuda 程序——vector add。过程非常简单，跟操作系统里面查页表差不多，这里通过 block 下标和 thread 下标可以得到向量加法的下标，然后每个线程都执行一样的代码就可以了。 </p>
+<p><img src="5-3.8.png"> </p>
+<p>后面讲了一个窗口 sum 的例子，因为他图画的不太好，所以有点难以理解，我尽力理解了一下： </p>
+<p><img src="5-4.png"> </p>
+<p>最简单的实现方式是这样的：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> RADIUS 3</span></span><br><span class="line"><span class="function">__global__ <span class="keyword">void</span> <span class="title">windowSumNaiveKernel</span><span class="params">(<span class="keyword">const</span> <span class="keyword">float</span>* A, <span class="keyword">float</span>* B, <span class="keyword">int</span> n)</span> </span></span><br><span class="line"><span class="function"></span>&#123;    </span><br><span class="line">    <span class="keyword">int</span> out_index = blockDim.x * blockIdx.x + threadIdx.x;    </span><br><span class="line">    <span class="keyword">int</span> in_index = out_index + RADIUS;    </span><br><span class="line">    <span class="keyword">if</span> (out_index &lt; n) &#123;</span><br><span class="line">        <span class="keyword">float</span> sum = <span class="number">0.</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = -RADIUS; i &lt;= RADIUS; ++i) &#123;</span><br><span class="line">            sum += A[in_index + i];        </span><br><span class="line">        &#125;</span><br><span class="line">        B[out_index] = sum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>为什么说他图画的不太好，因为他的图跟代码的下标其实是对应不上的。B[0] 的结果应该是从 A[0] 到 A[6] 的和才对，这样下标就和代码完全对应上了。 这个实现非常简单，所以有很大的优化空间。其中最脑残的地方就是每个线程都读了 7 次 A，这样对 GPU 这种小 cache 来说是非常残忍的。 </p>
+<p><img src="5-5.png"> </p>
+<p>所以一个非常简单的优化就是从一个线程读 7 次 A，变成一个 block (假设有四个线程) 读 9 次 A。 </p>
+<p><img src="5-6.png"> </p>
+<p>那么下面的实现就很好理解了：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">__global__ <span class="keyword">void</span> <span class="title">windowSumKernel</span><span class="params">(<span class="keyword">const</span> <span class="keyword">float</span>* A, <span class="keyword">float</span>* B, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    __shared__ <span class="keyword">float</span> temp[THREADS_PER_BLOCK + <span class="number">2</span> * RADIUS];</span><br><span class="line">    <span class="keyword">int</span> out_index = blockDim.x * blockIdx.x + threadIdx.x;</span><br><span class="line">    <span class="keyword">int</span> in_index = out_index + RADIUS;</span><br><span class="line">    <span class="keyword">int</span> local_index = threadIdx.x + RADIUS;</span><br><span class="line">    <span class="keyword">if</span> (out_index &lt; n) &#123;</span><br><span class="line">        temp[local_index] = A[in_index];</span><br><span class="line">        <span class="keyword">if</span> (threadIdx.x &lt; RADIUS) &#123;</span><br><span class="line">            temp[local_index - RADIUS] = A[in_index - RADIUS];</span><br><span class="line">            temp[local_index + THREADS_PER_BLOCK] = A[in_index+THREADS_PER_BLOCK];</span><br><span class="line">        &#125;</span><br><span class="line">        __syncthreads();</span><br><span class="line">        <span class="keyword">float</span> sum = <span class="number">0.</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = -RADIUS; i &lt;= RADIUS; ++i) &#123;</span><br><span class="line">            sum += temp[local_index + i];</span><br><span class="line">        &#125;        </span><br><span class="line">        B[out_index] = sum;    </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中比较奥妙的地方是 if (threadIdx.x &lt; RADIUS) 这个语法块，其实也不难理解，就是把两边的 RADIUS 部分充满。最后是一个简单的矩阵乘法程序： </p>
+<p><img src="5-7.png"></p>
+<h2 id="Lecture-6-Optimize-for-Hardware-Backends"><a href="#Lecture-6-Optimize-for-Hardware-Backends" class="headerlink" title="Lecture 6: Optimize for Hardware Backends"></a>Lecture 6: Optimize for Hardware Backends</h2><p>这一讲处于计算图和硬件之间。 首先讲了一些体系结构的基本知识，比如多级 cache 之类的，然后讲了矩阵乘法的 cache 优化，非常基础。 最简单的矩阵乘法如下图所示： </p>
+<p><img src="6-1.png"> </p>
+<p>像上面这样直接做矩阵乘法，其实对 cache 的利用率并不高，更好的方式是把矩阵分成很多个小块： </p>
+<p><img src="6-2.png"> </p>
+<p>分块的方法可以缩小从下级 cache 到寄存器的 cost，有人想那我直接把 v1、v2 高的大一点，这样不就可以优化更多了吗？ 但是通常来说，寄存器非常小，很难存下一整列或者一整行，所幸 CPU 的 cache 通常比较大，也许可以存下： </p>
+<p><img src="6-3.png"> </p>
+<p>把对寄存器的优化和 L1 cache 的优化相结合，就得到了下面这种比较复杂的优化方式： </p>
+<p><img src="6-4.png"> </p>
+<p>对于 CPU 来说，代码优化可能集中于 Reuse memory 上面，而 GPU 的优化则是集中于 Reuse among threads 上。（这段其实不太懂，我理解就是跟前一讲的那个 window sum 一样，优化复用不同线程的内存） </p>
+<p><img src="6-5.png"> </p>
+<p>对于计算图的代码优化，其实套路千变万化： </p>
+<p><img src="6-6.png"> </p>
+<p>为了解决这样的优化问题，我们就需要本门课的核心内容——TVM 了！</p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://reku1997.gitee.io">Reku</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/">https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/learning/">learning</a>
+            <a href="/tags/system/">system</a>
+            <a href="/tags/%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/">课程笔记</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2019/11/21/cse-599w-systems-for-ml-7-12/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">CSE 599W: SYSTEMS FOR ML 课程笔记 7-12</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2019/07/26/adaboost/">
+        <span class="next-text nav-default">从 AdaBoost 到 GBDT</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"><div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:906799571@qq.com" class="iconfont icon-email" title="email"></a>
+        <a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker" class="iconfont icon-github" title="github"></a>
+        <a target="_blank" rel="noopener" href="https://www.zhihu.com/people/reku1997" class="iconfont icon-zhihu" title="zhihu"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2016 - 2020<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Reku</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/';
+        this.page.identifier = '2019/11/08/cse-599w-systems-for-ml-1-6/';
+        this.page.title = 'CSE 599W: Systems for ML 课程笔记 1-6';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//reku.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+</body>
+</html>

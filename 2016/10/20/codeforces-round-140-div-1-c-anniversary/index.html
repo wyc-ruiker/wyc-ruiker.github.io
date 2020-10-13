@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="Codeforces Round #140 (Div. 1) C. Anniversary"/><meta name="keywords" content="数论, 斐波那契, Reku" /><link rel="alternate" href="/default" title="Reku" ><link rel="shortcut icon" type="image/x-icon" href="/reku.ico?v=2.11.0" />
+<link rel="canonical" href="https://reku1997.gitee.io/2016/10/20/codeforces-round-140-div-1-c-anniversary/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "MWLzM550UOu69h3dgvbbLSsF-gzGzoHsz",
+      appKey: "gkKnwm9FK0cu3ysJbcggsCDz"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"MWLzM550UOu69h3dgvbbLSsF-gzGzoHsz","app_key":"gkKnwm9FK0cu3ysJbcggsCDz"},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>Codeforces Round #140 (Div. 1) C. Anniversary - Reku</title>
+  <meta name="generator" content="Hexo 5.2.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Reku</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Reku</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">Codeforces Round #140 (Div. 1) C. Anniversary
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-10-20
+        </span><span class="post-category">
+            <a href="/categories/acm/">acm</a>
+            </span>
+        <span class="post-visits"
+             data-url="/2016/10/20/codeforces-round-140-div-1-c-anniversary/"
+             data-title="Codeforces Round #140 (Div. 1) C. Anniversary">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><p>通过这个题目发现了一个很奇妙的性质 \[gcd(fib(a),fib(b))=fib(gcd(a,b))\] </p>
+<a id="more"></a>这样只需要枚举下标的公因数，然后看看有没有\\(k\\)个符合条件就可以了。 注意，因为是通过\\(\frac{r}{p}-\frac{l-1}{p}\\)判断的。而本质不同的\\(\frac{r}{p}\\)只有\\(\sqrt{r}\\)级别，所以只需要枚举\\(\sqrt{r}\\)次即可，枚举\\(\frac{r}{p}\\)相同的最大的\\(p\\)
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> LL;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line">LL m,a,b,k;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">oo</span>&#123;</span></span><br><span class="line">	LL t[<span class="number">2</span>][<span class="number">2</span>];</span><br><span class="line">&#125;;</span><br><span class="line">oo su;</span><br><span class="line">oo tt;</span><br><span class="line"><span class="function">oo <span class="title">cheng</span><span class="params">(oo x,oo y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	oo ans;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;=<span class="number">1</span>;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;=<span class="number">1</span>;j++)</span><br><span class="line">		&#123;</span><br><span class="line">			ans.t[i][j]=<span class="number">0</span>;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">0</span>;k&lt;=<span class="number">1</span>;k++)</span><br><span class="line">			&#123;</span><br><span class="line">				ans.t[i][j]+=x.t[i][k]*y.t[k][j];</span><br><span class="line">				ans.t[i][j]%=m;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">oo <span class="title">kpow</span><span class="params">(LL x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(x==<span class="number">0</span>) <span class="keyword">return</span> su;</span><br><span class="line">	oo ans=kpow(x/<span class="number">2</span>);</span><br><span class="line">	ans=cheng(ans,ans);</span><br><span class="line">	<span class="keyword">if</span>(x%<span class="number">2</span>) ans=cheng(ans,tt);</span><br><span class="line">	<span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">LL <span class="title">ff</span><span class="params">(LL x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	su.t[<span class="number">0</span>][<span class="number">1</span>]=<span class="number">0</span>;</span><br><span class="line">	su.t[<span class="number">0</span>][<span class="number">0</span>]=<span class="number">1</span>;</span><br><span class="line">	su.t[<span class="number">1</span>][<span class="number">0</span>]=<span class="number">0</span>;</span><br><span class="line">	su.t[<span class="number">1</span>][<span class="number">1</span>]=<span class="number">1</span>;</span><br><span class="line">	tt.t[<span class="number">0</span>][<span class="number">0</span>]=<span class="number">0</span>;</span><br><span class="line">	tt.t[<span class="number">0</span>][<span class="number">1</span>]=<span class="number">1</span>;</span><br><span class="line">	tt.t[<span class="number">1</span>][<span class="number">0</span>]=<span class="number">1</span>;</span><br><span class="line">	tt.t[<span class="number">1</span>][<span class="number">1</span>]=<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">if</span>(x==<span class="number">1</span>) <span class="keyword">return</span> <span class="number">1</span>%m;</span><br><span class="line">	oo p=kpow(x<span class="number">-2</span>);</span><br><span class="line">	<span class="comment">//cout&lt;&lt;p.t[0][0]&lt;&lt;&quot; &quot;&lt;&lt;p.t[0][1]&lt;&lt;&quot; &quot;&lt;&lt;p.t[1][0]&lt;&lt;&quot; &quot;&lt;&lt;p.t[1][1]&lt;&lt;endl;</span></span><br><span class="line">	LL ans=p.t[<span class="number">0</span>][<span class="number">1</span>]+p.t[<span class="number">1</span>][<span class="number">1</span>];</span><br><span class="line">	ans%=m;</span><br><span class="line">	<span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%I64d%I64d%I64d%I64d&quot;</span>,&amp;m,&amp;b,&amp;a,&amp;k);</span><br><span class="line">	LL ans=<span class="number">0</span>,pos;</span><br><span class="line">	pos=a/k;</span><br><span class="line">    <span class="keyword">while</span>(pos&gt;=<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">		LL pp=a/pos-(b<span class="number">-1</span>)/pos;</span><br><span class="line">		<span class="keyword">if</span>(pp&gt;=k) ans=max(pos,ans);</span><br><span class="line">        pos=a/(a/pos+<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//cout&lt;&lt;ans&lt;&lt;endl;</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%I64d&quot;</span>,ff(ans));</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://reku1997.gitee.io">Reku</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://reku1997.gitee.io/2016/10/20/codeforces-round-140-div-1-c-anniversary/">https://reku1997.gitee.io/2016/10/20/codeforces-round-140-div-1-c-anniversary/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/%E6%95%B0%E8%AE%BA/">数论</a>
+            <a href="/tags/%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91/">斐波那契</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2016/10/30/%E8%BF%91%E6%9C%9F%E9%A2%98%E7%9B%AE-2/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">近期题目</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2016/10/05/codeforces-round-277-5-div-2-e-hiking/">
+        <span class="next-text nav-default">Codeforces Round #277.5 (Div. 2) E. Hiking</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"><div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:906799571@qq.com" class="iconfont icon-email" title="email"></a>
+        <a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker" class="iconfont icon-github" title="github"></a>
+        <a target="_blank" rel="noopener" href="https://www.zhihu.com/people/reku1997" class="iconfont icon-zhihu" title="zhihu"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2016 - 2020<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Reku</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://reku1997.gitee.io/2016/10/20/codeforces-round-140-div-1-c-anniversary/';
+        this.page.identifier = '2016/10/20/codeforces-round-140-div-1-c-anniversary/';
+        this.page.title = 'Codeforces Round #140 (Div. 1) C. Anniversary';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//reku.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+</body>
+</html>
