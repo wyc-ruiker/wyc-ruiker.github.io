@@ -1,217 +1,625 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-  <head><meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://gitee.com/reku1997/reku1997/raw/master/reku.ico">
+
+<link rel="stylesheet" href="/css/main.css">
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
 
-<meta name="theme-color" content="#f8f5ec" />
-<meta name="msapplication-navbutton-color" content="#f8f5ec">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
-
-<meta name="description" content="CC98留档：2016 省赛小结 By ruiker @ 心灵之约观光团"/><meta name="keywords" content="CC98, acm, Reku" /><link rel="alternate" href="/default" title="Reku" ><link rel="shortcut icon" type="image/x-icon" href="https://gitee.com/reku1997/reku1997/raw/master/reku.ico?v=2.11.0" />
-<link rel="canonical" href="https://reku1997.gitee.io/2016/04/23/cc98-2/"/>
-
-<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
-    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"reku1997.gitee.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AW5K8S9IEE","apiKey":"d7e666d597854738d2fb31ecaa989aa5","indexName":"dev_reku1997","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
-  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
 
-<script id="baidu_push">
-(function(){
-    var bp = document.createElement('script');
-    var curProtocol = window.location.protocol.split(':')[0];
-    if (curProtocol === 'https') {
-        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-    }
-    else {
-        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-    }
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(bp, s);
-})();
+  <meta name="description" content="惨不忍睹的一场比赛...就像是做了一个恐怖的噩梦...">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CC98留档：2016 省赛小结 By ruiker @ 心灵之约观光团">
+<meta property="og:url" content="https://reku1997.gitee.io/2016/04/23/cc98-2/index.html">
+<meta property="og:site_name" content="Reku">
+<meta property="og:description" content="惨不忍睹的一场比赛...就像是做了一个恐怖的噩梦...">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://www.reku.me/wp-content/uploads/2016/04/捕获33-184x300.png">
+<meta property="article:published_time" content="2016-04-23T11:46:15.000Z">
+<meta property="article:modified_time" content="2020-06-12T06:31:42.000Z">
+<meta property="article:author" content="Reku">
+<meta property="article:tag" content="CC98">
+<meta property="article:tag" content="acm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.reku.me/wp-content/uploads/2016/04/捕获33-184x300.png">
+
+<link rel="canonical" href="https://reku1997.gitee.io/2016/04/23/cc98-2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-cn'
+  };
 </script>
-<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
-  <script id="leancloud">
-    AV.init({
-      appId: "MWLzM550UOu69h3dgvbbLSsF-gzGzoHsz",
-      appKey: "gkKnwm9FK0cu3ysJbcggsCDz"
-    });
-  </script><script>
-  window.config = {"leancloud":{"app_id":"MWLzM550UOu69h3dgvbbLSsF-gzGzoHsz","app_key":"gkKnwm9FK0cu3ysJbcggsCDz"},"toc":true,"fancybox":true,"pjax":"","latex":true};
-</script>
 
-    <title>CC98留档：2016 省赛小结 By ruiker @ 心灵之约观光团 - Reku</title>
-  <meta name="generator" content="Hexo 5.2.0"></head>
+  <title>CC98留档：2016 省赛小结 By ruiker @ 心灵之约观光团 | Reku</title>
+  
 
-  <body><div id="mobile-navbar" class="mobile-navbar">
-  <div class="mobile-header-logo">
-    <a href="/." class="logo">Reku</a>
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Reku" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
   </div>
-  <div class="mobile-navbar-icon">
-    <span></span>
-    <span></span>
-    <span></span>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Reku</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
   </div>
 </div>
 
-<nav id="mobile-menu" class="mobile-menu slideout-menu">
-  <ul class="mobile-menu-list"><a href="/">
-        <li class="mobile-menu-item">Home
-          </li>
-      </a><a href="/archives/">
-        <li class="mobile-menu-item">Archives
-          </li>
-      </a><a href="/tags/">
-        <li class="mobile-menu-item">Tags
-          </li>
-      </a><a href="/about/">
-        <li class="mobile-menu-item">About
-          </li>
-      </a></ul>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
 </nav>
-<div class="container" id="mobile-panel">
-      <header id="header" class="header"><div class="logo-wrapper">
-  <a href="/." class="logo">Reku</a>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
 </div>
 
-<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
-          <a class="menu-item-link" href="/">
-            Home
-            </a>
-        </li>
-      <li class="menu-item">
-          <a class="menu-item-link" href="/archives/">
-            Archives
-            </a>
-        </li>
-      <li class="menu-item">
-          <a class="menu-item-link" href="/tags/">
-            Tags
-            </a>
-        </li>
-      <li class="menu-item">
-          <a class="menu-item-link" href="/about/">
-            About
-            </a>
-        </li>
-      </ul></nav>
-</header>
+      
+    </div>
+  </div>
 
-      <main id="main" class="main">
-        <div class="content-wrapper">
-          <div id="content" class="content"><article class="post">
-    <header class="post-header">
-      <h1 class="post-title">CC98留档：2016 省赛小结 By ruiker @ 心灵之约观光团
-        </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2016-04-23
-        </span><span class="post-category">
-            <a href="/categories/acm/">acm</a>
-            <a href="/categories/acm/CC98/">CC98</a>
-            <a href="/categories/acm/CC98/%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/">浙江大学</a>
-            </span>
-        <span class="post-visits"
-             data-url="/2016/04/23/cc98-2/"
-             data-title="CC98留档：2016 省赛小结 By ruiker @ 心灵之约观光团">
-          Visits 0
-        </span>
-        </div>
+</div>
     </header>
 
-    <div class="post-content"><p>惨不忍睹的一场比赛…就像是做了一个恐怖的噩梦… </p>
-<a id="more"></a>
-<p>A-3 C-92(-1)<br>D-206(-13)<br>F-(-2)<br>I-31<br>K-(-16)<br>L-6<br>早上本来打算7点半起床，然后8点去签到。感觉似乎并没有听到闹铃，一睁眼就到了8点40，在8点到8点40期间，starve给我打了7次电话。起床之后我感到非常的悔恨与自责，在床上又自我反省了10分钟才起床…<br>热身赛刚开始的时候成功通过手速冲到了前十，但是因为后来实在什么都不会了，热身赛排名又是比较感人…starve说D是月赛原题，题解是随机输出…我给他算了一下AC概率，感觉和我找到女朋友的概率差不多…浪交了10多次之后，决定挂机去吃饭…<br>学校给发了餐票，果不其然是二楼食堂的谜之专用窗口。这个所谓的20元套餐感觉和麦香简餐没什么区别…但是毕竟是白吃饭，也不好评论什么…这为我们下午的白痴做了铺垫…<br>下午正式赛，依然是校赛的分工，starve配环境，学长从头看，我从尾看。很快学长发现A是签到题，我发现L是签到题，于是我们队似乎抢到了本场的第一个气球…有个姐姐给我们照了相，感觉可以上新闻了…<br>之后我觉得D可做，写了一会儿之后发现看错了题…刷了一下榜，有人过了I，于是starve开始写I，胜利1a。此时排名前十，签到题都比较顺，觉得前途一片光明…(flag)<br>看了一会儿D，发现就是个很脑残的循环题，找找前2800年就可以了，然后去除循环，然后暴力，感觉非常水。于是采用了day++的写法，发生了神秘的超时…<br>此时学长发现C是大暴力，于是我打印了D，让Starve去写C，写完之后WA，我跟starve说我改好D了，然后让他打印了C的代码，我接着搞D。<br>其实并没有做出什么大的改变，就是把愚蠢的day++变成了相对机智的day+=7，理论可以优化7倍的时间？改好之后，果然效果非常拔群，不TLE了，变成了WA…学长发现starve的C忘输出回车了…改了之后，成功A了… 这时榜上好像有些人过了K，starve也觉得K比较有思路，就是一个spfa+最小生成树的贪心，我感觉好像挺有道理的，学长也感觉好像挺有道理的，于是starve又开始写K…我们谁都没有意识到，这场比赛最黑暗的时期到来了，并一直持续到比赛结束…<br>之后的两个小时…就像噩梦一样…starve写一会K，WA了，打印代码…我写一会D，WA了，打印代码…循环往复…到了三个小时左右的时候，还尝试看了看其他题目，G开了一个双指针+map的脑洞，算了算时间复杂度好像不太对，E和H分别产生了时间复杂度很谜的算法…看了看还是这两道最可写…看着别的参赛队伍纷纷过掉D和K，我们感到一丝绝望…我决定使用一下重写大法，重写了一下D，过了样例之后，用颤抖的手提交了D…竟然A了…我们三个一脸懵逼，然后看看我们的排名有没有增长。我们从4题罚时最少成为了5题罚时最多…排名基本没发生变化…又感到了一丝绝望…罚时都是我的锅，在算法正确的情况下竟然有13次错误提交，不得不说我是个傻逼…<br>之后starve试图用重写大法写一下K，并没有什么卵用…然后就封榜了…这时我们还有逆袭的幻想…我跟学长说了一下F的迷之贪心思路，学长感觉很有道理的样子，然后我上机开F，学长在下面给starve讲了一下F的贪心姿势，starve也觉得很有道理。写完F之后，成功WA，然后starve说他来改一下，又是WA…然后starve发现贪心似乎不太对，准备写个爆搜莽一下…此时还剩半个小时…我知道大局已定…开始和学长讨论晚饭吃什么…<br>然后starve的爆搜连样例都没搜出来，此时还剩五分钟，开始浪交K。K的状态在MLE和WA之间不断跳跃，就是没有AC… 这次比赛因为我和starve，中期崩的一塌糊涂…然后因为我的愚蠢，罚时直接爆炸…最后的榜上，从36到70似乎都是五道题…然后我们成功的因为罚时垫底…排名感人…同时也成为了浙大7支队伍中排名最低的…感到人生充满绝望…<br>最后 <img src="http://www.reku.me/wp-content/uploads/2016/04/%E6%8D%95%E8%8E%B733-184x300.png" alt="捕获33"></p>
-
-      </div>
-      <div class="post-copyright">
-    <p class="copyright-item">
-      <span>Author: </span>
-      <a href="https://reku1997.gitee.io">Reku</a>
-    </p>
-    <p class="copyright-item">
-      <span>Link: </span>
-      <a href="https://reku1997.gitee.io/2016/04/23/cc98-2/">https://reku1997.gitee.io/2016/04/23/cc98-2/</a>
-    </p>
-    <p class="copyright-item">
-      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
-    </p>
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
   </div>
-      <footer class="post-footer">
-        <div class="post-tags">
-            <a href="/tags/CC98/">CC98</a>
-            <a href="/tags/acm/">acm</a>
-            </div>
-        
-        <nav class="post-nav"><a class="prev" href="/2016/04/28/codeforces-round-348-div2div1-c/">
-        <i class="iconfont icon-left"></i>
-        <span class="prev-text nav-default">Codeforces Round #348 Div 2+Div 1 C 题解</span>
-        <span class="prev-text nav-mobile">Prev</span>
-      </a>
-    <a class="next" href="/2016/04/23/cc98-1/">
-        <span class="next-text nav-default">CC98留档：2016 校赛小结 By ruiker @ 心灵之约观光团</span>
-        <span class="prev-text nav-mobile">Next</span>
-        <i class="iconfont icon-right"></i>
-      </a>
-    </nav></footer>
-    </article></div><div class="comments" id="comments"><div id="disqus_thread">
-        <noscript>
-          Please enable JavaScript to view the
-          <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
-        </noscript>
-      </div>
-    </div></div>
-      </main>
 
-      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:906799571@qq.com" class="iconfont icon-email" title="email"></a>
-        <a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker" class="iconfont icon-github" title="github"></a>
-        <a target="_blank" rel="noopener" href="https://www.zhihu.com/people/reku1997" class="iconfont icon-zhihu" title="zhihu"></a>
-        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
-    </div><div class="copyright">
-  <span class="power-by">
-    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
-  </span>
-  <span class="division">|</span>
-  <span class="theme-info">
-    Theme - 
-    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
-  </span>
 
-  <span class="copyright-year">&copy;2016 - 2021<span class="heart">
-      <i class="iconfont icon-heart"></i>
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-cn">
+    <link itemprop="mainEntityOfPage" href="https://reku1997.gitee.io/2016/04/23/cc98-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Reku">
+      <meta itemprop="description" content="">
     </span>
-    <span class="author">Reku</span>
-  </span>
-</div>
-</footer>
 
-      <div class="back-to-top" id="back-to-top">
-        <i class="iconfont icon-up"></i>
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Reku">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CC98留档：2016 省赛小结 By ruiker @ 心灵之约观光团
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-04-23 19:46:15" itemprop="dateCreated datePublished" datetime="2016-04-23T19:46:15+08:00">2016-04-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-06-12 14:31:42" itemprop="dateModified" datetime="2020-06-12T14:31:42+08:00">2020-06-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/acm/" itemprop="url" rel="index"><span itemprop="name">acm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/acm/CC98/" itemprop="url" rel="index"><span itemprop="name">CC98</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/acm/CC98/%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">浙江大学</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2016/04/23/cc98-2/" class="post-meta-item leancloud_visitors" data-flag-title="CC98留档：2016 省赛小结 By ruiker @ 心灵之约观光团" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>惨不忍睹的一场比赛...就像是做了一个恐怖的噩梦... <span id="more"></span> A-3 C-92(-1) D-206(-13) F-(-2) I-31 K-(-16) L-6 早上本来打算7点半起床，然后8点去签到。感觉似乎并没有听到闹铃，一睁眼就到了8点40，在8点到8点40期间，starve给我打了7次电话。起床之后我感到非常的悔恨与自责，在床上又自我反省了10分钟才起床... 热身赛刚开始的时候成功通过手速冲到了前十，但是因为后来实在什么都不会了，热身赛排名又是比较感人...starve说D是月赛原题，题解是随机输出...我给他算了一下AC概率，感觉和我找到女朋友的概率差不多...浪交了10多次之后，决定挂机去吃饭... 学校给发了餐票，果不其然是二楼食堂的谜之专用窗口。这个所谓的20元套餐感觉和麦香简餐没什么区别...但是毕竟是白吃饭，也不好评论什么...这为我们下午的白痴做了铺垫... 下午正式赛，依然是校赛的分工，starve配环境，学长从头看，我从尾看。很快学长发现A是签到题，我发现L是签到题，于是我们队似乎抢到了本场的第一个气球...有个姐姐给我们照了相，感觉可以上新闻了... 之后我觉得D可做，写了一会儿之后发现看错了题...刷了一下榜，有人过了I，于是starve开始写I，胜利1a。此时排名前十，签到题都比较顺，觉得前途一片光明...(flag) 看了一会儿D，发现就是个很脑残的循环题，找找前2800年就可以了，然后去除循环，然后暴力，感觉非常水。于是采用了day++的写法，发生了神秘的超时... 此时学长发现C是大暴力，于是我打印了D，让Starve去写C，写完之后WA，我跟starve说我改好D了，然后让他打印了C的代码，我接着搞D。 其实并没有做出什么大的改变，就是把愚蠢的day++变成了相对机智的day+=7，理论可以优化7倍的时间？改好之后，果然效果非常拔群，不TLE了，变成了WA...学长发现starve的C忘输出回车了...改了之后，成功A了... 这时榜上好像有些人过了K，starve也觉得K比较有思路，就是一个spfa+最小生成树的贪心，我感觉好像挺有道理的，学长也感觉好像挺有道理的，于是starve又开始写K...我们谁都没有意识到，这场比赛最黑暗的时期到来了，并一直持续到比赛结束... 之后的两个小时...就像噩梦一样...starve写一会K，WA了，打印代码...我写一会D，WA了，打印代码...循环往复...到了三个小时左右的时候，还尝试看了看其他题目，G开了一个双指针+map的脑洞，算了算时间复杂度好像不太对，E和H分别产生了时间复杂度很谜的算法...看了看还是这两道最可写...看着别的参赛队伍纷纷过掉D和K，我们感到一丝绝望...我决定使用一下重写大法，重写了一下D，过了样例之后，用颤抖的手提交了D...竟然A了...我们三个一脸懵逼，然后看看我们的排名有没有增长。我们从4题罚时最少成为了5题罚时最多...排名基本没发生变化...又感到了一丝绝望...罚时都是我的锅，在算法正确的情况下竟然有13次错误提交，不得不说我是个傻逼... 之后starve试图用重写大法写一下K，并没有什么卵用...然后就封榜了...这时我们还有逆袭的幻想...我跟学长说了一下F的迷之贪心思路，学长感觉很有道理的样子，然后我上机开F，学长在下面给starve讲了一下F的贪心姿势，starve也觉得很有道理。写完F之后，成功WA，然后starve说他来改一下，又是WA...然后starve发现贪心似乎不太对，准备写个爆搜莽一下...此时还剩半个小时...我知道大局已定...开始和学长讨论晚饭吃什么... 然后starve的爆搜连样例都没搜出来，此时还剩五分钟，开始浪交K。K的状态在MLE和WA之间不断跳跃，就是没有AC... 这次比赛因为我和starve，中期崩的一塌糊涂...然后因为我的愚蠢，罚时直接爆炸...最后的榜上，从36到70似乎都是五道题...然后我们成功的因为罚时垫底...排名感人...同时也成为了浙大7支队伍中排名最低的...感到人生充满绝望... 最后 <img src="http://www.reku.me/wp-content/uploads/2016/04/捕获33-184x300.png" alt="捕获33"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CC98/" rel="tag"># CC98</a>
+              <a href="/tags/acm/" rel="tag"># acm</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/04/23/cc98-1/" rel="prev" title="CC98留档：2016 校赛小结 By ruiker @ 心灵之约观光团">
+      <i class="fa fa-chevron-left"></i> CC98留档：2016 校赛小结 By ruiker @ 心灵之约观光团
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/04/28/codeforces-round-348-div2div1-c/" rel="next" title="Codeforces Round #348 Div 2+Div 1 C 题解">
+      Codeforces Round #348 Div 2+Div 1 C 题解 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
       </div>
-    </div><script type="text/javascript">
-    var disqus_config = function () {
-        this.page.url = 'https://reku1997.gitee.io/2016/04/23/cc98-2/';
-        this.page.identifier = '2016/04/23/cc98-2/';
-        this.page.title = 'CC98留档：2016 省赛小结 By ruiker @ 心灵之约观光团';
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Reku</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">78</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">96</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="/./atom.xml" title="RSS → .&#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://github.com/wyc-ruiker" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wyc-ruiker" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/reku1997" title="ZhiHu → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;reku1997" rel="noopener" target="_blank"><i class="fa fa-fw fa-quora"></i>ZhiHu</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://codeforces.com/profile/reku" title="CodeForces → http:&#x2F;&#x2F;codeforces.com&#x2F;profile&#x2F;reku" rel="noopener" target="_blank"><i class="fa fa-fw fa-code"></i>CodeForces</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Reku</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"MWLzM550UOu69h3dgvbbLSsF-gzGzoHsz","app_key":"gkKnwm9FK0cu3ysJbcggsCDz","server_url":null,"security":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script>
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@4/dist/instantsearch.production.min.js"></script>
+<script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://reku1997.gitee.io/2016/04/23/cc98-2/";
+    this.page.identifier = "2016/04/23/cc98-2/";
+    this.page.title = "CC98留档：2016 省赛小结 By ruiker @ 心灵之约观光团";
     };
-    (function() {
-    var d = document, s = d.createElement('script');
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://reku.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
 
-    s.src = '//reku.disqus.com/embed.js';
-
-    s.setAttribute('data-timestamp', +new Date());
-    (d.head || d.body).appendChild(s);
-    })();  
-  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
-  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
-  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
-  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
 </body>
 </html>

@@ -1,237 +1,688 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-  <head><meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://gitee.com/reku1997/reku1997/raw/master/reku.ico">
+
+<link rel="stylesheet" href="/css/main.css">
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
 
-<meta name="theme-color" content="#f8f5ec" />
-<meta name="msapplication-navbutton-color" content="#f8f5ec">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
-
-<meta name="description" content="从 AdaBoost 到 GBDT"/><link rel="alternate" href="/default" title="Reku" ><link rel="shortcut icon" type="image/x-icon" href="https://gitee.com/reku1997/reku1997/raw/master/reku.ico?v=2.11.0" />
-<link rel="canonical" href="https://reku1997.gitee.io/2019/07/26/adaboost/"/>
-
-<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
-    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"reku1997.gitee.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AW5K8S9IEE","apiKey":"d7e666d597854738d2fb31ecaa989aa5","indexName":"dev_reku1997","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
-  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
 
-<script id="baidu_push">
-(function(){
-    var bp = document.createElement('script');
-    var curProtocol = window.location.protocol.split(':')[0];
-    if (curProtocol === 'https') {
-        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-    }
-    else {
-        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-    }
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(bp, s);
-})();
+  <meta name="description" content="集成学习顾名思义，就是把一堆垃圾方法集成起来变成一个牛逼的方法。集成学习主要分为两种思路：Bagging 和 Boosting。Bagging 的话就是一堆独立的垃圾方法，比如随机森林，就是通过不同的采样和不同的特征抽取方法产生一堆独立的决策树，然后把他们的决策进行投票。而 Boosting 则是通过一个垃圾方法来产生下一个垃圾方法，最知名的方法就是 AdaBoost 了。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从 AdaBoost 到 GBDT">
+<meta property="og:url" content="https://reku1997.gitee.io/2019/07/26/adaboost/index.html">
+<meta property="og:site_name" content="Reku">
+<meta property="og:description" content="集成学习顾名思义，就是把一堆垃圾方法集成起来变成一个牛逼的方法。集成学习主要分为两种思路：Bagging 和 Boosting。Bagging 的话就是一堆独立的垃圾方法，比如随机森林，就是通过不同的采样和不同的特征抽取方法产生一堆独立的决策树，然后把他们的决策进行投票。而 Boosting 则是通过一个垃圾方法来产生下一个垃圾方法，最知名的方法就是 AdaBoost 了。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-07-26T08:07:10.000Z">
+<meta property="article:modified_time" content="2021-12-16T11:24:07.607Z">
+<meta property="article:author" content="Reku">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://reku1997.gitee.io/2019/07/26/adaboost/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-cn'
+  };
 </script>
-<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
-  <script id="leancloud">
-    AV.init({
-      appId: "MWLzM550UOu69h3dgvbbLSsF-gzGzoHsz",
-      appKey: "gkKnwm9FK0cu3ysJbcggsCDz"
-    });
-  </script><script>
-  window.config = {"leancloud":{"app_id":"MWLzM550UOu69h3dgvbbLSsF-gzGzoHsz","app_key":"gkKnwm9FK0cu3ysJbcggsCDz"},"toc":true,"fancybox":true,"pjax":"","latex":true};
-</script>
 
-    <title>从 AdaBoost 到 GBDT - Reku</title>
-  <meta name="generator" content="Hexo 5.2.0"></head>
+  <title>从 AdaBoost 到 GBDT | Reku</title>
+  
 
-  <body><div id="mobile-navbar" class="mobile-navbar">
-  <div class="mobile-header-logo">
-    <a href="/." class="logo">Reku</a>
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Reku" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
   </div>
-  <div class="mobile-navbar-icon">
-    <span></span>
-    <span></span>
-    <span></span>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Reku</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
   </div>
 </div>
 
-<nav id="mobile-menu" class="mobile-menu slideout-menu">
-  <ul class="mobile-menu-list"><a href="/">
-        <li class="mobile-menu-item">Home
-          </li>
-      </a><a href="/archives/">
-        <li class="mobile-menu-item">Archives
-          </li>
-      </a><a href="/tags/">
-        <li class="mobile-menu-item">Tags
-          </li>
-      </a><a href="/about/">
-        <li class="mobile-menu-item">About
-          </li>
-      </a></ul>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
 </nav>
-<div class="container" id="mobile-panel">
-      <header id="header" class="header"><div class="logo-wrapper">
-  <a href="/." class="logo">Reku</a>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
 </div>
 
-<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
-          <a class="menu-item-link" href="/">
-            Home
-            </a>
-        </li>
-      <li class="menu-item">
-          <a class="menu-item-link" href="/archives/">
-            Archives
-            </a>
-        </li>
-      <li class="menu-item">
-          <a class="menu-item-link" href="/tags/">
-            Tags
-            </a>
-        </li>
-      <li class="menu-item">
-          <a class="menu-item-link" href="/about/">
-            About
-            </a>
-        </li>
-      </ul></nav>
-</header>
+      
+    </div>
+  </div>
 
-      <main id="main" class="main">
-        <div class="content-wrapper">
-          <div id="content" class="content"><article class="post">
-    <header class="post-header">
-      <h1 class="post-title">从 AdaBoost 到 GBDT
-        </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2019-07-26
-        </span><span class="post-category">
-            <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
-            </span>
-        <span class="post-visits"
-             data-url="/2019/07/26/adaboost/"
-             data-title="从 AdaBoost 到 GBDT">
-          Visits 0
-        </span>
-        </div>
+</div>
     </header>
 
-    <div class="post-toc" id="post-toc">
-    <h2 class="post-toc-title">Contents</h2>
-    <div class="post-toc-content">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9C%8B%E4%B8%8A%E5%8E%BB%E5%82%BB%E5%82%BB%E7%9A%84-AdaBoost"><span class="toc-text">看上去傻傻的 AdaBoost</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A5%A5%E5%A6%99%E9%87%8D%E9%87%8D%E7%9A%84-AdaBoost"><span class="toc-text">奥妙重重的 AdaBoost</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8E-AdaBoost-%E5%88%B0-Gradient-Boosting"><span class="toc-text">从 AdaBoost 到 Gradient Boosting</span></a></li></ol>
-    </div>
-  </div><div class="post-content"><p>集成学习顾名思义，就是把一堆垃圾方法集成起来变成一个牛逼的方法。集成学习主要分为两种思路：Bagging 和 Boosting。Bagging 的话就是一堆独立的垃圾方法，比如随机森林，就是通过不同的采样和不同的特征抽取方法产生一堆独立的决策树，然后把他们的决策进行投票。而 Boosting 则是通过一个垃圾方法来产生下一个垃圾方法，最知名的方法就是 AdaBoost 了。</p>
-<a id="more"></a>
-
-<h2 id="看上去傻傻的-AdaBoost"><a href="#看上去傻傻的-AdaBoost" class="headerlink" title="看上去傻傻的 AdaBoost"></a>看上去傻傻的 AdaBoost</h2><p>对于普通的集成学习来说，其实最后的结果就是不同方法的线性组合，以二分类问题（1，-1）为例，最后的结果在数学上可以表示为： \[G=sign(\sum_{t=1}^T\alpha_t g_t(x_n))\]</p>
-<p>上面的 \(g_t\) 就代表不同的学习方法，而 \(\alpha_t\) 代表着每个学习方法的权重。 在 AdaBoost 中，最关键的一点就是对于错误函数的修改。AdaBoost 使用的是带权重的错误函数，\(u_n\) 代表着每个样本点犯错误的权重： \[E_{in}^u(h)=\frac1N\sum_{n=1}^N u_n\cdot err(y_n,h(x_n))\] </p>
-<p>我们就是要使用不同的 \(u_n\) 来的得到不同的方法 \(g_t\)。显然，全都差不多的 \(g_t\) 最后集成学习出来的效果肯定很垃圾。从参数上面思考可以看出，模型 \(g_t\) 是通过参数 \(u_n^t\) 生成的，而模型 \(g_{t+1}\) 则是通过参数 \(u_n^{t+1}\) 来生成的。我们想让 \(g_t\) 和 \(g_{t+1}\) 产生足够大的差距，其实就是让 \(u_n^{t+1}\) 对应的 error 在 \(g_t\) 上表现很差就好了。 什么叫表现的差呢？对于分类预测来说，最差的结果其实就是扔硬币，也就是说达到百分之 \(50\) 的错误率，这个结果已经是最差的了。我们就是要通过构造 \(u_n^{t+1}\) 使得 \(g_t\) 在这个 error 上的错误率接近 \(0.5\)。  </p>
-<p>AdaBoost 的做法很简单，如果 \(g_t\) 的错误率为 \(\epsilon_t\) 的话，那么构造一个尺度因子： \[\diamond t=\sqrt{\frac{1-\epsilon_t}{\epsilon_t}}\]</p>
-<p>对于正确的 \(u_n^t\) 可以乘上 \(\diamond t\)，对于错误的 \(u_n^t\)，可以除上 \(\diamond t\)。这样就会使得正确的和错误的参数 \(u_{n+1}^t\) 达到平衡，从而达到放大错误、缩小正确的目的，使得 \(g_t\) 在新 error 上面的错误率等于 \(0.5\)。 现在有了生成每个 \(g_t\) 的方法，那每个方法的参数 \(\alpha_t\) 应该是什么呢？一个直观的想法是：生成完方法之后，再对这些方法进行线性组合的优化，然后来求出 \(\alpha_t\)。这样固然是可以的，但是其实我们可以通过数学推导，来直接算出这个 \(\alpha_t\)。这里先下结论，一会儿再进行数学推导： \[\alpha_t=ln(\diamond t)\] </p>
-<p>最简单的一种 AdaBoost 方法叫做 AdaBoost-Stump。在 AdaBoost-Stump 中，每个小方法都只能在某个维度上面画直线来对训练集进行分类。但就是这样简单的方法，可以通过 Boost 组合的方式达到非常好的效果，这就是 AdaBoost 的神奇之处。 现在我们想利用 AdaBoost 把决策树来组合起来。但是问题来了，首先是 error 函数如何参与决策树的分支操作，这个参与起来会比较麻烦。比较简单的做法是直接对决策树屏蔽了 \(u_n\) 参数。然后通过 \(u_n\) 参数来对训练集进行采样，来达到不同 error 函数的效果。这样决策树就是原来的决策树，不需要进行任何的修改。 另一个问题就是，很多决策树都是直接把叶子剖分到单个结点或者单个类别。这样的做法必然会导致这个决策树在测试集上面的错误率 \(\epsilon_t\) 等于 \(0\)。这样我们就没有办法通过 \(\diamond t\) 来产生下一个垃圾方法了。当然解决这个问题的方法也很简单，对决策树进行剪枝和采样数据不全部采样都是可以尝试的做法。这个方法叫做 AdaBoost-DTree。值得注意的一点是：如果我们的决策树的高度限制为 \(1\)，也就是说只能做一次划分，那么这个方法就跟 AdaBoost-Stump 没有任何区别啦。也就是说 AdaBoost-Stump 是 AdaBoost-DTree 的退化。</p>
-<h2 id="奥妙重重的-AdaBoost"><a href="#奥妙重重的-AdaBoost" class="headerlink" title="奥妙重重的 AdaBoost"></a>奥妙重重的 AdaBoost</h2><p>还记得上面的 \(\alpha_t\) 吗？下面就是通过推导 \(\alpha_t\) 来发现 AdaBoost 的奥妙之处了。当然过程中其实涉及到一些高深的数学知识，但是因为我都不会，所以很多地方可能会讲的很“民科”。 上面说过 \(u_n^{t+1}\) 的求法：对于正确的 \(u_n^t\) 可以乘上 \(\diamond t\)，对于错误的 \(u_n^t\)，可以除上 \(\diamond t\)。通过数学式子其实可以将他们归纳成一个规律： \[u_n^{(t+1)}=u_n^{(t)}\cdot \diamond_t^{-y_ng_t(x_n)}=u_n^{(t)}\cdot exp(-y_n\alpha_tg_t(x_n))\]</p>
-<p>如果初始值 \(u_n^{(1)}=\frac1N\) 的话，就有： \[u_n^{(T+1)}=u_n^{(1)}\cdot \prod_{t=1}^Texp(-y_n\alpha_tg_t(x_n))=\frac1N\cdot exp(-y_n\sum_{t=1}^T\alpha_tg_t(x_n))\]</p>
-<p>通过上面的式子可以发现一个很显然的事情：\(u_n^{(T+1)}\) 与 \(exp(-y_n\sum_{t=1}^T\alpha_tg_t(x_n))\) 成正比。 将 \(\sum_{t=1}^T\alpha_tg_t(x_n)\) 从另外一个角度来看，可以发现这个其实是一个对 \(x_n\) 特征转换的线性组合，跟 SVM 中的那个完全一致。其实这个式子就是没有进行正则化的分界距离，跟 \(y_n\) 相乘的话，可以感性的理解成跟 SVM 一样，这个距离越大越好。 使得 \(y_n\sum_{t=1}^T\alpha_tg_t(x_n)\) 越大越好，那么显然 \(exp(-y_n\sum_{t=1}^T\alpha_tg_t(x_n))\) 越小越好，于是 \(u_n^{(T+1)}\) 也就越小越好。 我们的目标就变成了最小化： \[\sum_{n=1}^Nu_n^{(T+1)}=\frac1N\sum_{n=1}^Nexp(-y_n\sum_{t=1}^T\alpha_tg_t(x_n))\] </p>
-<p>因为 \(\sum_{t=1}^T\alpha_tg_t(x_n)\) 是我们的预测项，所以这个最小化其实也是另一种错误函数，而且这个错误函数显然是 0/1 error 的上界，这个错误函数一般叫做 \(\hat{err}_{ADA}\)。 有个优化函数，下面的问题就是如何求出这个优化函数 \(\sum_{n=1}^Nu_n^{(T+1)}\) 的最小值了。 思考梯度下降的过程，我们通过泰勒展开发现梯度的反方向是要求下降的最好方向，当然梯度下降的方向是一个向量。但是我们这里的“梯度”其实是一个函数，函数跟向量其实并没有多大的区别，只是一个下标是连续的一个下标是离散的（因为数学不好，只能这么理解了）。 接下来对要最小化的式子进行推导： \[\frac1N\sum_{n=1}^Nexp(-y_n(\sum_{t=1}^T\alpha_tg_t(x_n)+\eta h(x_n)))=\sum_{n=1}^Nu_n^Texp(-y_n\eta h(x_n))\]</p>
-<p>对这个式子进行最简单的一阶泰勒展开可以得到：\[\sum_{n=1}^Nu_n^Texp(-y_n\eta h(x_n))=\sum_{n=1}^Nu_n^t(1-y_n\eta h(x_n))=\sum_{n=1}^Nu_n^t-\eta\sum_{n=1}^Nu_n^ty_nh(x_n)\]  </p>
-<p>先忽略掉步长 \(\eta\)，我们的目标就变成了找到一个好的 \(h(x_n)\) 来最小化 \(\sum_{n=1}^Nu_n^{(t)}(-y_nh(x_n))\)。 对于二分类问题，\(-y_nh(x_n)\) 的值要么是 \(-1\) 要么是 \(1\)。当 \(y_n = h(x_n)\) 时，\(\sum_{n=1}^Nu_n^{(t)}(-y_nh(x_n)) = -\sum_{n=1}^Nu_n^{(t)}\)，当 \(y_n \neq h(x_n)\) 时，\(\sum_{n=1}^Nu_n^{(t)}(-y_nh(x_n)) = \sum_{n=1}^Nu_n^{(t)}\)。将这个结果稍微平移并且统一一下，可以发现一件神奇的事情：\(\sum_{n=1}^Nu_n^{(t)}(-y_nh(x_n)) = -\sum_{n=1}^Nu_n^{(t)}+2E_{in}^{u_n^{(t)}}\cdot N\)。 太有趣了。让原来的 \(\sum_{n=1}^Nu_n^{(t)}(-y_nh(x_n))\) 竟然最优的 \(h(x_n)\) 就是让 \(E_{in}^{u_n^{(t)}}\) 最小的 \(h(x_n)\)，也就是我们的 AdaBoost 过程中求出的 \(g_t\)！ 在之前梯度下降的时候，我们选择的是自己随便设置一个步长，但是在 AdaBoost 里面，因为我们要组合各个方法以达到最好的效果，所以这个步长其实就是最后预测式中的 \(\alpha_t\)。这个步长也就是在最佳方向上的最大步进长度，先把要求最佳步长的表达式写下来： \[\check{E}<em>{ADA}=\sum</em>{n=1}^Nu_n^{(t)}exp(-y_n\eta g_t(x_n))\] </p>
-<p>有两种情况需要我们考虑，分别是预测正确：\(u_n^{(t)}exp(-\eta)\)，和预测错误：\(u_n^{(t)}exp(+\eta)\)。 之前我们将错误率以符号 \(\epsilon_t\) 来表示，经过简单推导统一，可以得到： \[\check{E}_{ADA}=(\sum_{n=1}^Nu_n^{(t)})\cdot ((1-\epsilon_t)exp(-\eta)+\epsilon_t\ exp(+\eta))\] </p>
-<p>求导，\(\frac{\partial \check{E}_{ADA}}{\partial \eta}=0\) 得到： \[\eta_t=ln\sqrt{\frac{1-\epsilon_t}{\epsilon_t}}=\alpha_t\]</p>
-<p>这就是 \(\alpha_t = ln\sqrt{\frac{1-\epsilon_t}{\epsilon_t}}\) 的原因啦！</p>
-<h2 id="从-AdaBoost-到-Gradient-Boosting"><a href="#从-AdaBoost-到-Gradient-Boosting" class="headerlink" title="从 AdaBoost 到 Gradient Boosting"></a>从 AdaBoost 到 Gradient Boosting</h2><p>总结一下之前 AdaBoost 的求解过程，其实就是去优化以下式子： \[min_{\eta}min_h\frac1N\sum_{n=1}^Nexp(-y_n(\sum_{t=1}^T\alpha_tg_t(x_n)+\eta h(x_n)))\]</p>
-<p>之前说了，这个 \(exp\) 函数其实只是错误函数的一种形式，我们也可以换成其他类型的 error 函数，比如这样： \[min_{\eta}min_h\frac1N\sum_{n=1}^Nerr(\sum_{t=1}^T\alpha_tg_t(x_n)+\eta h(x_n), y_n)\]</p>
-<p>这个公式就是一种通用的 Gradient Boosting 啦！ 接下来，我们就使用普通的 regression 错误（\(err(s,y)=(s-y)^2\)）来看看 regression 情况下的 Gradient Boosting 是怎么回事吧~ 我们将 \(\sum_{t=1}^T\alpha_tg_t(x_n)\) 看做 \(s_n\)，那么原式通过泰勒展开之后就等于： \[min_h\frac1N\sum_{n=1}^Nerr(s_n,y_n)+\frac1N\sum_{n=1}^N\eta h(x_n)\frac{\partial err(s,y_n)}{\partial s}\]</p>
-<p>其中的一阶导数\(\frac{\partial err(s,y_n)}{\partial s}=2(s_n-y_n)\)。 去除一堆常数项和常数因子，其实我们只需要最小化\(h(x_n)\cdot 2(s_n-y_n)\)就好了。所以只要令\(h(x_n)\)是梯度\(2(s_n-y_n)\)的反方向就好了，但是这个反方向究竟要取多大呢？回想一下我们之前的梯度下降，其实梯度只代表一个方向，多大并没有什么关系。为了防止这个梯度取到无穷大，我们需要对梯度的大小进行一下限制。参考之前的正则化思路，我们也可以通过加上一个惩罚项\(h^2(x_n)\)来得到新的优化式子，经过添加常数进行整理，可以得到我们最后关心的优化式子： \[min\sum_{n=1}^N((h(x_n)-(y_n-s_n))^2)\]</p>
-<p>也就是说，我们利用我们的基础 regression 方法使得 \(h(x_n)\) 更加接近 \(y_n-s_n\) 就可以了。简单的来说就是对所有 \(N\) 个点 \((x_n, y_n-s_n)\) 做 regression，得到的回归方程就是我们要求的 \(g_t(x_n)\) 啦！ 其中一个很重要的概念就是 \(y_n-s_n\)，很多博客会把这个东西叫做残差。也就是这些残差来决定 \(g_t\)。 现在需要求出步长 \(\eta\)。这个步骤非常简单，把我们之前求出来的 \(g_t\) 代回到原来的优化式子中们可以得到： \[min_{\eta}\frac1N\sum_{n=1}^N(s_n+\eta g_t(x_n)-y_n)^2 = \frac1N\sum_{n=1}^N((y_n-s_n)-\eta g_t(x_n))^2\]</p>
-<p>可以发现，这里又是对残差进行拟合。不过这个拟合只有一个变量，非常简单，只需要简单求个导数就可以得到我们需要的 \(\eta\) 啦！ 这个 Gradient Boosting 最出名的利用方法就是我们标题中提到的大名鼎鼎的 Gradient Boosted Decision Tree(GBDT) 啦！不过我们整个推导过程中好像并没有用过决策树啊？这个决策树要在哪里使用呢？ 很简单，就是我们通过决策树来做每一步的 regression 就好啦！有一个细节是，因为我们在求第一棵决策树的时候并没有残差这个东西，所以直接对各个 \((x_n, y_n)\) 做拟合就好了，从第二棵决策树开始对残差做拟合。</p>
-
-      </div>
-      <div class="post-copyright">
-    <p class="copyright-item">
-      <span>Author: </span>
-      <a href="https://reku1997.gitee.io">Reku</a>
-    </p>
-    <p class="copyright-item">
-      <span>Link: </span>
-      <a href="https://reku1997.gitee.io/2019/07/26/adaboost/">https://reku1997.gitee.io/2019/07/26/adaboost/</a>
-    </p>
-    <p class="copyright-item">
-      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
-    </p>
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
   </div>
-      <footer class="post-footer">
-        
-        <nav class="post-nav"><a class="prev" href="/2019/11/08/cse-599w-systems-for-ml-1-6/">
-        <i class="iconfont icon-left"></i>
-        <span class="prev-text nav-default">CSE 599W: Systems for ML 课程笔记 1-6</span>
-        <span class="prev-text nav-mobile">Prev</span>
-      </a>
-    <a class="next" href="/2019/07/06/svm/">
-        <span class="next-text nav-default">支持向量机的清晰推导</span>
-        <span class="prev-text nav-mobile">Next</span>
-        <i class="iconfont icon-right"></i>
-      </a>
-    </nav></footer>
-    </article></div><div class="comments" id="comments"><div id="disqus_thread">
-        <noscript>
-          Please enable JavaScript to view the
-          <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
-        </noscript>
-      </div>
-    </div></div>
-      </main>
 
-      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:906799571@qq.com" class="iconfont icon-email" title="email"></a>
-        <a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker" class="iconfont icon-github" title="github"></a>
-        <a target="_blank" rel="noopener" href="https://www.zhihu.com/people/reku1997" class="iconfont icon-zhihu" title="zhihu"></a>
-        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
-    </div><div class="copyright">
-  <span class="power-by">
-    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
-  </span>
-  <span class="division">|</span>
-  <span class="theme-info">
-    Theme - 
-    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
-  </span>
 
-  <span class="copyright-year">&copy;2016 - 2021<span class="heart">
-      <i class="iconfont icon-heart"></i>
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-cn">
+    <link itemprop="mainEntityOfPage" href="https://reku1997.gitee.io/2019/07/26/adaboost/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Reku">
+      <meta itemprop="description" content="">
     </span>
-    <span class="author">Reku</span>
-  </span>
-</div>
-</footer>
 
-      <div class="back-to-top" id="back-to-top">
-        <i class="iconfont icon-up"></i>
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Reku">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          从 AdaBoost 到 GBDT
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-07-26 16:07:10" itemprop="dateCreated datePublished" datetime="2019-07-26T16:07:10+08:00">2019-07-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-16 19:24:07" itemprop="dateModified" datetime="2021-12-16T19:24:07+08:00">2021-12-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2019/07/26/adaboost/" class="post-meta-item leancloud_visitors" data-flag-title="从 AdaBoost 到 GBDT" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>集成学习顾名思义，就是把一堆垃圾方法集成起来变成一个牛逼的方法。集成学习主要分为两种思路：Bagging 和 Boosting。Bagging 的话就是一堆独立的垃圾方法，比如随机森林，就是通过不同的采样和不同的特征抽取方法产生一堆独立的决策树，然后把他们的决策进行投票。而 Boosting 则是通过一个垃圾方法来产生下一个垃圾方法，最知名的方法就是 AdaBoost 了。</p>
+<span id="more"></span>
+<h2 id="看上去傻傻的-adaboost">看上去傻傻的 AdaBoost</h2>
+<p>对于普通的集成学习来说，其实最后的结果就是不同方法的线性组合，以二分类问题（1，-1）为例，最后的结果在数学上可以表示为： <span class="math display">\[G=sign(\sum_{t=1}^T\alpha_t g_t(x_n))\]</span></p>
+<p>上面的 <span class="math inline">\(g_t\)</span> 就代表不同的学习方法，而 <span class="math inline">\(\alpha_t\)</span> 代表着每个学习方法的权重。 在 AdaBoost 中，最关键的一点就是对于错误函数的修改。AdaBoost 使用的是带权重的错误函数，<span class="math inline">\(u_n\)</span> 代表着每个样本点犯错误的权重： <span class="math display">\[E_{in}^u(h)=\frac1N\sum_{n=1}^N u_n\cdot err(y_n,h(x_n))\]</span></p>
+<p>我们就是要使用不同的 <span class="math inline">\(u_n\)</span> 来的得到不同的方法 <span class="math inline">\(g_t\)</span>。显然，全都差不多的 <span class="math inline">\(g_t\)</span> 最后集成学习出来的效果肯定很垃圾。从参数上面思考可以看出，模型 <span class="math inline">\(g_t\)</span> 是通过参数 <span class="math inline">\(u_n^t\)</span> 生成的，而模型 <span class="math inline">\(g_{t+1}\)</span> 则是通过参数 <span class="math inline">\(u_n^{t+1}\)</span> 来生成的。我们想让 <span class="math inline">\(g_t\)</span> 和 <span class="math inline">\(g_{t+1}\)</span> 产生足够大的差距，其实就是让 <span class="math inline">\(u_n^{t+1}\)</span> 对应的 error 在 <span class="math inline">\(g_t\)</span> 上表现很差就好了。 什么叫表现的差呢？对于分类预测来说，最差的结果其实就是扔硬币，也就是说达到百分之 <span class="math inline">\(50\)</span> 的错误率，这个结果已经是最差的了。我们就是要通过构造 <span class="math inline">\(u_n^{t+1}\)</span> 使得 <span class="math inline">\(g_t\)</span> 在这个 error 上的错误率接近 <span class="math inline">\(0.5\)</span>。</p>
+<p>AdaBoost 的做法很简单，如果 <span class="math inline">\(g_t\)</span> 的错误率为 <span class="math inline">\(\epsilon_t\)</span> 的话，那么构造一个尺度因子： <span class="math display">\[\diamond t=\sqrt{\frac{1-\epsilon_t}{\epsilon_t}}\]</span></p>
+<p>对于正确的 <span class="math inline">\(u_n^t\)</span> 可以乘上 <span class="math inline">\(\diamond t\)</span>，对于错误的 <span class="math inline">\(u_n^t\)</span>，可以除上 <span class="math inline">\(\diamond t\)</span>。这样就会使得正确的和错误的参数 <span class="math inline">\(u_{n+1}^t\)</span> 达到平衡，从而达到放大错误、缩小正确的目的，使得 <span class="math inline">\(g_t\)</span> 在新 error 上面的错误率等于 <span class="math inline">\(0.5\)</span>。 现在有了生成每个 <span class="math inline">\(g_t\)</span> 的方法，那每个方法的参数 <span class="math inline">\(\alpha_t\)</span> 应该是什么呢？一个直观的想法是：生成完方法之后，再对这些方法进行线性组合的优化，然后来求出 <span class="math inline">\(\alpha_t\)</span>。这样固然是可以的，但是其实我们可以通过数学推导，来直接算出这个 <span class="math inline">\(\alpha_t\)</span>。这里先下结论，一会儿再进行数学推导： <span class="math display">\[\alpha_t=ln(\diamond t)\]</span></p>
+<p>最简单的一种 AdaBoost 方法叫做 AdaBoost-Stump。在 AdaBoost-Stump 中，每个小方法都只能在某个维度上面画直线来对训练集进行分类。但就是这样简单的方法，可以通过 Boost 组合的方式达到非常好的效果，这就是 AdaBoost 的神奇之处。 现在我们想利用 AdaBoost 把决策树来组合起来。但是问题来了，首先是 error 函数如何参与决策树的分支操作，这个参与起来会比较麻烦。比较简单的做法是直接对决策树屏蔽了 <span class="math inline">\(u_n\)</span> 参数。然后通过 <span class="math inline">\(u_n\)</span> 参数来对训练集进行采样，来达到不同 error 函数的效果。这样决策树就是原来的决策树，不需要进行任何的修改。 另一个问题就是，很多决策树都是直接把叶子剖分到单个结点或者单个类别。这样的做法必然会导致这个决策树在测试集上面的错误率 <span class="math inline">\(\epsilon_t\)</span> 等于 <span class="math inline">\(0\)</span>。这样我们就没有办法通过 <span class="math inline">\(\diamond t\)</span> 来产生下一个垃圾方法了。当然解决这个问题的方法也很简单，对决策树进行剪枝和采样数据不全部采样都是可以尝试的做法。这个方法叫做 AdaBoost-DTree。值得注意的一点是：如果我们的决策树的高度限制为 <span class="math inline">\(1\)</span>，也就是说只能做一次划分，那么这个方法就跟 AdaBoost-Stump 没有任何区别啦。也就是说 AdaBoost-Stump 是 AdaBoost-DTree 的退化。</p>
+<h2 id="奥妙重重的-adaboost">奥妙重重的 AdaBoost</h2>
+<p>还记得上面的 <span class="math inline">\(\alpha_t\)</span> 吗？下面就是通过推导 <span class="math inline">\(\alpha_t\)</span> 来发现 AdaBoost 的奥妙之处了。当然过程中其实涉及到一些高深的数学知识，但是因为我都不会，所以很多地方可能会讲的很“民科”。 上面说过 <span class="math inline">\(u_n^{t+1}\)</span> 的求法：对于正确的 <span class="math inline">\(u_n^t\)</span> 可以乘上 <span class="math inline">\(\diamond t\)</span>，对于错误的 <span class="math inline">\(u_n^t\)</span>，可以除上 <span class="math inline">\(\diamond t\)</span>。通过数学式子其实可以将他们归纳成一个规律： <span class="math display">\[u_n^{(t+1)}=u_n^{(t)}\cdot \diamond_t^{-y_ng_t(x_n)}=u_n^{(t)}\cdot exp(-y_n\alpha_tg_t(x_n))\]</span></p>
+<p>如果初始值 <span class="math inline">\(u_n^{(1)}=\frac1N\)</span> 的话，就有： <span class="math display">\[u_n^{(T+1)}=u_n^{(1)}\cdot \prod_{t=1}^Texp(-y_n\alpha_tg_t(x_n))=\frac1N\cdot exp(-y_n\sum_{t=1}^T\alpha_tg_t(x_n))\]</span></p>
+<p>通过上面的式子可以发现一个很显然的事情：<span class="math inline">\(u_n^{(T+1)}\)</span> 与 <span class="math inline">\(exp(-y_n\sum_{t=1}^T\alpha_tg_t(x_n))\)</span> 成正比。 将 <span class="math inline">\(\sum_{t=1}^T\alpha_tg_t(x_n)\)</span> 从另外一个角度来看，可以发现这个其实是一个对 <span class="math inline">\(x_n\)</span> 特征转换的线性组合，跟 SVM 中的那个完全一致。其实这个式子就是没有进行正则化的分界距离，跟 <span class="math inline">\(y_n\)</span> 相乘的话，可以感性的理解成跟 SVM 一样，这个距离越大越好。 使得 <span class="math inline">\(y_n\sum_{t=1}^T\alpha_tg_t(x_n)\)</span> 越大越好，那么显然 <span class="math inline">\(exp(-y_n\sum_{t=1}^T\alpha_tg_t(x_n))\)</span> 越小越好，于是 <span class="math inline">\(u_n^{(T+1)}\)</span> 也就越小越好。 我们的目标就变成了最小化： <span class="math display">\[\sum_{n=1}^Nu_n^{(T+1)}=\frac1N\sum_{n=1}^Nexp(-y_n\sum_{t=1}^T\alpha_tg_t(x_n))\]</span></p>
+<p>因为 <span class="math inline">\(\sum_{t=1}^T\alpha_tg_t(x_n)\)</span> 是我们的预测项，所以这个最小化其实也是另一种错误函数，而且这个错误函数显然是 0/1 error 的上界，这个错误函数一般叫做 <span class="math inline">\(\hat{err}_{ADA}\)</span>。 有个优化函数，下面的问题就是如何求出这个优化函数 <span class="math inline">\(\sum_{n=1}^Nu_n^{(T+1)}\)</span> 的最小值了。 思考梯度下降的过程，我们通过泰勒展开发现梯度的反方向是要求下降的最好方向，当然梯度下降的方向是一个向量。但是我们这里的“梯度”其实是一个函数，函数跟向量其实并没有多大的区别，只是一个下标是连续的一个下标是离散的（因为数学不好，只能这么理解了）。 接下来对要最小化的式子进行推导： <span class="math display">\[\frac1N\sum_{n=1}^Nexp(-y_n(\sum_{t=1}^T\alpha_tg_t(x_n)+\eta h(x_n)))=\sum_{n=1}^Nu_n^Texp(-y_n\eta h(x_n))\]</span></p>
+<p>对这个式子进行最简单的一阶泰勒展开可以得到：<span class="math display">\[\sum_{n=1}^Nu_n^Texp(-y_n\eta h(x_n))=\sum_{n=1}^Nu_n^t(1-y_n\eta h(x_n))=\sum_{n=1}^Nu_n^t-\eta\sum_{n=1}^Nu_n^ty_nh(x_n)\]</span></p>
+<p>先忽略掉步长 <span class="math inline">\(\eta\)</span>，我们的目标就变成了找到一个好的 <span class="math inline">\(h(x_n)\)</span> 来最小化 <span class="math inline">\(\sum_{n=1}^Nu_n^{(t)}(-y_nh(x_n))\)</span>。 对于二分类问题，<span class="math inline">\(-y_nh(x_n)\)</span> 的值要么是 <span class="math inline">\(-1\)</span> 要么是 <span class="math inline">\(1\)</span>。当 <span class="math inline">\(y_n = h(x_n)\)</span> 时，<span class="math inline">\(\sum_{n=1}^Nu_n^{(t)}(-y_nh(x_n)) = -\sum_{n=1}^Nu_n^{(t)}\)</span>，当 <span class="math inline">\(y_n \neq h(x_n)\)</span> 时，<span class="math inline">\(\sum_{n=1}^Nu_n^{(t)}(-y_nh(x_n)) = \sum_{n=1}^Nu_n^{(t)}\)</span>。将这个结果稍微平移并且统一一下，可以发现一件神奇的事情：<span class="math inline">\(\sum_{n=1}^Nu_n^{(t)}(-y_nh(x_n)) = -\sum_{n=1}^Nu_n^{(t)}+2E_{in}^{u_n^{(t)}}\cdot N\)</span>。 太有趣了。让原来的 <span class="math inline">\(\sum_{n=1}^Nu_n^{(t)}(-y_nh(x_n))\)</span> 竟然最优的 <span class="math inline">\(h(x_n)\)</span> 就是让 <span class="math inline">\(E_{in}^{u_n^{(t)}}\)</span> 最小的 <span class="math inline">\(h(x_n)\)</span>，也就是我们的 AdaBoost 过程中求出的 <span class="math inline">\(g_t\)</span>！ 在之前梯度下降的时候，我们选择的是自己随便设置一个步长，但是在 AdaBoost 里面，因为我们要组合各个方法以达到最好的效果，所以这个步长其实就是最后预测式中的 <span class="math inline">\(\alpha_t\)</span>。这个步长也就是在最佳方向上的最大步进长度，先把要求最佳步长的表达式写下来： <span class="math display">\[\check{E}_{ADA}=\sum_{n=1}^Nu_n^{(t)}exp(-y_n\eta g_t(x_n))\]</span></p>
+<p>有两种情况需要我们考虑，分别是预测正确：<span class="math inline">\(u_n^{(t)}exp(-\eta)\)</span>，和预测错误：<span class="math inline">\(u_n^{(t)}exp(+\eta)\)</span>。 之前我们将错误率以符号 <span class="math inline">\(\epsilon_t\)</span> 来表示，经过简单推导统一，可以得到： <span class="math display">\[\check{E}_{ADA}=(\sum_{n=1}^Nu_n^{(t)})\cdot ((1-\epsilon_t)exp(-\eta)+\epsilon_t\ exp(+\eta))\]</span></p>
+<p>求导，<span class="math inline">\(\frac{\partial \check{E}_{ADA}}{\partial \eta}=0\)</span> 得到： <span class="math display">\[\eta_t=ln\sqrt{\frac{1-\epsilon_t}{\epsilon_t}}=\alpha_t\]</span></p>
+<p>这就是 <span class="math inline">\(\alpha_t = ln\sqrt{\frac{1-\epsilon_t}{\epsilon_t}}\)</span> 的原因啦！</p>
+<h2 id="从-adaboost-到-gradient-boosting">从 AdaBoost 到 Gradient Boosting</h2>
+<p>总结一下之前 AdaBoost 的求解过程，其实就是去优化以下式子： <span class="math display">\[min_{\eta}min_h\frac1N\sum_{n=1}^Nexp(-y_n(\sum_{t=1}^T\alpha_tg_t(x_n)+\eta h(x_n)))\]</span></p>
+<p>之前说了，这个 <span class="math inline">\(exp\)</span> 函数其实只是错误函数的一种形式，我们也可以换成其他类型的 error 函数，比如这样： <span class="math display">\[min_{\eta}min_h\frac1N\sum_{n=1}^Nerr(\sum_{t=1}^T\alpha_tg_t(x_n)+\eta h(x_n), y_n)\]</span></p>
+<p>这个公式就是一种通用的 Gradient Boosting 啦！ 接下来，我们就使用普通的 regression 错误（<span class="math inline">\(err(s,y)=(s-y)^2\)</span>）来看看 regression 情况下的 Gradient Boosting 是怎么回事吧~ 我们将 <span class="math inline">\(\sum_{t=1}^T\alpha_tg_t(x_n)\)</span> 看做 <span class="math inline">\(s_n\)</span>，那么原式通过泰勒展开之后就等于： <span class="math display">\[min_h\frac1N\sum_{n=1}^Nerr(s_n,y_n)+\frac1N\sum_{n=1}^N\eta h(x_n)\frac{\partial err(s,y_n)}{\partial s}\]</span></p>
+<p>其中的一阶导数<span class="math inline">\(\frac{\partial err(s,y_n)}{\partial s}=2(s_n-y_n)\)</span>。 去除一堆常数项和常数因子，其实我们只需要最小化<span class="math inline">\(h(x_n)\cdot 2(s_n-y_n)\)</span>就好了。所以只要令<span class="math inline">\(h(x_n)\)</span>是梯度<span class="math inline">\(2(s_n-y_n)\)</span>的反方向就好了，但是这个反方向究竟要取多大呢？回想一下我们之前的梯度下降，其实梯度只代表一个方向，多大并没有什么关系。为了防止这个梯度取到无穷大，我们需要对梯度的大小进行一下限制。参考之前的正则化思路，我们也可以通过加上一个惩罚项<span class="math inline">\(h^2(x_n)\)</span>来得到新的优化式子，经过添加常数进行整理，可以得到我们最后关心的优化式子： <span class="math display">\[min\sum_{n=1}^N((h(x_n)-(y_n-s_n))^2)\]</span></p>
+<p>也就是说，我们利用我们的基础 regression 方法使得 <span class="math inline">\(h(x_n)\)</span> 更加接近 <span class="math inline">\(y_n-s_n\)</span> 就可以了。简单的来说就是对所有 <span class="math inline">\(N\)</span> 个点 <span class="math inline">\((x_n, y_n-s_n)\)</span> 做 regression，得到的回归方程就是我们要求的 <span class="math inline">\(g_t(x_n)\)</span> 啦！ 其中一个很重要的概念就是 <span class="math inline">\(y_n-s_n\)</span>，很多博客会把这个东西叫做残差。也就是这些残差来决定 <span class="math inline">\(g_t\)</span>。 现在需要求出步长 <span class="math inline">\(\eta\)</span>。这个步骤非常简单，把我们之前求出来的 <span class="math inline">\(g_t\)</span> 代回到原来的优化式子中们可以得到： <span class="math display">\[min_{\eta}\frac1N\sum_{n=1}^N(s_n+\eta g_t(x_n)-y_n)^2 = \frac1N\sum_{n=1}^N((y_n-s_n)-\eta g_t(x_n))^2\]</span></p>
+<p>可以发现，这里又是对残差进行拟合。不过这个拟合只有一个变量，非常简单，只需要简单求个导数就可以得到我们需要的 <span class="math inline">\(\eta\)</span> 啦！ 这个 Gradient Boosting 最出名的利用方法就是我们标题中提到的大名鼎鼎的 Gradient Boosted Decision Tree(GBDT) 啦！不过我们整个推导过程中好像并没有用过决策树啊？这个决策树要在哪里使用呢？ 很简单，就是我们通过决策树来做每一步的 regression 就好啦！有一个细节是，因为我们在求第一棵决策树的时候并没有残差这个东西，所以直接对各个 <span class="math inline">\((x_n, y_n)\)</span> 做拟合就好了，从第二棵决策树开始对残差做拟合。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/07/06/svm/" rel="prev" title="支持向量机的清晰推导">
+      <i class="fa fa-chevron-left"></i> 支持向量机的清晰推导
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/11/08/cse-599w-systems-for-ml-1-6/" rel="next" title="CSE 599W: Systems for ML 课程笔记 1-6">
+      CSE 599W: Systems for ML 课程笔记 1-6 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9C%8B%E4%B8%8A%E5%8E%BB%E5%82%BB%E5%82%BB%E7%9A%84-adaboost"><span class="nav-number">1.</span> <span class="nav-text">看上去傻傻的 AdaBoost</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A5%A5%E5%A6%99%E9%87%8D%E9%87%8D%E7%9A%84-adaboost"><span class="nav-number">2.</span> <span class="nav-text">奥妙重重的 AdaBoost</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8E-adaboost-%E5%88%B0-gradient-boosting"><span class="nav-number">3.</span> <span class="nav-text">从 AdaBoost 到 Gradient Boosting</span></a></li></ol></div>
       </div>
-    </div><script type="text/javascript">
-    var disqus_config = function () {
-        this.page.url = 'https://reku1997.gitee.io/2019/07/26/adaboost/';
-        this.page.identifier = '2019/07/26/adaboost/';
-        this.page.title = '从 AdaBoost 到 GBDT';
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Reku</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">78</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">96</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="/./atom.xml" title="RSS → .&#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://github.com/wyc-ruiker" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wyc-ruiker" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/reku1997" title="ZhiHu → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;reku1997" rel="noopener" target="_blank"><i class="fa fa-fw fa-quora"></i>ZhiHu</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://codeforces.com/profile/reku" title="CodeForces → http:&#x2F;&#x2F;codeforces.com&#x2F;profile&#x2F;reku" rel="noopener" target="_blank"><i class="fa fa-fw fa-code"></i>CodeForces</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Reku</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"MWLzM550UOu69h3dgvbbLSsF-gzGzoHsz","app_key":"gkKnwm9FK0cu3ysJbcggsCDz","server_url":null,"security":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script>
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@4/dist/instantsearch.production.min.js"></script>
+<script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
     };
-    (function() {
-    var d = document, s = d.createElement('script');
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
 
-    s.src = '//reku.disqus.com/embed.js';
+    
 
-    s.setAttribute('data-timestamp', +new Date());
-    (d.head || d.body).appendChild(s);
-    })();  
-  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
-  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
-  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
-  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+  
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://reku1997.gitee.io/2019/07/26/adaboost/";
+    this.page.identifier = "2019/07/26/adaboost/";
+    this.page.title = "从 AdaBoost 到 GBDT";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://reku.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
 </body>
 </html>
