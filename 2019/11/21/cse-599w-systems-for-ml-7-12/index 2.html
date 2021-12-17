@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://gitee.com/reku1997/reku1997/raw/master/reku.ico">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"reku1997.gitee.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AW5K8S9IEE","apiKey":"d7e666d597854738d2fb31ecaa989aa5","indexName":"dev_reku1997","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="各种课程资料请参考上一篇文章">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSE 599W: SYSTEMS FOR ML 课程笔记 7-12">
+<meta property="og:url" content="https://reku1997.gitee.io/2019/11/21/cse-599w-systems-for-ml-7-12/index.html">
+<meta property="og:site_name" content="Reku">
+<meta property="og:description" content="各种课程资料请参考上一篇文章">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://reku1997.gitee.io/2019/11/21/cse-599w-systems-for-ml-7-12/1.png">
+<meta property="og:image" content="https://reku1997.gitee.io/2019/11/21/cse-599w-systems-for-ml-7-12/2.png">
+<meta property="og:image" content="https://reku1997.gitee.io/2019/11/21/cse-599w-systems-for-ml-7-12/3.png">
+<meta property="og:image" content="https://reku1997.gitee.io/2019/11/21/cse-599w-systems-for-ml-7-12/4.png">
+<meta property="og:image" content="https://reku1997.gitee.io/2019/11/21/cse-599w-systems-for-ml-7-12/5.png">
+<meta property="og:image" content="https://reku1997.gitee.io/2019/11/21/cse-599w-systems-for-ml-7-12/1-1.png">
+<meta property="og:image" content="https://reku1997.gitee.io/2019/11/21/cse-599w-systems-for-ml-7-12/2-1.png">
+<meta property="og:image" content="https://reku1997.gitee.io/2019/11/21/cse-599w-systems-for-ml-7-12/3-1.png">
+<meta property="og:image" content="https://reku1997.gitee.io/2019/11/21/cse-599w-systems-for-ml-7-12/4-1.png">
+<meta property="og:image" content="https://reku1997.gitee.io/2019/11/21/cse-599w-systems-for-ml-7-12/5-1.png">
+<meta property="og:image" content="https://reku1997.gitee.io/2019/11/21/cse-599w-systems-for-ml-7-12/1-2.png">
+<meta property="og:image" content="https://reku1997.gitee.io/2019/11/21/cse-599w-systems-for-ml-7-12/2-2.png">
+<meta property="og:image" content="https://reku1997.gitee.io/2019/11/21/cse-599w-systems-for-ml-7-12/3-2.png">
+<meta property="og:image" content="https://reku1997.gitee.io/2019/11/21/cse-599w-systems-for-ml-7-12/4-2.png">
+<meta property="og:image" content="https://reku1997.gitee.io/2019/11/21/cse-599w-systems-for-ml-7-12/1-3.png">
+<meta property="og:image" content="https://reku1997.gitee.io/2019/11/21/cse-599w-systems-for-ml-7-12/2-3.png">
+<meta property="og:image" content="https://reku1997.gitee.io/2019/11/21/cse-599w-systems-for-ml-7-12/3-3.png">
+<meta property="og:image" content="https://reku1997.gitee.io/2019/11/21/cse-599w-systems-for-ml-7-12/4-3.png">
+<meta property="article:published_time" content="2019-11-21T07:04:48.000Z">
+<meta property="article:modified_time" content="2021-12-16T11:33:10.164Z">
+<meta property="article:author" content="Reku">
+<meta property="article:tag" content="learning">
+<meta property="article:tag" content="system">
+<meta property="article:tag" content="机器学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://reku1997.gitee.io/2019/11/21/cse-599w-systems-for-ml-7-12/1.png">
+
+<link rel="canonical" href="https://reku1997.gitee.io/2019/11/21/cse-599w-systems-for-ml-7-12/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-cn'
+  };
+</script>
+
+  <title>CSE 599W: SYSTEMS FOR ML 课程笔记 7-12 | Reku</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Reku" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Reku</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+      
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-cn">
+    <link itemprop="mainEntityOfPage" href="https://reku1997.gitee.io/2019/11/21/cse-599w-systems-for-ml-7-12/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Reku">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Reku">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CSE 599W: SYSTEMS FOR ML 课程笔记 7-12
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-11-21 15:04:48" itemprop="dateCreated datePublished" datetime="2019-11-21T15:04:48+08:00">2019-11-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-16 19:33:10" itemprop="dateModified" datetime="2021-12-16T19:33:10+08:00">2021-12-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/system/" itemprop="url" rel="index"><span itemprop="name">system</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/system/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2019/11/21/cse-599w-systems-for-ml-7-12/" class="post-meta-item leancloud_visitors" data-flag-title="CSE 599W: SYSTEMS FOR ML 课程笔记 7-12" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>各种课程资料请参考<a href="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/">上一篇文章</a></p>
+<span id="more"></span>
+<h2 id="lecture-7-automatic-code-generation---tvm-stack">Lecture 7: Automatic Code Generation - TVM Stack</h2>
+<p>现在深度学习的框架非常多，而这些乱七八糟框架写出来的代码通常又跑在乱七八糟的设备上。这其中最为关键的问题就是：如何让深度学习代码在不同的设备上都跑出最好的效果。 众所周知，如果软件架构出现了什么难以解决的问题，那就加个中间层，看看能不能解决。如果还不能解决，那就再加个中间层（ 目前各家（比如 TensorFlow XLA、NVIDIA TensorRT 等）采用的设计思路就是将各个框架写出来的网络转换成一种统一的表示形式，也就是所谓的 Graph IR。</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/1.png"></p>
+<p>当然了，最后 IR 如果想要运行，那你还是要把 IR 变成机器码才可以。对于不同的硬件平台、数据格式、精度、线程结构都要写一堆不同的代码生成规则和优化规则。 这个问题是 TVM 的技术背景了。前面说了，如果还解决不了问题，那就再加个中间层。TVM 加的中间层就是所谓的 Tensor Expression Language 表示方法。这个 idea 来自于 Halide，核心在于把代码的计算和调度分开。</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/2.png"></p>
+<p>举个具体的例子，最简单的一个向量相加，用 TVM 实现起来长这样：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">C = tvm.compute((n,), <span class="keyword">lambda</span> i: A[i] + B[i])</span><br><span class="line">s = tvm.create_schedule(C.op)</span><br></pre></td></tr></table></figure>
+<p>得到的 C 代码是：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</span><br><span class="line">&#123;</span><br><span class="line">    C[i] = A[i] + B[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>加上一些额外的循环控制（就是上篇文章中讲的 cache 优化）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">C = tvm.compute((n,), <span class="keyword">lambda</span> i: A[i] + B[i])</span><br><span class="line">s = tvm.create_schedule(C.op)</span><br><span class="line">xo, xi = s[C].split(s[C].axis[<span class="number">0</span>], factor=<span class="number">32</span>)</span><br></pre></td></tr></table></figure>
+<p>生成的代码就变成了：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> xo = <span class="number">0</span>; xo &lt; <span class="built_in">ceil</span>(n / <span class="number">32</span>); ++xo)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> xi = <span class="number">0</span>; xi &lt; <span class="number">32</span>; ++xi)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> i = xo * <span class="number">32</span> + xi;</span><br><span class="line">        <span class="keyword">if</span> (i &lt; n)</span><br><span class="line">        &#123;</span><br><span class="line">            C[i] = A[i] + B[i];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>甚至可以绑定特定的变量：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">C = tvm.compute((n,), <span class="keyword">lambda</span> i: A[i] + B[i])</span><br><span class="line">s = tvm.create_schedule(C.op)</span><br><span class="line">xo, xi = s[C].split(s[C].axis[<span class="number">0</span>], factor=<span class="number">32</span>)</span><br><span class="line">s[C].recorder(xi, xo)</span><br><span class="line">s[C].bind(xo, tvm.thread_axis(“blockIdx.x”)</span><br><span class="line">s[C].bind(xi, tvm.thread_axis(“threadIdx.x”)</span><br></pre></td></tr></table></figure>
+<p>这样就出来一个 CUDA kernel 代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i = threadIdx.x * <span class="number">32</span> + blockIdx.x;</span><br><span class="line"><span class="keyword">if</span> (i &lt; n)</span><br><span class="line">&#123;</span><br><span class="line">    C[i] = A[i] + B[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>TVM 的核心就是一些调度原语，比如下图这些：</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/3.png"></p>
+<p>还有 TVM 最有趣的部分 AutoTVM，可以用 learning 的方式对代码进行自动优化，不过这个东西在课程中并不是重点，所以只是简单的提及了一下。</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/4.png"></p>
+<p>在我理解，TVM 就是一个 Graph IR 的优化框架，或者说是底层算子的高阶表示。</p>
+<h2 id="lecture-8-hardware-specialization-in-deep-learning">Lecture 8: Hardware Specialization in Deep Learning</h2>
+<p>这一讲主要介绍 TVM 技术栈中的重要部分 VTA。对于硬件我不是特别熟悉，也不是特别感兴趣，所以这章就随便看看了。 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/39635145">VTA: 开源AI芯片栈</a> Tianqi 的这篇文章概括性的讲述了 VTA 的意义。 总体来说，就是根据 RISC 的思想，设计了一套硬件架构。TVM 充当编译器，VTA 充当底层计算硬件，两者配合达到良好的效果。</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/5.png"></p>
+<h2 id="lecture-9-memory-optimization">Lecture 9: Memory Optimization</h2>
+<p>这一讲我觉得还蛮有意思的，讲的是深度学习的内存优化。 主要内容来自于这篇论文：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1604.06174">Training Deep Nets with Sublinear Memory Cost</a> 这一讲的核心问题在于，为什么我们要用 autograd 来形成计算图，而不是直接使用 BP？</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/1-1.png"></p>
+<p>这个问题的答案其实就本节课的标题：Memory Optimization。我们要优化内存的使用，所以要用计算图。 假如只有前向传播的话，我们其实可以通过计算图的层次结构来复用内存：</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/2-1.png"></p>
+<p>这个内存复用有两个原则：Inplace 和 Normal Sharing。 所谓 Inplace 就是输出的内容直接存到输入内存的地方。Normal Sharing 则是重复使用那些不被需要的内存。 显然 Inplace 也有一些失效的时候，当输入的内容还被其他输出依赖时，我们之前的输出就不能使用这块内存。</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/3-1.png"></p>
+<p>回到我们最开始的问题，为什么我们要用 autograd 的计算图来代替 BP？</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/4-1.png"></p>
+<p>这个问题其实没有在 slides 中说清楚。看了看其他人的理解，都是觉得 BP 要存中间结果，所以比较费内存。但是计算图也要存中间结果啊？所以有点费解。我的理解是，计算图可以更好的捕获变量之间的依赖性，就像上面这个图一样。如果用 BP，每一步中间结果都要存起来，但是如果用 autograd，就可以全程 Inplace。 后面讲了一些利用两个原则优化内存的例子，都不是很难理解。但是问题在于，不管我们怎么复用，整体的空间复杂度仍然是线性增长的。</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/5-1.png"></p>
+<p>这时候有个牛逼做法就是保存 <span class="math inline">\(\sqrt{N}\)</span> 个中间节点，每次需要反向传播的时候，就从这个中间节点往下算 <span class="math inline">\(\sqrt{N}\)</span> 步。这样内存就是 <span class="math inline">\(O(\sqrt{N})\)</span> 级别了，是不是跟 ICPC 竞赛里面常见的分块算法一模一样？ 感觉内存优化这部分还是有些东西不太清楚，需要回头看一下论文。看完论文补充一下这部分的内容。 接下来是 assignment 2。 这次作业感觉工作量还是很大的，首先是要满足作业的第一个要求，把 test_tvm_op.py 里面的所有测试都跑通：</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/1-2.png"></p>
+<p>这一步主要要参考 <a target="_blank" rel="noopener" href="https://docs.tvm.ai/index.html">TVM Documentation</a> 的写法，把这些算子都补齐。其中一些算子的作用还是比较迷惑的，要看测试才知道是什么意思。TVM 的写法有些地方也比较古怪，要自己慢慢尝试。 然后是满足第二个要求，跑通 mnist 的两个方法：</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/2-2.png"></p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/3-2.png"></p>
+<p>这一步是要把 autodiff 的内容补全，其实很简单，但是有些地方可能不太清楚他到底想让你写什么东西，仔细看看调用代码，然后把函数补全就好了。 从上面的截图可以看出，我们自己写的算子效果非常垃圾，跑一遍 mlp 要 80s，下面就是如何优化矩阵乘法算子了：</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/4-2.png"></p>
+<p>主要思路还是来自于 <a target="_blank" rel="noopener" href="http://dlsys.cs.washington.edu/pdf/lecture6.pdf">Lecture 6</a>，只要简单的把矩阵分一下块，调整一下循环顺序，然后再并行一下，就可以得到 20x 的优化效果。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">s = tvm.create_schedule(C.op)</span><br><span class="line">xo, yo, xi, yi = s[C].tile(C.op.axis[<span class="number">0</span>], C.op.axis[<span class="number">1</span>], x_factor=<span class="number">32</span>, y_factor=<span class="number">64</span>)</span><br><span class="line">xk, yk = s[C].split(k, factor=<span class="number">8</span>)</span><br><span class="line">s[C].reorder(xo, yo, xk, xi, yi, yk)</span><br><span class="line">s[C].parallel(xo)</span><br><span class="line">s[C].unroll(yk)</span><br><span class="line">f = tvm.build(s, [A, B, C], tgt, target_host=tgt_host, name=func_name)</span><br></pre></td></tr></table></figure>
+<p>更多精细的优化在 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/75203171">如何利用TVM快速实现超越Numpy的GEMM</a> 这篇文章中可以找到，非常牛逼。</p>
+<h2 id="lecture-10-parallel-scheduling">Lecture 10: Parallel Scheduling</h2>
+<p>在内存分配之后，第10讲讲的是并行调度的问题。 首先讲了一下 Model Parallel 和 Data Parallel 的模式，比较基础。</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/1-3.png"></p>
+<p>因为现实的运算中存在着各种复杂的同步关系，所以我们需要一个自动调度器。 这个自动调度器需要调度各种各样的资源，包括数据、随机数生成器、网络通信等等；也要调度各种各样的操作。 对于深度学习来说，基于计算图的调度就非常自然。因为计算图是一个 DAG，各种依赖复用关系都非常明显。但是基于计算图的这种调度对于一些什么写后读、读后写的问题可能不是特别敏感，所以还增加需要 mutation aware 这种调度方式。</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/2-3.png"></p>
+<p>后面给了一个很简单的队列调度的例子，看看就能懂。</p>
+<h2 id="lecture-11-distributed-training-and-communication-protocols">Lecture 11: Distributed Training and Communication Protocols</h2>
+<p>这一讲讲的主要是参数的 Synchronization 问题。 首先介绍了一种叫做 Allreduce 的操作，感觉就是在中间把分布式程序拦了一下：</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/3-3.png"></p>
+<p>然后讲了几种网络拓扑对 Allreduce 操作的影响，看起来比较简单。 之后介绍了 Parameter Server，这个在实习的时候接触的蛮多，其实就是个 KV，用 PS 去更新和获取参数，他们内部甚至搞了个无锁 hash 表...</p>
+<h2 id="lecture-12-model-serving">Lecture 12: Model Serving</h2>
+<p>终于到了最后一讲，这一讲主要讲的是模型部署在现实应用中的问题。</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/4-3.png"></p>
+<p>主要分为模型压缩和服务系统两个部分来进行讲解。 模型压缩的第一个部分是矩阵/向量分解，这个矩阵分解套路很简单很常见，向量分解没见过，也没太看懂，有空可以仔细研究一下。大概是把一个 cnn 分解成几个 cnn，但是能达到相似的效果。 然后网络剪枝，其中一个思路是 prune the connections。想法很简单，每次增加前向传播的 theshold，减少连通性。 第二个思路是 weight sharing，首先对参数进行聚类，相似的参数就看做一个参数，再对他们进行统一的更新。 模型的低比特量化也是一个很有趣的思路，通过降低模型数据存储的精度，来压缩模型并且尽量保持精度。 还有知识蒸馏，用一个大模型去训练一个小模型。上周末实验室讲座有个大哥讲的就是这个内容，但是我因为家里有急事所以没听到，不过获得了 PPT，之后自己补一补吧。 第二个部分就是服务系统了，服务系统的目标是编写程序的灵活性、GPU 上面的高效率以及延迟满足 SLA（service-level agreement）。 然后讲了一个叫 Nexus 的系统，看起来有些难以理解，先略过吧~</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/learning/" rel="tag"># learning</a>
+              <a href="/tags/system/" rel="tag"># system</a>
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/11/08/cse-599w-systems-for-ml-1-6/" rel="prev" title="CSE 599W: Systems for ML 课程笔记 1-6">
+      <i class="fa fa-chevron-left"></i> CSE 599W: Systems for ML 课程笔记 1-6
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/30/autotvm-1/" rel="next" title="AutoTVM 探秘（一）">
+      AutoTVM 探秘（一） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#lecture-7-automatic-code-generation---tvm-stack"><span class="nav-number">1.</span> <span class="nav-text">Lecture 7: Automatic Code Generation - TVM Stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lecture-8-hardware-specialization-in-deep-learning"><span class="nav-number">2.</span> <span class="nav-text">Lecture 8: Hardware Specialization in Deep Learning</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lecture-9-memory-optimization"><span class="nav-number">3.</span> <span class="nav-text">Lecture 9: Memory Optimization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lecture-10-parallel-scheduling"><span class="nav-number">4.</span> <span class="nav-text">Lecture 10: Parallel Scheduling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lecture-11-distributed-training-and-communication-protocols"><span class="nav-number">5.</span> <span class="nav-text">Lecture 11: Distributed Training and Communication Protocols</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lecture-12-model-serving"><span class="nav-number">6.</span> <span class="nav-text">Lecture 12: Model Serving</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Reku</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">78</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">96</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="/./atom.xml" title="RSS → .&#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://github.com/wyc-ruiker" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wyc-ruiker" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/reku1997" title="ZhiHu → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;reku1997" rel="noopener" target="_blank"><i class="fa fa-fw fa-quora"></i>ZhiHu</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://codeforces.com/profile/reku" title="CodeForces → http:&#x2F;&#x2F;codeforces.com&#x2F;profile&#x2F;reku" rel="noopener" target="_blank"><i class="fa fa-fw fa-code"></i>CodeForces</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Reku</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"MWLzM550UOu69h3dgvbbLSsF-gzGzoHsz","app_key":"gkKnwm9FK0cu3ysJbcggsCDz","server_url":null,"security":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script>
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@4/dist/instantsearch.production.min.js"></script>
+<script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://reku1997.gitee.io/2019/11/21/cse-599w-systems-for-ml-7-12/";
+    this.page.identifier = "2019/11/21/cse-599w-systems-for-ml-7-12/";
+    this.page.title = "CSE 599W: SYSTEMS FOR ML 课程笔记 7-12";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://reku.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>
