@@ -3,11 +3,11 @@
   <title>Reku</title>
   
   
-  <link href="https://reku1997.gitee.io/atom.xml" rel="self"/>
+  <link href="https://wyc-ruiker.github.io/atom.xml" rel="self"/>
   
-  <link href="https://reku1997.gitee.io/"/>
+  <link href="https://wyc-ruiker.github.io/"/>
   <updated>2021-12-17T15:26:22.801Z</updated>
-  <id>https://reku1997.gitee.io/</id>
+  <id>https://wyc-ruiker.github.io/</id>
   
   <author>
     <name>Reku</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>MIT-6.S081 2020</title>
-    <link href="https://reku1997.gitee.io/2020/10/13/mit-os/"/>
-    <id>https://reku1997.gitee.io/2020/10/13/mit-os/</id>
+    <link href="https://wyc-ruiker.github.io/2020/10/13/mit-os/"/>
+    <id>https://wyc-ruiker.github.io/2020/10/13/mit-os/</id>
     <published>2020-10-13T07:17:57.000Z</published>
     <updated>2021-12-17T15:26:22.801Z</updated>
     
@@ -30,17 +30,17 @@
     
     
     
-    <category term="操作系统" scheme="https://reku1997.gitee.io/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+    <category term="操作系统" scheme="https://wyc-ruiker.github.io/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
     
     
-    <category term="OS" scheme="https://reku1997.gitee.io/tags/OS/"/>
+    <category term="OS" scheme="https://wyc-ruiker.github.io/tags/OS/"/>
     
   </entry>
   
   <entry>
     <title>GNN for Source Code Modeling（三）</title>
-    <link href="https://reku1997.gitee.io/2020/03/09/gnn-for-source-code-modeling-3/"/>
-    <id>https://reku1997.gitee.io/2020/03/09/gnn-for-source-code-modeling-3/</id>
+    <link href="https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/"/>
+    <id>https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/</id>
     <published>2020-03-09T12:51:24.000Z</published>
     <updated>2021-12-16T11:28:06.000Z</updated>
     
@@ -51,19 +51,19 @@
     
     
     
-    <category term="机器学习" scheme="https://reku1997.gitee.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    <category term="机器学习" scheme="https://wyc-ruiker.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="program" scheme="https://reku1997.gitee.io/tags/program/"/>
+    <category term="graph" scheme="https://wyc-ruiker.github.io/tags/graph/"/>
     
-    <category term="graph" scheme="https://reku1997.gitee.io/tags/graph/"/>
+    <category term="program" scheme="https://wyc-ruiker.github.io/tags/program/"/>
     
   </entry>
   
   <entry>
     <title>GNN for Source Code Modeling（二）</title>
-    <link href="https://reku1997.gitee.io/2020/03/08/gnn-for-source-code-modeling-2/"/>
-    <id>https://reku1997.gitee.io/2020/03/08/gnn-for-source-code-modeling-2/</id>
+    <link href="https://wyc-ruiker.github.io/2020/03/08/gnn-for-source-code-modeling-2/"/>
+    <id>https://wyc-ruiker.github.io/2020/03/08/gnn-for-source-code-modeling-2/</id>
     <published>2020-03-07T17:18:25.000Z</published>
     <updated>2021-12-16T11:26:15.000Z</updated>
     
@@ -74,19 +74,19 @@
     
     
     
-    <category term="机器学习" scheme="https://reku1997.gitee.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    <category term="机器学习" scheme="https://wyc-ruiker.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="program" scheme="https://reku1997.gitee.io/tags/program/"/>
+    <category term="graph" scheme="https://wyc-ruiker.github.io/tags/graph/"/>
     
-    <category term="graph" scheme="https://reku1997.gitee.io/tags/graph/"/>
+    <category term="program" scheme="https://wyc-ruiker.github.io/tags/program/"/>
     
   </entry>
   
   <entry>
     <title>GNN for Source Code Modeling（一）</title>
-    <link href="https://reku1997.gitee.io/2020/03/07/gnn-for-source-code-modeling-1/"/>
-    <id>https://reku1997.gitee.io/2020/03/07/gnn-for-source-code-modeling-1/</id>
+    <link href="https://wyc-ruiker.github.io/2020/03/07/gnn-for-source-code-modeling-1/"/>
+    <id>https://wyc-ruiker.github.io/2020/03/07/gnn-for-source-code-modeling-1/</id>
     <published>2020-03-07T10:10:17.000Z</published>
     <updated>2021-12-16T11:27:58.000Z</updated>
     
@@ -97,19 +97,19 @@
     
     
     
-    <category term="机器学习" scheme="https://reku1997.gitee.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    <category term="机器学习" scheme="https://wyc-ruiker.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="GNN" scheme="https://reku1997.gitee.io/tags/GNN/"/>
+    <category term="program" scheme="https://wyc-ruiker.github.io/tags/program/"/>
     
-    <category term="program" scheme="https://reku1997.gitee.io/tags/program/"/>
+    <category term="GNN" scheme="https://wyc-ruiker.github.io/tags/GNN/"/>
     
   </entry>
   
   <entry>
     <title>AutoTVM 探秘 （三）</title>
-    <link href="https://reku1997.gitee.io/2020/01/02/autotvm-3/"/>
-    <id>https://reku1997.gitee.io/2020/01/02/autotvm-3/</id>
+    <link href="https://wyc-ruiker.github.io/2020/01/02/autotvm-3/"/>
+    <id>https://wyc-ruiker.github.io/2020/01/02/autotvm-3/</id>
     <published>2020-01-02T08:48:01.000Z</published>
     <updated>2020-07-20T08:26:40.000Z</updated>
     
@@ -120,21 +120,21 @@
     
     
     
-    <category term="system" scheme="https://reku1997.gitee.io/categories/system/"/>
+    <category term="system" scheme="https://wyc-ruiker.github.io/categories/system/"/>
     
-    <category term="机器学习" scheme="https://reku1997.gitee.io/categories/system/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    <category term="机器学习" scheme="https://wyc-ruiker.github.io/categories/system/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="TVM" scheme="https://reku1997.gitee.io/tags/TVM/"/>
+    <category term="TVM" scheme="https://wyc-ruiker.github.io/tags/TVM/"/>
     
-    <category term="AutoTVM" scheme="https://reku1997.gitee.io/tags/AutoTVM/"/>
+    <category term="AutoTVM" scheme="https://wyc-ruiker.github.io/tags/AutoTVM/"/>
     
   </entry>
   
   <entry>
     <title>AutoTVM 探秘（二）</title>
-    <link href="https://reku1997.gitee.io/2019/12/31/autotvm-2/"/>
-    <id>https://reku1997.gitee.io/2019/12/31/autotvm-2/</id>
+    <link href="https://wyc-ruiker.github.io/2019/12/31/autotvm-2/"/>
+    <id>https://wyc-ruiker.github.io/2019/12/31/autotvm-2/</id>
     <published>2019-12-31T06:02:40.000Z</published>
     <updated>2021-12-16T12:08:27.000Z</updated>
     
@@ -145,21 +145,21 @@
     
     
     
-    <category term="system" scheme="https://reku1997.gitee.io/categories/system/"/>
+    <category term="system" scheme="https://wyc-ruiker.github.io/categories/system/"/>
     
-    <category term="机器学习" scheme="https://reku1997.gitee.io/categories/system/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    <category term="机器学习" scheme="https://wyc-ruiker.github.io/categories/system/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="TVM" scheme="https://reku1997.gitee.io/tags/TVM/"/>
+    <category term="TVM" scheme="https://wyc-ruiker.github.io/tags/TVM/"/>
     
-    <category term="AutoTVM" scheme="https://reku1997.gitee.io/tags/AutoTVM/"/>
+    <category term="AutoTVM" scheme="https://wyc-ruiker.github.io/tags/AutoTVM/"/>
     
   </entry>
   
   <entry>
     <title>AutoTVM 探秘（一）</title>
-    <link href="https://reku1997.gitee.io/2019/12/30/autotvm-1/"/>
-    <id>https://reku1997.gitee.io/2019/12/30/autotvm-1/</id>
+    <link href="https://wyc-ruiker.github.io/2019/12/30/autotvm-1/"/>
+    <id>https://wyc-ruiker.github.io/2019/12/30/autotvm-1/</id>
     <published>2019-12-30T12:34:03.000Z</published>
     <updated>2020-07-20T08:34:18.000Z</updated>
     
@@ -170,21 +170,21 @@
     
     
     
-    <category term="system" scheme="https://reku1997.gitee.io/categories/system/"/>
+    <category term="system" scheme="https://wyc-ruiker.github.io/categories/system/"/>
     
-    <category term="机器学习" scheme="https://reku1997.gitee.io/categories/system/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    <category term="机器学习" scheme="https://wyc-ruiker.github.io/categories/system/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="TVM" scheme="https://reku1997.gitee.io/tags/TVM/"/>
+    <category term="TVM" scheme="https://wyc-ruiker.github.io/tags/TVM/"/>
     
-    <category term="AutoTVM" scheme="https://reku1997.gitee.io/tags/AutoTVM/"/>
+    <category term="AutoTVM" scheme="https://wyc-ruiker.github.io/tags/AutoTVM/"/>
     
   </entry>
   
   <entry>
     <title>CSE 599W: SYSTEMS FOR ML 课程笔记 7-12</title>
-    <link href="https://reku1997.gitee.io/2019/11/21/cse-599w-systems-for-ml-7-12/"/>
-    <id>https://reku1997.gitee.io/2019/11/21/cse-599w-systems-for-ml-7-12/</id>
+    <link href="https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/"/>
+    <id>https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/</id>
     <published>2019-11-21T07:04:48.000Z</published>
     <updated>2021-12-16T11:33:10.000Z</updated>
     
@@ -195,23 +195,23 @@
     
     
     
-    <category term="system" scheme="https://reku1997.gitee.io/categories/system/"/>
+    <category term="system" scheme="https://wyc-ruiker.github.io/categories/system/"/>
     
-    <category term="机器学习" scheme="https://reku1997.gitee.io/categories/system/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    <category term="机器学习" scheme="https://wyc-ruiker.github.io/categories/system/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="learning" scheme="https://reku1997.gitee.io/tags/learning/"/>
+    <category term="learning" scheme="https://wyc-ruiker.github.io/tags/learning/"/>
     
-    <category term="system" scheme="https://reku1997.gitee.io/tags/system/"/>
+    <category term="system" scheme="https://wyc-ruiker.github.io/tags/system/"/>
     
-    <category term="机器学习" scheme="https://reku1997.gitee.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    <category term="机器学习" scheme="https://wyc-ruiker.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
     
   </entry>
   
   <entry>
     <title>CSE 599W: Systems for ML 课程笔记 1-6</title>
-    <link href="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/"/>
-    <id>https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/</id>
+    <link href="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/"/>
+    <id>https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/</id>
     <published>2019-11-08T07:31:51.000Z</published>
     <updated>2021-12-16T11:33:12.000Z</updated>
     
@@ -222,23 +222,23 @@
     
     
     
-    <category term="system" scheme="https://reku1997.gitee.io/categories/system/"/>
+    <category term="system" scheme="https://wyc-ruiker.github.io/categories/system/"/>
     
-    <category term="机器学习" scheme="https://reku1997.gitee.io/categories/system/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    <category term="机器学习" scheme="https://wyc-ruiker.github.io/categories/system/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="learning" scheme="https://reku1997.gitee.io/tags/learning/"/>
+    <category term="learning" scheme="https://wyc-ruiker.github.io/tags/learning/"/>
     
-    <category term="system" scheme="https://reku1997.gitee.io/tags/system/"/>
+    <category term="system" scheme="https://wyc-ruiker.github.io/tags/system/"/>
     
-    <category term="课程笔记" scheme="https://reku1997.gitee.io/tags/%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/"/>
+    <category term="课程笔记" scheme="https://wyc-ruiker.github.io/tags/%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/"/>
     
   </entry>
   
   <entry>
     <title>从 AdaBoost 到 GBDT</title>
-    <link href="https://reku1997.gitee.io/2019/07/26/adaboost/"/>
-    <id>https://reku1997.gitee.io/2019/07/26/adaboost/</id>
+    <link href="https://wyc-ruiker.github.io/2019/07/26/adaboost/"/>
+    <id>https://wyc-ruiker.github.io/2019/07/26/adaboost/</id>
     <published>2019-07-26T08:07:10.000Z</published>
     <updated>2021-12-16T11:24:07.000Z</updated>
     
@@ -249,15 +249,15 @@
     
     
     
-    <category term="机器学习" scheme="https://reku1997.gitee.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    <category term="机器学习" scheme="https://wyc-ruiker.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
     
     
   </entry>
   
   <entry>
     <title>支持向量机的清晰推导</title>
-    <link href="https://reku1997.gitee.io/2019/07/06/svm/"/>
-    <id>https://reku1997.gitee.io/2019/07/06/svm/</id>
+    <link href="https://wyc-ruiker.github.io/2019/07/06/svm/"/>
+    <id>https://wyc-ruiker.github.io/2019/07/06/svm/</id>
     <published>2019-07-06T06:12:16.000Z</published>
     <updated>2021-12-16T11:32:34.000Z</updated>
     
@@ -268,15 +268,15 @@
     
     
     
-    <category term="机器学习" scheme="https://reku1997.gitee.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    <category term="机器学习" scheme="https://wyc-ruiker.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
     
     
   </entry>
   
   <entry>
     <title>GoodBye ICPC</title>
-    <link href="https://reku1997.gitee.io/2017/12/20/goodbye-icpc/"/>
-    <id>https://reku1997.gitee.io/2017/12/20/goodbye-icpc/</id>
+    <link href="https://wyc-ruiker.github.io/2017/12/20/goodbye-icpc/"/>
+    <id>https://wyc-ruiker.github.io/2017/12/20/goodbye-icpc/</id>
     <published>2017-12-20T01:03:17.000Z</published>
     <updated>2021-12-16T11:33:00.000Z</updated>
     
@@ -295,15 +295,15 @@
     
     
     
-    <category term="acm" scheme="https://reku1997.gitee.io/categories/acm/"/>
+    <category term="acm" scheme="https://wyc-ruiker.github.io/categories/acm/"/>
     
     
   </entry>
   
   <entry>
     <title>2017 CCPC 杭州赛区小结 By ruiker @ 广东老乡</title>
-    <link href="https://reku1997.gitee.io/2017/11/08/2017-ccpc-hangzhou-by-ruiker/"/>
-    <id>https://reku1997.gitee.io/2017/11/08/2017-ccpc-hangzhou-by-ruiker/</id>
+    <link href="https://wyc-ruiker.github.io/2017/11/08/2017-ccpc-hangzhou-by-ruiker/"/>
+    <id>https://wyc-ruiker.github.io/2017/11/08/2017-ccpc-hangzhou-by-ruiker/</id>
     <published>2017-11-08T07:25:16.000Z</published>
     <updated>2021-12-16T14:40:39.000Z</updated>
     
@@ -315,17 +315,17 @@
     
     
     
-    <category term="acm" scheme="https://reku1997.gitee.io/categories/acm/"/>
+    <category term="acm" scheme="https://wyc-ruiker.github.io/categories/acm/"/>
     
     
-    <category term="小结" scheme="https://reku1997.gitee.io/tags/%E5%B0%8F%E7%BB%93/"/>
+    <category term="小结" scheme="https://wyc-ruiker.github.io/tags/%E5%B0%8F%E7%BB%93/"/>
     
   </entry>
   
   <entry>
     <title>2017 ACM/ICPC 西安赛区小结 by ruiker @ 广东老乡</title>
-    <link href="https://reku1997.gitee.io/2017/10/31/2017-acmicpc-xian-by-ruiker/"/>
-    <id>https://reku1997.gitee.io/2017/10/31/2017-acmicpc-xian-by-ruiker/</id>
+    <link href="https://wyc-ruiker.github.io/2017/10/31/2017-acmicpc-xian-by-ruiker/"/>
+    <id>https://wyc-ruiker.github.io/2017/10/31/2017-acmicpc-xian-by-ruiker/</id>
     <published>2017-10-31T11:12:12.000Z</published>
     <updated>2022-10-28T14:35:00.925Z</updated>
     
@@ -336,17 +336,17 @@
     
     
     
-    <category term="acm" scheme="https://reku1997.gitee.io/categories/acm/"/>
+    <category term="acm" scheme="https://wyc-ruiker.github.io/categories/acm/"/>
     
     
-    <category term="小结" scheme="https://reku1997.gitee.io/tags/%E5%B0%8F%E7%BB%93/"/>
+    <category term="小结" scheme="https://wyc-ruiker.github.io/tags/%E5%B0%8F%E7%BB%93/"/>
     
   </entry>
   
   <entry>
     <title>后缀自动机</title>
-    <link href="https://reku1997.gitee.io/2017/09/28/%E5%90%8E%E7%BC%80%E8%87%AA%E5%8A%A8%E6%9C%BA/"/>
-    <id>https://reku1997.gitee.io/2017/09/28/%E5%90%8E%E7%BC%80%E8%87%AA%E5%8A%A8%E6%9C%BA/</id>
+    <link href="https://wyc-ruiker.github.io/2017/09/28/%E5%90%8E%E7%BC%80%E8%87%AA%E5%8A%A8%E6%9C%BA/"/>
+    <id>https://wyc-ruiker.github.io/2017/09/28/%E5%90%8E%E7%BC%80%E8%87%AA%E5%8A%A8%E6%9C%BA/</id>
     <published>2017-09-28T14:27:51.000Z</published>
     <updated>2021-12-16T12:15:01.000Z</updated>
     
@@ -357,17 +357,17 @@
     
     
     
-    <category term="acm" scheme="https://reku1997.gitee.io/categories/acm/"/>
+    <category term="acm" scheme="https://wyc-ruiker.github.io/categories/acm/"/>
     
     
-    <category term="后缀自动机" scheme="https://reku1997.gitee.io/tags/%E5%90%8E%E7%BC%80%E8%87%AA%E5%8A%A8%E6%9C%BA/"/>
+    <category term="后缀自动机" scheme="https://wyc-ruiker.github.io/tags/%E5%90%8E%E7%BC%80%E8%87%AA%E5%8A%A8%E6%9C%BA/"/>
     
   </entry>
   
   <entry>
     <title>虚树</title>
-    <link href="https://reku1997.gitee.io/2017/09/20/%E8%99%9A%E6%A0%91/"/>
-    <id>https://reku1997.gitee.io/2017/09/20/%E8%99%9A%E6%A0%91/</id>
+    <link href="https://wyc-ruiker.github.io/2017/09/20/%E8%99%9A%E6%A0%91/"/>
+    <id>https://wyc-ruiker.github.io/2017/09/20/%E8%99%9A%E6%A0%91/</id>
     <published>2017-09-20T05:08:47.000Z</published>
     <updated>2020-06-09T12:01:18.000Z</updated>
     
@@ -378,19 +378,19 @@
     
     
     
-    <category term="acm" scheme="https://reku1997.gitee.io/categories/acm/"/>
+    <category term="acm" scheme="https://wyc-ruiker.github.io/categories/acm/"/>
     
     
-    <category term="树DP" scheme="https://reku1997.gitee.io/tags/%E6%A0%91DP/"/>
+    <category term="树DP" scheme="https://wyc-ruiker.github.io/tags/%E6%A0%91DP/"/>
     
-    <category term="虚树" scheme="https://reku1997.gitee.io/tags/%E8%99%9A%E6%A0%91/"/>
+    <category term="虚树" scheme="https://wyc-ruiker.github.io/tags/%E8%99%9A%E6%A0%91/"/>
     
   </entry>
   
   <entry>
     <title>Codeforces Round #417 (Div. 2) E</title>
-    <link href="https://reku1997.gitee.io/2017/06/04/codeforces-round-417-div-2-e/"/>
-    <id>https://reku1997.gitee.io/2017/06/04/codeforces-round-417-div-2-e/</id>
+    <link href="https://wyc-ruiker.github.io/2017/06/04/codeforces-round-417-div-2-e/"/>
+    <id>https://wyc-ruiker.github.io/2017/06/04/codeforces-round-417-div-2-e/</id>
     <published>2017-06-04T14:45:05.000Z</published>
     <updated>2021-12-16T11:33:15.000Z</updated>
     
@@ -401,19 +401,19 @@
     
     
     
-    <category term="acm" scheme="https://reku1997.gitee.io/categories/acm/"/>
+    <category term="acm" scheme="https://wyc-ruiker.github.io/categories/acm/"/>
     
     
-    <category term="codeforces" scheme="https://reku1997.gitee.io/tags/codeforces/"/>
+    <category term="codeforces" scheme="https://wyc-ruiker.github.io/tags/codeforces/"/>
     
-    <category term="博弈" scheme="https://reku1997.gitee.io/tags/%E5%8D%9A%E5%BC%88/"/>
+    <category term="博弈" scheme="https://wyc-ruiker.github.io/tags/%E5%8D%9A%E5%BC%88/"/>
     
   </entry>
   
   <entry>
     <title>计蒜之道2017</title>
-    <link href="https://reku1997.gitee.io/2017/06/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932017/"/>
-    <id>https://reku1997.gitee.io/2017/06/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932017/</id>
+    <link href="https://wyc-ruiker.github.io/2017/06/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932017/"/>
+    <id>https://wyc-ruiker.github.io/2017/06/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932017/</id>
     <published>2017-06-04T07:10:58.000Z</published>
     <updated>2020-06-09T12:01:18.000Z</updated>
     
@@ -424,19 +424,19 @@
     
     
     
-    <category term="acm" scheme="https://reku1997.gitee.io/categories/acm/"/>
+    <category term="acm" scheme="https://wyc-ruiker.github.io/categories/acm/"/>
     
     
-    <category term="hash" scheme="https://reku1997.gitee.io/tags/hash/"/>
+    <category term="计蒜客" scheme="https://wyc-ruiker.github.io/tags/%E8%AE%A1%E8%92%9C%E5%AE%A2/"/>
     
-    <category term="计蒜客" scheme="https://reku1997.gitee.io/tags/%E8%AE%A1%E8%92%9C%E5%AE%A2/"/>
+    <category term="hash" scheme="https://wyc-ruiker.github.io/tags/hash/"/>
     
   </entry>
   
   <entry>
     <title>Codeforces Round #416 (Div. 2)</title>
-    <link href="https://reku1997.gitee.io/2017/05/31/codeforces-round-416-div-2/"/>
-    <id>https://reku1997.gitee.io/2017/05/31/codeforces-round-416-div-2/</id>
+    <link href="https://wyc-ruiker.github.io/2017/05/31/codeforces-round-416-div-2/"/>
+    <id>https://wyc-ruiker.github.io/2017/05/31/codeforces-round-416-div-2/</id>
     <published>2017-05-31T10:42:53.000Z</published>
     <updated>2021-12-16T12:10:02.000Z</updated>
     
@@ -447,25 +447,25 @@
     
     
     
-    <category term="acm" scheme="https://reku1997.gitee.io/categories/acm/"/>
+    <category term="acm" scheme="https://wyc-ruiker.github.io/categories/acm/"/>
     
     
-    <category term="codeforces" scheme="https://reku1997.gitee.io/tags/codeforces/"/>
+    <category term="并查集" scheme="https://wyc-ruiker.github.io/tags/%E5%B9%B6%E6%9F%A5%E9%9B%86/"/>
     
-    <category term="树DP" scheme="https://reku1997.gitee.io/tags/%E6%A0%91DP/"/>
+    <category term="codeforces" scheme="https://wyc-ruiker.github.io/tags/codeforces/"/>
     
-    <category term="并查集" scheme="https://reku1997.gitee.io/tags/%E5%B9%B6%E6%9F%A5%E9%9B%86/"/>
+    <category term="树DP" scheme="https://wyc-ruiker.github.io/tags/%E6%A0%91DP/"/>
     
-    <category term="二分查找" scheme="https://reku1997.gitee.io/tags/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/"/>
+    <category term="二分查找" scheme="https://wyc-ruiker.github.io/tags/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/"/>
     
-    <category term="交互题" scheme="https://reku1997.gitee.io/tags/%E4%BA%A4%E4%BA%92%E9%A2%98/"/>
+    <category term="交互题" scheme="https://wyc-ruiker.github.io/tags/%E4%BA%A4%E4%BA%92%E9%A2%98/"/>
     
   </entry>
   
   <entry>
     <title>Playrix Codescapes Cup (Codeforces Round #413, rated, Div. 1 + Div. 2)</title>
-    <link href="https://reku1997.gitee.io/2017/05/16/playrix-codescapes-cup-codeforces-round-413-rated-div-1-div-2/"/>
-    <id>https://reku1997.gitee.io/2017/05/16/playrix-codescapes-cup-codeforces-round-413-rated-div-1-div-2/</id>
+    <link href="https://wyc-ruiker.github.io/2017/05/16/playrix-codescapes-cup-codeforces-round-413-rated-div-1-div-2/"/>
+    <id>https://wyc-ruiker.github.io/2017/05/16/playrix-codescapes-cup-codeforces-round-413-rated-div-1-div-2/</id>
     <published>2017-05-16T09:11:12.000Z</published>
     <updated>2021-12-16T11:32:41.000Z</updated>
     
@@ -476,14 +476,14 @@
     
     
     
-    <category term="acm" scheme="https://reku1997.gitee.io/categories/acm/"/>
+    <category term="acm" scheme="https://wyc-ruiker.github.io/categories/acm/"/>
     
     
-    <category term="codeforces" scheme="https://reku1997.gitee.io/tags/codeforces/"/>
+    <category term="codeforces" scheme="https://wyc-ruiker.github.io/tags/codeforces/"/>
     
-    <category term="树状数组" scheme="https://reku1997.gitee.io/tags/%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84/"/>
+    <category term="树状数组" scheme="https://wyc-ruiker.github.io/tags/%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84/"/>
     
-    <category term="折半搜索" scheme="https://reku1997.gitee.io/tags/%E6%8A%98%E5%8D%8A%E6%90%9C%E7%B4%A2/"/>
+    <category term="折半搜索" scheme="https://wyc-ruiker.github.io/tags/%E6%8A%98%E5%8D%8A%E6%90%9C%E7%B4%A2/"/>
     
   </entry>
   

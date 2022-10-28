@@ -14,46 +14,46 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"reku1997.gitee.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AW5K8S9IEE","apiKey":"d7e666d597854738d2fb31ecaa989aa5","indexName":"dev_reku1997","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"wyc-ruiker.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AW5K8S9IEE","apiKey":"d7e666d597854738d2fb31ecaa989aa5","indexName":"dev_reku1997","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="课程网站 在头条 AML 实习的时候就觉得这个 AI system 方向非常有趣，但是苦于实验室不是搞这一套的，自己拖延症也非常严重，所以一直在入门的边缘徘徊。但是在今天——研一秋学期考试周的前一周，我决定开始学习 AI system 方向最著名的必学课程，Tianqi Chen 在 UW 开设的 CSE599W。 这个课程其实资料并不是很完善，只有 github 上面的几个 repo 和课程网站">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CSE 599W: Systems for ML 课程笔记 1-6">
-<meta property="og:url" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/index.html">
+<meta property="og:url" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/index.html">
 <meta property="og:site_name" content="Reku">
 <meta property="og:description" content="课程网站 在头条 AML 实习的时候就觉得这个 AI system 方向非常有趣，但是苦于实验室不是搞这一套的，自己拖延症也非常严重，所以一直在入门的边缘徘徊。但是在今天——研一秋学期考试周的前一周，我决定开始学习 AI system 方向最著名的必学课程，Tianqi Chen 在 UW 开设的 CSE599W。 这个课程其实资料并不是很完善，只有 github 上面的几个 repo 和课程网站">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/3-1.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/3-2.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/3-3.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/3-4.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/3-5.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/3-6.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/3-7.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/3-8.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/3-9.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/3-10.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/4-1.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/4-2.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/4-3.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/4-5.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/4-4.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/5-1.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/5-2.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/5-3.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/5-3.5.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/5-3.8.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/5-4.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/5-5.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/5-6.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/5-7.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/6-1.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/6-2.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/6-3.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/6-4.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/6-5.png">
-<meta property="og:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/6-6.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/3-1.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/3-2.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/3-3.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/3-4.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/3-5.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/3-6.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/3-7.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/3-8.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/3-9.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/3-10.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/4-1.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/4-2.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/4-3.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/4-5.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/4-4.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/5-1.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/5-2.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/5-3.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/5-3.5.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/5-3.8.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/5-4.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/5-5.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/5-6.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/5-7.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/6-1.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/6-2.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/6-3.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/6-4.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/6-5.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/6-6.png">
 <meta property="article:published_time" content="2019-11-08T07:31:51.000Z">
 <meta property="article:modified_time" content="2021-12-16T11:33:12.000Z">
 <meta property="article:author" content="Reku">
@@ -61,9 +61,9 @@
 <meta property="article:tag" content="system">
 <meta property="article:tag" content="课程笔记">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/3-1.png">
+<meta name="twitter:image" content="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/3-1.png">
 
-<link rel="canonical" href="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/">
+<link rel="canonical" href="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/">
 
 
 <script id="page-configurations">
@@ -222,7 +222,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-cn">
-    <link itemprop="mainEntityOfPage" href="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/">
+    <link itemprop="mainEntityOfPage" href="https://wyc-ruiker.github.io/2019/11/08/cse-599w-systems-for-ml-1-6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
