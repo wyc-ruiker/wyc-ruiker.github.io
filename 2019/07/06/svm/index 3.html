@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://gitee.com/reku1997/reku1997/raw/master/reku.ico">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"reku1997.gitee.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AW5K8S9IEE","apiKey":"d7e666d597854738d2fb31ecaa989aa5","indexName":"dev_reku1997","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="其实是标题党啦... SVM 推导作为最臭名昭著的机器学习面试题，其实我在去年的这个时候准备头条实习面试的期间就已经“背诵”过了，但完全没有理解自己推导的是个什么东西。最近看台大的《机器学习技法》的课程视频，感觉这个 SVM 推导过程讲的非常清晰。最关键的是每一步的 motivation 都讲的非常清楚，正好博客也好久好久好久没有更新了，这里简单重复一下，以证明自己学会了 SVM 的推导吧~">
+<meta property="og:type" content="article">
+<meta property="og:title" content="支持向量机的清晰推导">
+<meta property="og:url" content="https://reku1997.gitee.io/2019/07/06/svm/index.html">
+<meta property="og:site_name" content="Reku">
+<meta property="og:description" content="其实是标题党啦... SVM 推导作为最臭名昭著的机器学习面试题，其实我在去年的这个时候准备头条实习面试的期间就已经“背诵”过了，但完全没有理解自己推导的是个什么东西。最近看台大的《机器学习技法》的课程视频，感觉这个 SVM 推导过程讲的非常清晰。最关键的是每一步的 motivation 都讲的非常清楚，正好博客也好久好久好久没有更新了，这里简单重复一下，以证明自己学会了 SVM 的推导吧~">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://reku1997.gitee.io/2019/07/06/svm/a.png">
+<meta property="article:published_time" content="2019-07-06T06:12:16.000Z">
+<meta property="article:modified_time" content="2021-12-16T11:32:34.000Z">
+<meta property="article:author" content="Reku">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://reku1997.gitee.io/2019/07/06/svm/a.png">
+
+<link rel="canonical" href="https://reku1997.gitee.io/2019/07/06/svm/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-cn'
+  };
+</script>
+
+  <title>支持向量机的清晰推导 | Reku</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Reku" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Reku</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+      
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-cn">
+    <link itemprop="mainEntityOfPage" href="https://reku1997.gitee.io/2019/07/06/svm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Reku">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Reku">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          支持向量机的清晰推导
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-07-06 14:12:16" itemprop="dateCreated datePublished" datetime="2019-07-06T14:12:16+08:00">2019-07-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-16 19:32:34" itemprop="dateModified" datetime="2021-12-16T19:32:34+08:00">2021-12-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2019/07/06/svm/" class="post-meta-item leancloud_visitors" data-flag-title="支持向量机的清晰推导" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2019/07/06/svm/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/07/06/svm/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>其实是标题党啦... SVM 推导作为最臭名昭著的机器学习面试题，其实我在去年的这个时候准备头条实习面试的期间就已经“背诵”过了，但完全没有理解自己推导的是个什么东西。最近看台大的《机器学习技法》的课程视频，感觉这个 SVM 推导过程讲的非常清晰。最关键的是每一步的 motivation 都讲的非常清楚，正好博客也好久好久好久没有更新了，这里简单重复一下，以证明自己学会了 SVM 的推导吧~</p>
+<span id="more"></span>
+<h2 id="从线性分割说起"><strong>从线性分割说起</strong></h2>
+<p>在《机器学习基石》课程中讲了一个基于迭代的简单线性分类算法 PLA，但是对一个二分类的数据集，合法的分类线普遍是无数条。对于这无数条线我们应该选择哪条线作为我们最终分类的结果才比较好呢？</p>
+<p><img src="/2019/07/06/svm/a.png"></p>
+<p>从上图来看，显然最右边这一列是比较合理的分割方法。也就说，离分类线的最近的点要尽可能的远，这样对各种噪音误差的兼容性是最好的。 用数学的定义来说就是： <span class="math display">\[max_{w}min_{n=1...N}distance(x_n, w)\]</span></p>
+<p>对于每个点来说都必须存在<span class="math inline">\(y_nw^Tx_n&gt;0\)</span>（如果一定要每个点都没有分割错误的话）。 在计算距离的时候，bias 显然是不应该参与进来的，所以需要把 bias 从矩阵中拆出来，变成<span class="math inline">\(h(x)=sign(w^Tx+b)\)</span>的形式，距离就从<span class="math inline">\(distance(x,w)\)</span>变成了<span class="math inline">\(distance(x,b,w)\)</span>。 下面要计算点<span class="math inline">\(x\)</span>到超平面<span class="math inline">\(w^Tx+b\)</span>的距离，这个就是一个简单的投影，得到 <span class="math display">\[distance(x,b,w)=\frac{|w^Tx+b|}{||w||}\]</span></p>
+<p>因为上面有对于每个点来说都必须存在<span class="math inline">\(y_n(w^Tx_n+b)&gt;0\)</span>的条件，所以分子里面这个麻烦的绝对值式子可以直接用<span class="math inline">\(y_n(w^Tx_n+b)\)</span>来代替（反正<span class="math inline">\(y_n\)</span>要么是<span class="math inline">\(1\)</span>要么是<span class="math inline">\(-1\)</span>，不会对结果有任何影响），所以得到以下式子： <span class="math display">\[distance(x,b,w)=\frac{y_n(w^Tx_n+b)}{||w||}\]</span></p>
+<p>又因为<span class="math inline">\(w^Tx_n+b\)</span>这个东西是可以加常数放缩的，也就是说<span class="math inline">\(w^Tx_n+b\)</span>跟<span class="math inline">\(3w^Tx_n+3b\)</span>所代表的平面是完全一致的，所以我们完全可以通过放缩使得最小的平面求出来的值等于<span class="math inline">\(1\)</span>，这样的好处是，最小的 distance 一定是 <span class="math inline">\(\frac{1}{||w||}\)</span>。这样做我们要求的数学式子就变为： <span class="math display">\[max_{w}\frac{1}{||w||}min_{n=1...N}y_n(w^Tx_n+b)=1\]</span></p>
+<p>但是接下来有个奇怪的问题，如果我们限制的条件是所有的<span class="math inline">\(y_n(w^Tx_n+b)\ge 1\)</span>，那一定会有一个<span class="math inline">\(w\)</span>使得<span class="math inline">\(y_n(w^Tx_n+b)=1\)</span>吗？ 这个证明其实很简单，如果最优的<span class="math inline">\(w\)</span>使得<span class="math inline">\(y_n(w^Tx_n+b)=1.126\)</span>，那么我们只要取<span class="math inline">\((b/1.126, w/1.126)\)</span>这样一组解，就会比之前的<span class="math inline">\(w\)</span>更优了。 现在优化目标已经很明显了，为了之后陈述方便，我们将最大化<span class="math inline">\(\frac{1}{||w||}\)</span>变成最小化<span class="math inline">\(w^Tw\)</span>。为了后续的推导方便，加了一个<span class="math inline">\(\frac{1}{2}\)</span>的放缩。于是我们的优化函数就变成了下面这样： <span class="math display">\[min_{w}\frac{1}{2}w^Tw\]</span><span class="math display">\[min_{n=1...N}y_n(w^Tx_n+b)\ge 1\]</span></p>
+<p>现在有了优化函数，如何求解呢？可以很简单的发现，这是一个非常经典的二次规划问题！给出一堆<span class="math inline">\(w\)</span>的限制，求解一个<span class="math inline">\(w\)</span>二次项的最优解！ 对于非线性的情况，我们只要把线性的映射到非线性情况就行了，非常的 easy，真是太爽了！</p>
+<h2 id="为什么我们需要对偶问题"><strong>为什么我们需要对偶问题</strong></h2>
+<p>不是都爽了吗？还要搞啥呢？ 真的爽吗？我们想一下，线性的情况确实蛮爽的，但是非线性的情况，当我们要将低维的特征映射的高维的时候，将<span class="math inline">\(x_n\)</span>映射到<span class="math inline">\(z_n\)</span>，这个代价是非常巨大的。比如一个<span class="math inline">\(x_n=(x1, x2)\)</span>特征，映射到二维就需要<span class="math inline">\(z_n=(1, x1, x2, x1^2, x2^2, x1x2)\)</span>这么多东西，更高的维度需要的代价会更大。 为了解决这个问题，我们首先需要了解一个叫做 Lagrange Mulitipliers 的东西。这个东西在正则化的时候，我们其实已经了解过了，大致是这个形式： <span class="math display">\[min_wE_{in}(w), w^Tw\le C \cong min_w(E_{aug}(w)=E_{in}(w)+\frac{\lambda}{N}w^Tw)\]</span></p>
+<p>既然<span class="math inline">\(w^Tw\le C\)</span>我们可以通过在后面加一个<span class="math inline">\(\frac{\lambda}{N}w^Tw\)</span>来获得等价问题，那么<span class="math inline">\(y_n(w^Tz_n+b)\ge 1\)</span>这个条件我们显然也可以如法炮制，大致是这个形式： <span class="math display">\[L(b,w,a)=\frac{1}{2}w^Tw+\sum_{n=1}^N\alpha_n(1-y_n(w^Tz_n+b))\]</span><span class="math display">\[\min_{b,w}(max_{\alpha_n\ge 0}L(b,w,\alpha))\]</span>我们保证<span class="math inline">\(\alpha_n\ge 0\)</span>这样的条件，这样就可以使得所有<span class="math inline">\(1-y_n(w^Tz_n+b)\)</span>都符合不超过<span class="math inline">\(0\)</span>的要求。因为如果有一个<span class="math inline">\(1-y_n(w^Tz_n+b)ge 0\)</span>，那就可以让对应的<span class="math inline">\(\alpha_n\)</span>为无穷，优化的 max 就是无穷大了。 但是这个东西我们还是不会优化，这时候就需要引入一个叫做拉格朗日对偶问题的东西，这个东西通过一系列的证明，表示在我们这个优化形式下，这两个问题是完全等价的： <span class="math display">\[min_{b,w}(max_{a_n\ge 0}L(b,w,\alpha))\cong max_{a_n\ge0}(min_{b,w}L(b,w,\alpha))\]</span></p>
+<p>展开来写的话就是： <span class="math display">\[max_{a_n\ge0}(min_{b,w}\frac{1}{2}w^Tw+\sum_{n=1}^N\alpha_n(1-y_n(w^Tz_n+b)))\]</span></p>
+<p>下面开始魔法时刻~</p>
+<p>如果里面的那个最小值优化是一个最值的话，那么对于每一个参数的偏导都应该是<span class="math inline">\(0\)</span>。基于这一点，我们就可以做一些有趣的事情了。 首先对里面的<span class="math inline">\(L(b,w,\alpha)\)</span>求<span class="math inline">\(b\)</span>的偏导，可以得到如下式子： <span class="math display">\[\frac{\partial L(b,w,\alpha)}{\partial b}=-\sum_{n=1}^N\alpha_ny_n=0\]</span></p>
+<p>这个结论其实就有点神奇了，但是更神奇的地方在于，我们把<span class="math inline">\(L(b,w,\alpha)\)</span>展开，发现<span class="math inline">\(b\)</span>的系数恰好就是这个<span class="math inline">\(-\sum_{n=1}^N\alpha_ny_n\)</span>！也就说<span class="math inline">\(b\)</span>这一项直接就可以消掉！</p>
+<p>继续我们的魔法之旅，下面对<span class="math inline">\(L(b,w,\alpha)\)</span>求<span class="math inline">\(w_i\)</span>的偏导： <span class="math display">\[\frac{\partial L(b,w,\alpha)}{\partial w_i}=w_i-\sum_{n=1}^N\alpha_ny_nz_{n,i}=0\]</span></p>
+<p>这样就得到了一个有趣的结论，<span class="math inline">\(w=\sum_{n=1}^N\alpha_ny_nz_n\)</span>。 将这个结论带入回原来的式子，可以得到： <span class="math display">\[max(\frac{1}{2}||\sum_{n=1}^N\alpha_ny_nz_n||+\sum_{n=1}^N\alpha_n)\\ a_n\ge0, \sum_{n=1}^N\alpha_ny_n=0, w=\sum_{n=1}^N\alpha_ny_nz_n\]</span></p>
+<p>所谓的 KKT 条件，其实也就是上面式子的几个条件了，还有一个原来定义中的条件<span class="math inline">\(y_n(w^Tx_n+b)\ge1\)</span>，当然还有一个最有趣的 KKT 条件就是<span class="math inline">\(\alpha_n(1-y_n(w^Tz_n+b))=0\)</span>，因为在优化的过程中，我们要求最后结果的最大值，而两个非负数相乘最后想要结果最大的话，必须其中一个为<span class="math inline">\(0\)</span>，那么上面这个条件就必须成立。 通过取负数将优化最大值变成优化最小值，然后展开可以得到： <span class="math display">\[min_{\alpha}\frac{1}{2}\sum_{n=1}^N\sum_{m=1}^N\alpha_n\alpha_my_ny_mz_n^Tz_m-\sum_{n=1}^N\alpha_n\\ a_n\ge0, \sum_{n=1}^N\alpha_ny_n=0\]</span></p>
+<p>诶，这个东西的形式是不是有点眼熟？没错，就是二次规划，太爽了，对偶问题我们现在也会求解了！ 求解出<span class="math inline">\(\alpha\)</span>之后，就可以通过<span class="math inline">\(w=\sum_{n=1}^N\alpha_ny_nz_n\)</span>求出<span class="math inline">\(w\)</span>。那我们的 bias 呢？还记得<span class="math inline">\(\alpha_n(1-y_n(w^Tz_n+b))=0\)</span>这个 KKT 条件吗？在<span class="math inline">\(\alpha_n&gt;0\)</span>的时候，我们就可以求出对应的 bias 了，而那些<span class="math inline">\(\alpha_n&gt;0\)</span>所对应的<span class="math inline">\(n\)</span>，其实就是所谓的支持向量！ 当然了，这个时候聪明的读者就会发现，你这个不还是有一个<span class="math inline">\(z_n^Tz_m\)</span>吗？复杂度并没有降低啊？</p>
+<h2 id="久等了核方法"><strong>久等了，核方法！</strong></h2>
+<p>核方法其实跟 SVM 的推导并没有什么直接关系，但是在 SVM 的使用中却是大放异彩的。 所谓的核方法，其实就是一些神奇的<span class="math inline">\(z_n^Tz_m\)</span>求法，这些核方法可以完成很好的空间变换功能，甚至将原来的特征空间变换到无限维，正是核方法的出现，才使得 SVM 在某一个历史时期“一统江湖”的。 比如我们有一个垃圾特征空间变换，将<span class="math inline">\(x_n=(x_1, x_2, x_3, ..., x_d)\)</span>变换到<span class="math inline">\(\phi_n=(1, x_1, x_2, ..., x_d, x_1x_2, ..., x_1x_d, x_2x_1, x_2^2, ..., x_2x_d, ..., x_d^2)\)</span>。 现在我们想知道<span class="math inline">\(\phi_n(x)^T\phi_n(x^*)\)</span>，直接乘起来的话复杂度是<span class="math inline">\(O(d^2)\)</span>。我们通过观察式子，进行一定程度的优化可以发现<span class="math inline">\(\phi_n(x)^T\phi_n(x)=1+x^Tx^*+(x^Tx^*)(x^Tx^*)\)</span>。这样复杂度就是<span class="math inline">\(O(d)\)</span>了，是不是很棒？ 当然了，还有很多例如 RBF 之类的比较复杂的核方法，这里就不加赘述了，在实际应用中通常将<span class="math inline">\(z_n^Tz_m\)</span>换成<span class="math inline">\(K(x_n, x_m)\)</span>就代表核方法啦。</p>
+<h2 id="虚假的-svm-和真正的-svm"><strong>虚假的 SVM 和真正的 SVM</strong></h2>
+<p>其实上面讲的 SVM 跟实际使用的 SVM 并不完全一致，主要问题出现在大前提上，就是<span class="math inline">\(y_n(w^Tx_n+b)\ge1\)</span>这个定义。这个定义要求我们每个点都不能分割错误，过于严格，因为有一些噪音的结果是不需要考虑的。我们的 SVM 需要容忍一些分割错误。 我们将原来的 SVM 扩展一下，形式如下： <span class="math display">\[min_{b,w,\xi}\frac{1}{2}w^Tw+C\sum_{n=1}^N\xi_n\\ y_n(w^Tz_n+b)\ge1-\xi_n, \xi_n\ge0\]</span></p>
+<p>其中参数<span class="math inline">\(C\)</span>就是用来 trade-off 容错率和分割线的鲁棒性的，参数<span class="math inline">\(\xi_n\)</span>就是表示这个点到底犯了多少错。 用 Lagrange Mulitipliers 重写这个优化式子，形式是这样： <span class="math display">\[L(b,w,\xi,\alpha,\beta)=\frac{1}{2}w^Tw+C\sum_{n=1}^N\xi_n+\sum_{n=1}^N\alpha_n(1-\xi_n-y_n(w^Tz_n+b))+\sum_{n=1}^N\beta_n(-\xi_n)\]</span></p>
+<p><span class="math display">\[max_{\alpha_n\ge0, \beta_n\ge0}(min_{b,w,\xi}L(b,w,\xi,\alpha,\beta))\]</span></p>
+<p>跟原来一样，通过求<span class="math inline">\(\xi_n\)</span>的偏导可以发现： <span class="math display">\[\frac{\partial L(b,w,\xi,\alpha,\beta)}{\partial \xi_n}=C-\alpha_n-\beta_n=0\]</span> 跟之前的 bias 一样，我们将式子展开之后，发现<span class="math inline">\(\xi_n\)</span>的系数就是上面这个等于<span class="math inline">\(0\)</span>的式子，所以<span class="math inline">\(\xi_n\)</span>这一项就没了。但是需要多一个<span class="math inline">\(0\le\alpha_n\le C\)</span>的条件。很神奇，这一项没了之后，我们的式子又开始变得眼熟起来： <span class="math display">\[max_{0\le\alpha_n\le C}(min_{b,w}\frac{1}{2}w^Tw+\sum_{n=1}^N\alpha_n(1-y_n(w^Tz_n+b)))\]</span></p>
+<p>后面的事情就很显而易见了，前面都推导过了，这里也就不加赘述了。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/12/20/goodbye-icpc/" rel="prev" title="GoodBye ICPC">
+      <i class="fa fa-chevron-left"></i> GoodBye ICPC
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/07/26/adaboost/" rel="next" title="从 AdaBoost 到 GBDT">
+      从 AdaBoost 到 GBDT <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8E%E7%BA%BF%E6%80%A7%E5%88%86%E5%89%B2%E8%AF%B4%E8%B5%B7"><span class="nav-number">1.</span> <span class="nav-text">从线性分割说起</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%88%91%E4%BB%AC%E9%9C%80%E8%A6%81%E5%AF%B9%E5%81%B6%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">为什么我们需要对偶问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%85%E7%AD%89%E4%BA%86%E6%A0%B8%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">久等了，核方法！</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%9A%E5%81%87%E7%9A%84-svm-%E5%92%8C%E7%9C%9F%E6%AD%A3%E7%9A%84-svm"><span class="nav-number">4.</span> <span class="nav-text">虚假的 SVM 和真正的 SVM</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Reku</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">78</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">96</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wyc-ruiker" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wyc-ruiker" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/reku1997" title="ZhiHu → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;reku1997" rel="noopener" target="_blank"><i class="fa fa-fw fa-quora"></i>ZhiHu</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://codeforces.com/profile/reku" title="CodeForces → http:&#x2F;&#x2F;codeforces.com&#x2F;profile&#x2F;reku" rel="noopener" target="_blank"><i class="fa fa-fw fa-code"></i>CodeForces</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.linkedin.cn/injobs/in/reku" title="Linkedin → https:&#x2F;&#x2F;www.linkedin.cn&#x2F;injobs&#x2F;in&#x2F;reku" rel="noopener" target="_blank"><i class="fa fa-fw fa-linkedin"></i>Linkedin</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://gitee.com/reku1997" title="Gitee → https:&#x2F;&#x2F;gitee.com&#x2F;reku1997" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>Gitee</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/./atom.xml" title="RSS → .&#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Reku</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script>
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@4/dist/instantsearch.production.min.js"></script>
+<script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'MWLzM550UOu69h3dgvbbLSsF-gzGzoHsz',
+      appKey     : 'gkKnwm9FK0cu3ysJbcggsCDz',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

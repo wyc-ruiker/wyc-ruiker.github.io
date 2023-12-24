@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://gitee.com/reku1997/reku1997/raw/master/reku.ico">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"reku1997.gitee.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AW5K8S9IEE","apiKey":"d7e666d597854738d2fb31ecaa989aa5","indexName":"dev_reku1997","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="周末要在实验室搞个类似讲座之类的东西，先在这里写一下讲座内容，理清思路。也是对最近一个月的学习内容做一个总结。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AutoTVM 探秘（一）">
+<meta property="og:url" content="https://reku1997.gitee.io/2019/12/30/autotvm-1/index.html">
+<meta property="og:site_name" content="Reku">
+<meta property="og:description" content="周末要在实验室搞个类似讲座之类的东西，先在这里写一下讲座内容，理清思路。也是对最近一个月的学习内容做一个总结。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://reku1997.gitee.io/2019/12/30/autotvm-1/屏幕快照-2019-12-30-下午4.08.45.png">
+<meta property="og:image" content="https://reku1997.gitee.io/2019/12/30/autotvm-1/屏幕快照-2019-12-30-下午4.44.18.png">
+<meta property="og:image" content="https://reku1997.gitee.io/2019/12/30/autotvm-1/屏幕快照-2019-12-30-下午8.07.07.png">
+<meta property="og:image" content="https://reku1997.gitee.io/2019/12/30/autotvm-1/屏幕快照-2019-12-30-下午8.27.33.png">
+<meta property="og:image" content="https://reku1997.gitee.io/2019/12/30/autotvm-1/屏幕快照-2020-01-02-上午11.37.17.png">
+<meta property="article:published_time" content="2019-12-30T12:34:03.000Z">
+<meta property="article:modified_time" content="2020-07-20T08:34:18.000Z">
+<meta property="article:author" content="Reku">
+<meta property="article:tag" content="TVM">
+<meta property="article:tag" content="AutoTVM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://reku1997.gitee.io/2019/12/30/autotvm-1/屏幕快照-2019-12-30-下午4.08.45.png">
+
+<link rel="canonical" href="https://reku1997.gitee.io/2019/12/30/autotvm-1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-cn'
+  };
+</script>
+
+  <title>AutoTVM 探秘（一） | Reku</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Reku" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Reku</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+      
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-cn">
+    <link itemprop="mainEntityOfPage" href="https://reku1997.gitee.io/2019/12/30/autotvm-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Reku">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Reku">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          AutoTVM 探秘（一）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-12-30 20:34:03" itemprop="dateCreated datePublished" datetime="2019-12-30T20:34:03+08:00">2019-12-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-07-20 16:34:18" itemprop="dateModified" datetime="2020-07-20T16:34:18+08:00">2020-07-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/system/" itemprop="url" rel="index"><span itemprop="name">system</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/system/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2019/12/30/autotvm-1/" class="post-meta-item leancloud_visitors" data-flag-title="AutoTVM 探秘（一）" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2019/12/30/autotvm-1/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/12/30/autotvm-1/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>周末要在实验室搞个类似讲座之类的东西，先在这里写一下讲座内容，理清思路。也是对最近一个月的学习内容做一个总结。</p>
+<span id="more"></span>
+<h2 id="从-tvm-开始">从 TVM 开始</h2>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1802.04799">TVM: an automated end-to-end optimizing compiler for deep learning. OSDI`18</a> AutoTVM 其实是 TVM 的一个组件，那么先要搞清楚 TVM 是个啥。</p>
+<blockquote>
+<p>Apache TVM (incubating) is a compiler stack for deep learning systems. It is designed to close the gap between the productivity-focused deep learning frameworks, and the performance- and efficiency-focused hardware backends. TVM works with deep learning frameworks to provide end to end compilation to different backends.</p>
+</blockquote>
+<p>简单来说，这是一个深度学习编译器。输入是 high-level DL program (Pytorch TensorFlow etc.) 输出是 low-level optimized code。</p>
+<p><img src="/2019/12/30/autotvm-1/屏幕快照-2019-12-30-下午4.08.45.png"></p>
+<p>本文章的主题其实就是图里面蓝色的那个 Machine Learning-Based Automated Optimizer。 不过在进入主题之前先谈一谈这个 TVM 的意义吧，通过 TVM 的意义其实我们就可以自然的了解到为什么我们需要 AutoTVM。这些内容其实在之前的两篇文章里面都有谈过。 在之前很多厂商都搞过深度学习编译器，比如 TensorFlow XLA、NVIDIA TensorRT 等等。之前的搞法通常都是先把这些乱七八糟深度学习框架前端统一成一个 Graph IR，再对这个 Graph IR 进行一些例如 Operator Fusion 和 Constant Folding 之类的优化，然后将 Graph IR 映射到 XLA 算子或者 cuDNN 中，这些算子很多是由专业的工程师进行手工优化，效果拔群，通过这个过程实现神经网络的高效。 问题在于，你的模型需要在一大坨设备上面跑（比如手机、树莓派、GPU、CPU...）这些设备的运算能力和优化方式都有所不同，那么就需要每个设备都搞一个编译框架，然后由很多很多工程师去实现很多高效的算子用来映射。一个更夸张的发展趋势是，很多 AI 芯片厂商会把一些常用算子（如卷积层）直接设计一个硬件模块去加速，这样会导致只要出一个牛逼网络，那 AI 芯片就会多做一个模块去对网络的某些公共运算进行加速，然后工程师也会设计相关的算子，不停加班，永不失业。 还有个问题就是，比如 Operator Fusion 这种优化，有一些算子（如卷积+池化+relu）的融合模块已经在 cuDNN 中写好了，那么 Operator Fusion 的时候就可以直接对应过去。但是随着 DL 的发展，越来越多算子都可能进行融合，但是因为底层的实现还没做好，导致在图级别的优化会出现捉襟见肘的情况。很多时候优化会倾向于使用成熟的算子，避免那些还没有优化很好的融合方式。 以及一个在 learning 领域广泛出现的问题——长尾分布。对于那些通用的优化来说，优化一下可以产生很大的性能提升，但是对于那些长尾的优化来说，优化一次的代价过高，产生的利益也没有那么丰厚。 显然，解决问题的核心就在于如何对不同的硬件和不同的算子进行一波通用的优化。</p>
+<h2 id="autotvm-初探">AutoTVM 初探</h2>
+<p>对于上面这个问题，TVM 给我们的答案是 AutoTVM，一个 Automating Optimization。 在谈论这个问题之前，我们还要再复习一下体系结构的内容。其实这个在前两篇文章中也讲过很多。</p>
+<p><img src="/2019/12/30/autotvm-1/屏幕快照-2019-12-30-下午4.44.18.png"></p>
+<p>一个简单的 CPU 架构可以概括为上面这样，这个 CPU 有两个核心，每个核心都有自己 L12 cache，然后也支持 SIMD，也就是 fetch 一个指令可以在两个 PU 上面运算。当然现在很多处理器都支持超线程，也就是说一个核心有两个硬件线程，每个核心在操作系统中其实是两个核心。然后现在最厉害的 SIMD 指令叫做 AVX-512，可以在每个 cycle 同时对 16 个 float32 进行运算。 所以对于 CPU 而言，最为常用的优化其实就是三种：Parallelization（多核并行）、Vectorization（SIMD）、Cache。还有一些诸如是否进行循环展开之类的优化。 下面用 TVM 实现一个最简单的矩阵乘法，程序来自于 <a target="_blank" rel="noopener" href="https://docs.tvm.ai/tutorials/autotvm/tune_simple_template.html#sphx-glr-tutorials-autotvm-tune-simple-template-py">AutoTVM 教程</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">matmul_v0</span>(<span class="params">N, L, M, dtype</span>):</span></span><br><span class="line">    A = tvm.placeholder((N, L), name=<span class="string">&#x27;A&#x27;</span>, dtype=dtype)</span><br><span class="line">    B = tvm.placeholder((L, M), name=<span class="string">&#x27;B&#x27;</span>, dtype=dtype)</span><br><span class="line"></span><br><span class="line">    k = tvm.reduce_axis((<span class="number">0</span>, L), name=<span class="string">&#x27;k&#x27;</span>)</span><br><span class="line">    C = tvm.compute((N, M), <span class="keyword">lambda</span> i, j: tvm.<span class="built_in">sum</span>(A[i, k] * B[k, j], axis=k), name=<span class="string">&#x27;C&#x27;</span>)</span><br><span class="line">    s = tvm.create_schedule(C.op)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># schedule</span></span><br><span class="line">    y, x = s[C].op.axis</span><br><span class="line">    k = s[C].op.reduce_axis[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">    yo, yi = s[C].split(y, <span class="number">8</span>)</span><br><span class="line">    xo, xi = s[C].split(x, <span class="number">8</span>)</span><br><span class="line"></span><br><span class="line">    s[C].reorder(yo, xo, k, yi, xi)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> s, [A, B, C]</span><br></pre></td></tr></table></figure>
+<p>上面的程序只包括了 Cache 优化，方式就是常见的矩阵乘法循环变量 reorder 和矩阵分块。注意，这里矩阵分块的 magic number 是 8, 也就是说把这个矩阵分成 8*8 的小块，使得 cache 的 hit rate 更高。 但是对于这样的 magic number，没有经验的人是很难找到最优的数值的。而且这个数值跟很多硬件因素都有关系，很多时候我们不能对硬件的所有因素都产生全面的了解，这个时候就需要 AutoTVM 的帮助了。 用起来也很简单，其实就是指名一下哪些参数需要搜索。比如下面的程序就是指明要搜索 tile size：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@autotvm.template</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">matmul</span>(<span class="params">N, L, M, dtype</span>):</span></span><br><span class="line">    A = tvm.placeholder((N, L), name=<span class="string">&#x27;A&#x27;</span>, dtype=dtype)</span><br><span class="line">    B = tvm.placeholder((L, M), name=<span class="string">&#x27;B&#x27;</span>, dtype=dtype)</span><br><span class="line"></span><br><span class="line">    k = tvm.reduce_axis((<span class="number">0</span>, L), name=<span class="string">&#x27;k&#x27;</span>)</span><br><span class="line">    C = tvm.compute((N, M), <span class="keyword">lambda</span> i, j: tvm.<span class="built_in">sum</span>(A[i, k] * B[k, j], axis=k), name=<span class="string">&#x27;C&#x27;</span>)</span><br><span class="line">    s = tvm.create_schedule(C.op)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># schedule</span></span><br><span class="line">    y, x = s[C].op.axis</span><br><span class="line">    k = s[C].op.reduce_axis[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">    <span class="comment">##### define space begin #####</span></span><br><span class="line">    cfg = autotvm.get_config()</span><br><span class="line">    cfg.define_split(<span class="string">&quot;tile_y&quot;</span>, y, num_outputs=<span class="number">2</span>)</span><br><span class="line">    cfg.define_split(<span class="string">&quot;tile_x&quot;</span>, x, num_outputs=<span class="number">2</span>)</span><br><span class="line">    <span class="comment">##### define space end #####</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># schedule according to config</span></span><br><span class="line">    yo, yi = cfg[<span class="string">&quot;tile_y&quot;</span>].apply(s, C, y)</span><br><span class="line">    xo, xi = cfg[<span class="string">&quot;tile_x&quot;</span>].apply(s, C, x)</span><br><span class="line"></span><br><span class="line">    s[C].reorder(yo, xo, k, yi, xi)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> s, [A, B, C]</span><br></pre></td></tr></table></figure>
+<p>这其实也是系统设计的艺术，首先 TVM 把运算与 schedule 进行解耦，然后一部分 schedule 由用户进行实现，一部分需要精细调整的内容由一个 ML 算法进行搜索，从而达到一个易用性和性能的 trade-off。相对应的是 Facebook 做的 Tensor Comprehension，要解决的问题跟 TVM 是类似的，但是选择的是利用 polyhedra model 进行一个类似端到端的优化过程，但是优化的空间其实比 TVM 这种 schedule space 模型要差一些，所以效果也会打些折扣。一些相关的讨论可以在<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/267167829">如何看待Tensor Comprehensions？与TVM有何异同？</a>上面看到。 对于 GPU 来说，由于架构跟 CPU 存在区别，所以优化的方式也不太一样：</p>
+<p><img src="/2019/12/30/autotvm-1/屏幕快照-2019-12-30-下午8.07.07.png"></p>
+<p><img src="/2019/12/30/autotvm-1/屏幕快照-2019-12-30-下午8.27.33.png"></p>
+<p>可以看到，相对 CPU 来说，GPU 多了很多可以向量化的计算单元，甚至还有 Tensor Core 可以对计算进行张量化。而且 L1 cache 可以由程序员来进行主动的控制，作为线程之间的缓存，提供了很大的自由性。 在 GPU 里面还有线程与线程块的概念。几个 thread 会统一放到一个 block 中。同一个 block 中的线程会共享同一个 L1 cache 或者 shared memory，合理的分配 shared memory 会显著减少读写时间。 在 GPU 上面优化矩阵乘法，我们可以这样写，代码来自 <a target="_blank" rel="noopener" href="http://tvm.d2l.ai/chapter_gpu_schedules/matmul.html">Dive in DL Compiler</a>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">matmul_gpu</span>(<span class="params">n</span>):</span></span><br><span class="line">    A, B, C = d2ltvm.matmul(n, n, n)</span><br><span class="line">    s = tvm.create_schedule(C.op)</span><br><span class="line">    <span class="comment"># Create caches</span></span><br><span class="line">    A_shared = s.cache_read(A, <span class="string">&quot;shared&quot;</span>, [C])</span><br><span class="line">    A_local  = s.cache_read(A_shared, <span class="string">&quot;local&quot;</span>, [C])</span><br><span class="line">    B_shared = s.cache_read(B, <span class="string">&quot;shared&quot;</span>, [C])</span><br><span class="line">    B_local  = s.cache_read(B_shared, <span class="string">&quot;local&quot;</span>, [C])</span><br><span class="line">    C_local = s.cache_write(C, <span class="string">&quot;local&quot;</span>)</span><br><span class="line">    <span class="comment"># Split each axis into block axis, thread axis, and inner axis</span></span><br><span class="line">    x, y = s[C].op.axis</span><br><span class="line">    xb, xo, xi = split(s[C], x, (block_size, tx))</span><br><span class="line">    yb, yo, yi = split(s[C], y, (block_size, ty))</span><br><span class="line">    s[C].reorder(xb, yb, xo, yo, xi, yi)</span><br><span class="line">    <span class="comment"># Note that we bind yb to blockIdx.x instead of blockIdx.y</span></span><br><span class="line">    bind_thread(s[C], (yb, xb, yo, xo),</span><br><span class="line">                (<span class="string">&quot;blockIdx.x&quot;</span>, <span class="string">&quot;blockIdx.y&quot;</span>, <span class="string">&quot;threadIdx.x&quot;</span>, <span class="string">&quot;threadIdx.y&quot;</span>))</span><br><span class="line">    <span class="comment"># Schedule C_local</span></span><br><span class="line">    s[C_local].compute_at(s[C], yo)</span><br><span class="line">    yi, xi = s[C_local].op.axis</span><br><span class="line">    k, = s[C_local].op.reduce_axis</span><br><span class="line">    ko, ki = s[C_local].split(k, tk)</span><br><span class="line">    s[C_local].reorder(ko, ki, yi, xi)</span><br><span class="line">    <span class="comment"># Optimize read caches of A and B with cooperative fetching</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">optimize_read_cache</span>(<span class="params">shared, local</span>):</span></span><br><span class="line">        s[shared].compute_at(s[C_local], ko)</span><br><span class="line">        s[local].compute_at(s[C_local], ki)</span><br><span class="line">        y, x = s[shared].op.axis</span><br><span class="line">        <span class="comment"># Note that we must split into block_size parts to reuse</span></span><br><span class="line">        <span class="comment"># the previous axis threads</span></span><br><span class="line">        yo, yi = s[shared].split(y, nparts=block_size)</span><br><span class="line">        xo, xi = s[shared].split(x, nparts=block_size)</span><br><span class="line">        s[shared].reorder(yo, xo, yi, xi)</span><br><span class="line">        bind_thread(s[shared], (yo, xo), (<span class="string">&quot;threadIdx.y&quot;</span>, <span class="string">&quot;threadIdx.x&quot;</span>))</span><br><span class="line">    optimize_read_cache(A_shared, A_local)</span><br><span class="line">    optimize_read_cache(B_shared, B_local)</span><br><span class="line">    <span class="keyword">return</span> s, (A, B, C)</span><br></pre></td></tr></table></figure>
+<p>看起来有点复杂，其实就是 shared memory 的一些分配。从代码中可以看到，有很多 split 的操作，事实上对于缺乏经验的工程师来说，确定这些 split size 是非常困难的。 在 <a target="_blank" rel="noopener" href="https://docs.tvm.ai/tutorials/autotvm/tune_conv2d_cuda.html">AutoTVM 教程</a>中我们可以找到一个相对通用的模板：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@autotvm.template</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">conv2d_no_batching</span>(<span class="params">N, H, W, CO, CI, KH, KW, stride, padding</span>):</span></span><br><span class="line">    <span class="keyword">assert</span> N == <span class="number">1</span>, <span class="string">&quot;Only consider batch_size = 1 in this template&quot;</span></span><br><span class="line"></span><br><span class="line">    data = tvm.placeholder((N, CI, H, W), name=<span class="string">&#x27;data&#x27;</span>)</span><br><span class="line">    kernel = tvm.placeholder((CO, CI, KH, KW), name=<span class="string">&#x27;kernel&#x27;</span>)</span><br><span class="line">    conv = topi.nn.conv2d_nchw(data, kernel, stride, padding, dilation=<span class="number">1</span>, out_dtype=<span class="string">&#x27;float32&#x27;</span>)</span><br><span class="line">    s = tvm.create_schedule([conv.op])</span><br><span class="line"></span><br><span class="line">    <span class="comment">##### space definition begin #####</span></span><br><span class="line">    n, f, y, x = s[conv].op.axis</span><br><span class="line">    rc, ry, rx = s[conv].op.reduce_axis</span><br><span class="line"></span><br><span class="line">    cfg = autotvm.get_config()</span><br><span class="line">    cfg.define_split(<span class="string">&quot;tile_f&quot;</span>, f, num_outputs=<span class="number">4</span>)</span><br><span class="line">    cfg.define_split(<span class="string">&quot;tile_y&quot;</span>, y, num_outputs=<span class="number">4</span>)</span><br><span class="line">    cfg.define_split(<span class="string">&quot;tile_x&quot;</span>, x, num_outputs=<span class="number">4</span>)</span><br><span class="line">    cfg.define_split(<span class="string">&quot;tile_rc&quot;</span>, rc, num_outputs=<span class="number">3</span>)</span><br><span class="line">    cfg.define_split(<span class="string">&quot;tile_ry&quot;</span>, ry, num_outputs=<span class="number">3</span>)</span><br><span class="line">    cfg.define_split(<span class="string">&quot;tile_rx&quot;</span>, rx, num_outputs=<span class="number">3</span>)</span><br><span class="line">    cfg.define_knob(<span class="string">&quot;auto_unroll_max_step&quot;</span>, [<span class="number">0</span>, <span class="number">512</span>, <span class="number">1500</span>])</span><br><span class="line">    cfg.define_knob(<span class="string">&quot;unroll_explicit&quot;</span>, [<span class="number">0</span>, <span class="number">1</span>])</span><br><span class="line">    <span class="comment">##### space definition end #####</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># inline padding</span></span><br><span class="line">    pad_data = s[conv].op.input_tensors[<span class="number">0</span>]</span><br><span class="line">    s[pad_data].compute_inline()</span><br><span class="line">    data, raw_data = pad_data, data</span><br><span class="line"></span><br><span class="line">    output = conv</span><br><span class="line">    OL = s.cache_write(conv, <span class="string">&#x27;local&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># create cache stage</span></span><br><span class="line">    AA = s.cache_read(data, <span class="string">&#x27;shared&#x27;</span>, [OL])</span><br><span class="line">    WW = s.cache_read(kernel, <span class="string">&#x27;shared&#x27;</span>, [OL])</span><br><span class="line">    AL = s.cache_read(AA, <span class="string">&#x27;local&#x27;</span>, [OL])</span><br><span class="line">    WL = s.cache_read(WW, <span class="string">&#x27;local&#x27;</span>, [OL])</span><br><span class="line"></span><br><span class="line">    <span class="comment"># tile and bind spatial axes</span></span><br><span class="line">    n, f, y, x = s[output].op.axis</span><br><span class="line">    bf, vf, tf, fi = cfg[<span class="string">&quot;tile_f&quot;</span>].apply(s, output, f)</span><br><span class="line">    by, vy, ty, yi = cfg[<span class="string">&quot;tile_y&quot;</span>].apply(s, output, y)</span><br><span class="line">    bx, vx, tx, xi = cfg[<span class="string">&quot;tile_x&quot;</span>].apply(s, output, x)</span><br><span class="line">    kernel_scope = n  <span class="comment"># this is the scope to attach global config inside this kernel</span></span><br><span class="line"></span><br><span class="line">    s[output].bind(bf, tvm.thread_axis(<span class="string">&quot;blockIdx.z&quot;</span>))</span><br><span class="line">    s[output].bind(by, tvm.thread_axis(<span class="string">&quot;blockIdx.y&quot;</span>))</span><br><span class="line">    s[output].bind(bx, tvm.thread_axis(<span class="string">&quot;blockIdx.x&quot;</span>))</span><br><span class="line">    s[output].bind(vf, tvm.thread_axis(<span class="string">&quot;vthread&quot;</span>))</span><br><span class="line">    s[output].bind(vy, tvm.thread_axis(<span class="string">&quot;vthread&quot;</span>))</span><br><span class="line">    s[output].bind(vx, tvm.thread_axis(<span class="string">&quot;vthread&quot;</span>))</span><br><span class="line">    s[output].bind(tf, tvm.thread_axis(<span class="string">&quot;threadIdx.z&quot;</span>))</span><br><span class="line">    s[output].bind(ty, tvm.thread_axis(<span class="string">&quot;threadIdx.y&quot;</span>))</span><br><span class="line">    s[output].bind(tx, tvm.thread_axis(<span class="string">&quot;threadIdx.x&quot;</span>))</span><br><span class="line">    s[output].reorder(n, bf, by, bx, vf, vy, vx, tf, ty, tx, fi, yi, xi)</span><br><span class="line">    s[OL].compute_at(s[output], tx)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># tile reduction axes</span></span><br><span class="line">    n, f, y, x = s[OL].op.axis</span><br><span class="line">    rc, ry, rx = s[OL].op.reduce_axis</span><br><span class="line">    rco, rcm, rci = cfg[<span class="string">&#x27;tile_rc&#x27;</span>].apply(s, OL, rc)</span><br><span class="line">    ryo, rym, ryi = cfg[<span class="string">&#x27;tile_rx&#x27;</span>].apply(s, OL, ry)</span><br><span class="line">    rxo, rxm, rxi = cfg[<span class="string">&#x27;tile_ry&#x27;</span>].apply(s, OL, rx)</span><br><span class="line">    s[OL].reorder(rco, ryo, rxo, rcm, rym, rxm, rci, ryi, rxi, n, f, y, x)</span><br><span class="line"></span><br><span class="line">    s[AA].compute_at(s[OL], rxo)</span><br><span class="line">    s[WW].compute_at(s[OL], rxo)</span><br><span class="line">    s[AL].compute_at(s[OL], rxm)</span><br><span class="line">    s[WL].compute_at(s[OL], rxm)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># cooperative fetching</span></span><br><span class="line">    <span class="keyword">for</span> load <span class="keyword">in</span> [AA, WW]:</span><br><span class="line">        n, f, y, x = s[load].op.axis</span><br><span class="line">        fused = s[load].fuse(n, f, y, x)</span><br><span class="line">        tz, fused = s[load].split(fused, nparts=cfg[<span class="string">&quot;tile_f&quot;</span>].size[<span class="number">2</span>])</span><br><span class="line">        ty, fused = s[load].split(fused, nparts=cfg[<span class="string">&quot;tile_y&quot;</span>].size[<span class="number">2</span>])</span><br><span class="line">        tx, fused = s[load].split(fused, nparts=cfg[<span class="string">&quot;tile_x&quot;</span>].size[<span class="number">2</span>])</span><br><span class="line">        s[load].bind(tz, tvm.thread_axis(<span class="string">&quot;threadIdx.z&quot;</span>))</span><br><span class="line">        s[load].bind(ty, tvm.thread_axis(<span class="string">&quot;threadIdx.y&quot;</span>))</span><br><span class="line">        s[load].bind(tx, tvm.thread_axis(<span class="string">&quot;threadIdx.x&quot;</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># tune unroll</span></span><br><span class="line">    s[output].pragma(kernel_scope, <span class="string">&#x27;auto_unroll_max_step&#x27;</span>, cfg[<span class="string">&#x27;auto_unroll_max_step&#x27;</span>].val)</span><br><span class="line">    s[output].pragma(kernel_scope, <span class="string">&#x27;unroll_explicit&#x27;</span>, cfg[<span class="string">&#x27;unroll_explicit&#x27;</span>].val)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> s, [raw_data, kernel, conv]</span><br></pre></td></tr></table></figure>
+<p>对于这些 knob，有个简单进行解释的图表： <img src="/2019/12/30/autotvm-1/屏幕快照-2020-01-02-上午11.37.17.png"></p>
+<p>好了，现在对 AutoTVM 已经有了一些感性的理解了。不过这个开头写的有点多，以上内容先算一篇，下一篇我们讲 AutoTVM 的具体实现。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/TVM/" rel="tag"># TVM</a>
+              <a href="/tags/AutoTVM/" rel="tag"># AutoTVM</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/11/21/cse-599w-systems-for-ml-7-12/" rel="prev" title="CSE 599W: SYSTEMS FOR ML 课程笔记 7-12">
+      <i class="fa fa-chevron-left"></i> CSE 599W: SYSTEMS FOR ML 课程笔记 7-12
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/31/autotvm-2/" rel="next" title="AutoTVM 探秘（二）">
+      AutoTVM 探秘（二） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8E-tvm-%E5%BC%80%E5%A7%8B"><span class="nav-number">1.</span> <span class="nav-text">从 TVM 开始</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#autotvm-%E5%88%9D%E6%8E%A2"><span class="nav-number">2.</span> <span class="nav-text">AutoTVM 初探</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Reku</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">78</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">96</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wyc-ruiker" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wyc-ruiker" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/reku1997" title="ZhiHu → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;reku1997" rel="noopener" target="_blank"><i class="fa fa-fw fa-quora"></i>ZhiHu</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://codeforces.com/profile/reku" title="CodeForces → http:&#x2F;&#x2F;codeforces.com&#x2F;profile&#x2F;reku" rel="noopener" target="_blank"><i class="fa fa-fw fa-code"></i>CodeForces</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.linkedin.cn/injobs/in/reku" title="Linkedin → https:&#x2F;&#x2F;www.linkedin.cn&#x2F;injobs&#x2F;in&#x2F;reku" rel="noopener" target="_blank"><i class="fa fa-fw fa-linkedin"></i>Linkedin</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://gitee.com/reku1997" title="Gitee → https:&#x2F;&#x2F;gitee.com&#x2F;reku1997" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>Gitee</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/./atom.xml" title="RSS → .&#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Reku</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script>
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@4/dist/instantsearch.production.min.js"></script>
+<script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'MWLzM550UOu69h3dgvbbLSsF-gzGzoHsz',
+      appKey     : 'gkKnwm9FK0cu3ysJbcggsCDz',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
