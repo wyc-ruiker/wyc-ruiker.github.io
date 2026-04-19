@@ -18,7 +18,7 @@
 <meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B_img_2.jpg">
 <meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B_img_3.jpg">
 <meta property="article:published_time" content="2025-02-16T16:00:00.000Z">
-<meta property="article:modified_time" content="2026-04-19T16:18:38.576Z">
+<meta property="article:modified_time" content="2026-04-19T17:00:43.062Z">
 <meta property="article:author" content="Reku">
 <meta property="article:tag" content="zhihu">
 <meta name="twitter:card" content="summary">
@@ -188,13 +188,13 @@
 
   <div class="content e-content" itemprop="articleBody">
     <blockquote>
-<p>原文链接: https://zhuanlan.zhihu.com/p/22879442357</p>
+<p>原文链接: <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/22879442357">https://zhuanlan.zhihu.com/p/22879442357</a></p>
 </blockquote>
 <p>作者使用纯Python实现了一个名为DeZero的深度学习框架，其编程风格与PyTorch类似。通过结合代码实现，由浅入深地拆解了深度学习框架的前端功能，包括自动微分、Layer、Optimizer、DataLoader等模块。</p>
-<p><a href="https://link.zhihu.com/?target=https%3A//book.douban.com/subject/36303408/"><img src="/zhihu/images/书籍推荐《深度学习入门2_自制框架》_img_0.jpg">深度学习入门2book.douban.com/subject/36303408/</a>这本书在国内比较冷门，但是我读过的最好的关于深度学习框架的书籍。这里所说的“好”，并不是指内容面面俱到，而是因为它的逻辑非常清晰，对入门十分友好。同时又不算很粗浅，像高阶微分这样的深度话题也有探讨。</p>
+<p><a target="_blank" rel="noopener" href="https://book.douban.com/subject/36303408/"><img src="/zhihu/images/书籍推荐《深度学习入门2_自制框架》_img_0.jpg">深度学习入门2book.douban.com/subject/36303408/</a>这本书在国内比较冷门，但是我读过的最好的关于深度学习框架的书籍。这里所说的“好”，并不是指内容面面俱到，而是因为它的逻辑非常清晰，对入门十分友好。同时又不算很粗浅，像高阶微分这样的深度话题也有探讨。</p>
 <p>本书的作者是Chainer的核心开发者Koki Saitoh。Chainer可能是最早在Python实现的define by run的深度学习框架（更常见的叫法是<strong>动态图</strong>），非常具有前瞻性，可惜在2019年的时候母公司（Preferred Networks）转投了PyTorch，项目停止了维护<a href="#ref_1">[1]</a>。</p>
 <p>这个母公司Preferred Networks也值得聊一聊。从主页来看啥都搞，AI外包公司，像是日本的商汤科技。</p>
-<p><a href="https://link.zhihu.com/?target=https%3A//www.preferred.jp/en/projects/"><img src="/zhihu/images/书籍推荐《深度学习入门2_自制框架》_img_1.jpg">Projects - Preferred Networks, Inc.www.preferred.jp/en/projects/</a>创始人兼CEO叫Toru Nishikawa，代表东京大学参加了2006年ACM ICPC世界总决赛，荣获第19名。</p>
+<p><a target="_blank" rel="noopener" href="https://www.preferred.jp/en/projects/"><img src="/zhihu/images/书籍推荐《深度学习入门2_自制框架》_img_1.jpg">Projects - Preferred Networks, Inc.www.preferred.jp/en/projects/</a>创始人兼CEO叫Toru Nishikawa，代表东京大学参加了2006年ACM ICPC世界总决赛，荣获第19名。</p>
 <p><img src="/zhihu/images/书籍推荐《深度学习入门2_自制框架》_img_2.jpg"></p>
 <p>比较有意思的一点是前一年（2005）的ACM ICPC世界总决赛冠军是戴文渊大神，后来创建了第四范式，也是个AI外包公司。大神们的水平都不需要质疑，但最后都成为了AI外包公司，可能这就是这代人的宿命吧。。。</p>
 <p>Preferred Networks还有个很出名的项目叫CuPy<a href="#ref_2">[2]</a>，相当于numpy在cuda上的实现，也为书里的DeZero框架提供了GPU能力（不过这个前后端解耦设计其实不怎么合理，后端能拿到的前端信息太少了）。这个项目现在还活着，而且还在发版本。从产出来看，Preferred Networks确实聚集了一批日本AI仙人，做出了一些很有前瞻性的且很有影响力的软件，希望该公司业务蒸蒸日上。</p>

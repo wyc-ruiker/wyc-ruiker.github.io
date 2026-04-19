@@ -1673,3 +1673,17 @@ code {
 #header-post #actions {
   direction: ltr !important;
 }
+figure {
+  margin: 1.5rem auto;
+  text-align: center;
+}
+figure img {
+  display: block;
+  margin: 0 auto;
+}
+figure figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.9em;
+  color: #666;
+  text-align: center;
+}

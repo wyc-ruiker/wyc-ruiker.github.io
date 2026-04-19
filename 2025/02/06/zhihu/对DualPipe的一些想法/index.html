@@ -22,7 +22,7 @@
 <meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95_img_6.jpg">
 <meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95_img_7.jpg">
 <meta property="article:published_time" content="2025-02-05T16:00:00.000Z">
-<meta property="article:modified_time" content="2026-04-19T16:18:38.577Z">
+<meta property="article:modified_time" content="2026-04-19T17:00:43.062Z">
 <meta property="article:author" content="Reku">
 <meta property="article:tag" content="zhihu">
 <meta name="twitter:card" content="summary">
@@ -192,7 +192,7 @@
 
   <div class="content e-content" itemprop="articleBody">
     <blockquote>
-<p>原文链接: https://zhuanlan.zhihu.com/p/21525151726</p>
+<p>原文链接: <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/21525151726">https://zhuanlan.zhihu.com/p/21525151726</a></p>
 </blockquote>
 <p>DualPipe是DeepSeek V3里面infra部分的重头戏，既能减少bubble还能做到通信掩盖，整个编排方式看起来神乎其技。而且对于一些国产芯片复现DeepSeek V3（FP8很难用起来、也没法用SM去控制网卡），DualPipe几乎是论文里面infra部分唯一能参考的优化点。我用我半吊子的大模型并行知识，猜想一下这个东西是怎么构造出来的，以及落地上可能遇到的难度。</p>
 <h2 id="动机猜想">动机猜想</h2>
@@ -222,7 +222,7 @@
 <p>虽然普通的pp不行，但是对于vpp来说，很多地方都是可以做掩盖的：</p>
 <p><img src="/zhihu/images/对DualPipe的一些想法_img_6.jpg"></p>
 <p>红框标注的地方都可以掩盖，而且这个方式相比普通的vpp显存没有任何增加，实现逻辑也比DualPipe简单多了，感觉是个比较靠谱的落地方向。</p>
-<p>或者更本质的，能不能用类似<a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/2406.06858">FLUX: Fast Software-based Communication Overlap On GPUs Through Kernel Fusion</a>的思路搞一个AllToAll MLP AllToAll的融合算子，这样对上层业务来说是最轻松的。但这个领域不太熟，不确定能不能做到。</p>
+<p>或者更本质的，能不能用类似<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2406.06858">FLUX: Fast Software-based Communication Overlap On GPUs Through Kernel Fusion</a>的思路搞一个AllToAll MLP AllToAll的融合算子，这样对上层业务来说是最轻松的。但这个领域不太熟，不确定能不能做到。</p>
 <p><img src="/zhihu/images/对DualPipe的一些想法_img_7.jpg"></p>
 
   </div>

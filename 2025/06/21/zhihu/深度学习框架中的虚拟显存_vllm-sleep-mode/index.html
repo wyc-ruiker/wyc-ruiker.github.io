@@ -26,7 +26,7 @@
 <meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode_img_10.jpg">
 <meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode_img_11.jpg">
 <meta property="article:published_time" content="2025-06-20T16:00:00.000Z">
-<meta property="article:modified_time" content="2026-04-19T16:18:38.577Z">
+<meta property="article:modified_time" content="2026-04-19T17:00:43.062Z">
 <meta property="article:author" content="Reku">
 <meta property="article:tag" content="zhihu">
 <meta name="twitter:card" content="summary">
@@ -196,10 +196,10 @@
 
   <div class="content e-content" itemprop="articleBody">
     <blockquote>
-<p>原文链接: https://zhuanlan.zhihu.com/p/1919814348047623458</p>
+<p>原文链接: <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1919814348047623458">https://zhuanlan.zhihu.com/p/1919814348047623458</a></p>
 </blockquote>
 <h3 id="深度学习框架中的虚拟显存">深度学习框架中的虚拟显存</h3>
-<p><a href="https://link.zhihu.com/?target=https%3A//developer.nvidia.com/blog/introducing-low-level-gpu-virtual-memory-management/">CUDA</a>和<a href="https://link.zhihu.com/?target=https%3A//www.hiascend.com/document/detail/zh/canncommercial/81RC1/apiref/appdevgapi/aclcppdevg_03_0114.html">AscendCL</a>都支持虚拟内存管理。两个硬件的API也基本是对齐的，以AscendCL为例，大概需要这么几个API：</p>
+<p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/blog/introducing-low-level-gpu-virtual-memory-management/">CUDA</a>和<a target="_blank" rel="noopener" href="https://www.hiascend.com/document/detail/zh/canncommercial/81RC1/apiref/appdevgapi/aclcppdevg_03_0114.html">AscendCL</a>都支持虚拟内存管理。两个硬件的API也基本是对齐的，以AscendCL为例，大概需要这么几个API：</p>
 <p><img src="/zhihu/images/深度学习框架中的虚拟显存_vllm-sleep-mode_img_0.jpg"></p>
 <p>CUDA和AscendCL的对应关系如下图：</p>
 <p><img src="/zhihu/images/深度学习框架中的虚拟显存_vllm-sleep-mode_img_1.jpg"></p>
@@ -219,10 +219,10 @@
 <p>而虚拟内存就能做到，提前预留好一大块物理地址，不断的申请handle map到当前的物理地址上，这样不管怎么拓展显存，都是一个连续的大块显存。</p>
 <p><img src="/zhihu/images/深度学习框架中的虚拟显存_vllm-sleep-mode_img_5.jpg"></p>
 <p>当然如果有多池子的显存优化（大小显存池、param单独分池子），虚拟显存也可以做到用多少占用多少，不需要提前约定好每个池子占用的大小。而且经过一次碎片整理，不同池子的显存互相复用也会比较方便。（只要不在乎性能）</p>
-<p>对于深度学习框架来说，虚拟内存比较好用的点就是这些。其实虚拟内存还有个很大的好处是他可以在虚拟地址（或者叫上层感知到的地址）完全不变的情况下，在底层做一些特殊操作。例如<a href="https://link.zhihu.com/?target=https%3A//www.hiascend.com/graph-engine">Graph Engine</a>和<a href="https://link.zhihu.com/?target=https%3A//developer.nvidia.com/blog/cuda-graphs/">CUDA Graph</a>这种硬件底层的图调度对于地址使用都有些不可变的约束，如果能够结合虚拟内存，就能玩一些花活。但因为map/unmap这种操作确实代价有点大，一直没有想到一个比较好的整活场景。</p>
+<p>对于深度学习框架来说，虚拟内存比较好用的点就是这些。其实虚拟内存还有个很大的好处是他可以在虚拟地址（或者叫上层感知到的地址）完全不变的情况下，在底层做一些特殊操作。例如<a target="_blank" rel="noopener" href="https://www.hiascend.com/graph-engine">Graph Engine</a>和<a target="_blank" rel="noopener" href="https://developer.nvidia.com/blog/cuda-graphs/">CUDA Graph</a>这种硬件底层的图调度对于地址使用都有些不可变的约束，如果能够结合虚拟内存，就能玩一些花活。但因为map/unmap这种操作确实代价有点大，一直没有想到一个比较好的整活场景。</p>
 <h3 id="vllm-sleep-mode">vllm sleep mode</h3>
-<p>最近研究了一下<a href="https://link.zhihu.com/?target=https%3A//github.com/vllm-project/vllm/pull/11743">vllm sleep mode</a>的实现，发现他通过虚拟内存的特性，在底层深度学习框架不感知的情况下完成了kvcache/weights的卸载/加载功能。</p>
-<p>sleep mode主要是在强化学习共部署的场景下，做完推理之后，得把推理的显存都释放出来给训练用。在没有这个功能的时候，适配强化学习共部署，想卸载kvcache，都是通过<a href="https://link.zhihu.com/?target=https%3A//objgraph.readthedocs.io/en/stable/">objgraph</a>等方式找到所有挂kvcache的python对象，然后一个个把持有kvcache的python对象都干掉，让python对象析构去触发框架显存的释放。跑推理之前还要一个个恢复回来，维护成本很高，每次升级vllm版本还要重新来。</p>
+<p>最近研究了一下<a target="_blank" rel="noopener" href="https://github.com/vllm-project/vllm/pull/11743">vllm sleep mode</a>的实现，发现他通过虚拟内存的特性，在底层深度学习框架不感知的情况下完成了kvcache/weights的卸载/加载功能。</p>
+<p>sleep mode主要是在强化学习共部署的场景下，做完推理之后，得把推理的显存都释放出来给训练用。在没有这个功能的时候，适配强化学习共部署，想卸载kvcache，都是通过<a target="_blank" rel="noopener" href="https://objgraph.readthedocs.io/en/stable/">objgraph</a>等方式找到所有挂kvcache的python对象，然后一个个把持有kvcache的python对象都干掉，让python对象析构去触发框架显存的释放。跑推理之前还要一个个恢复回来，维护成本很高，每次升级vllm版本还要重新来。</p>
 <p>vllm实现sleep mode这个功能，首先是在csrc/cumem_allocator.cpp里面实现了一个简易的显存申请释放的接口，但都是通过虚拟内存的方式进行的。也就是说cumem_allocator里面每申请一块显存，都会包含虚拟地址和底层对应的handle两个信息。这些信息会通过callback记录到python层。</p>
 <p><img src="/zhihu/images/深度学习框架中的虚拟显存_vllm-sleep-mode_img_6.jpg"></p>
 <p>然后在sleep的时候，就申请一个cpu的tensor，把显存里面的内容都拷贝过去。虚拟地址不变，但是虚拟地址下面的handle都unmap并且释放掉。</p>
@@ -233,7 +233,7 @@
 <figure>
 <img src="/zhihu/images/深度学习框架中的虚拟显存_vllm-sleep-mode_img_8.jpg" alt="wake up（恢复）流程"><figcaption aria-hidden="true">wake up（恢复）流程</figcaption>
 </figure>
-<p>那怎么让torch的显存申请走到cumem_allocator里面呢？vllm的大佬利用了<a href="https://link.zhihu.com/?target=https%3A//docs.pytorch.org/docs/stable/notes/cuda.html%23using-custom-memory-allocators-for-cuda">torch外挂显存池</a>的能力，如果在cumem定义的context中，就会自动走到对应cumem_allocator的显存申请流程：</p>
+<p>那怎么让torch的显存申请走到cumem_allocator里面呢？vllm的大佬利用了<a target="_blank" rel="noopener" href="https://docs.pytorch.org/docs/stable/notes/cuda.html#using-custom-memory-allocators-for-cuda">torch外挂显存池</a>的能力，如果在cumem定义的context中，就会自动走到对应cumem_allocator的显存申请流程：</p>
 <figure>
 <img src="/zhihu/images/深度学习框架中的虚拟显存_vllm-sleep-mode_img_9.jpg" alt="外置显存池context"><figcaption aria-hidden="true">外置显存池context</figcaption>
 </figure>
@@ -241,7 +241,7 @@
 <figure>
 <img src="/zhihu/images/深度学习框架中的虚拟显存_vllm-sleep-mode_img_10.jpg" alt="使用方法"><figcaption aria-hidden="true">使用方法</figcaption>
 </figure>
-<p>下面来分析，为什么这个东西非常的巧妙。先考虑我如果想实现这个功能会怎么搞？首先做好python对象的管理，然后基于python对象析构去触发显存释放是比较恶心的，也很容易出bug；还有一种方式是能不能把需要释放的tensor都调用一下to('cpu')？但pytorch的tensor to语义<a href="https://link.zhihu.com/?target=https%3A//stackoverflow.com/questions/53570334/documentation-for-pytorch-tocpu-or-tocuda">不是inplace的</a>。如果想要释放显存需要类似a=a.to('cpu')这样的书写方式，那就和第一种做好python对象的管理一模一样了，没有解决根本的问题。</p>
+<p>下面来分析，为什么这个东西非常的巧妙。先考虑我如果想实现这个功能会怎么搞？首先做好python对象的管理，然后基于python对象析构去触发显存释放是比较恶心的，也很容易出bug；还有一种方式是能不能把需要释放的tensor都调用一下to('cpu')？但pytorch的tensor to语义<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/53570334/documentation-for-pytorch-tocpu-or-tocuda">不是inplace的</a>。如果想要释放显存需要类似a=a.to('cpu')这样的书写方式，那就和第一种做好python对象的管理一模一样了，没有解决根本的问题。</p>
 <p>那我们自己管理显存呢？虽然torch做了外挂显存池的功能，但malloc和free接口都是torch框架来触发的。tensor.data_ptr()可以获取tensor的物理地址，但外部不能修改他。这也很好理解，如果外部能随便改data_ptr，框架的显存管理要怎么做呢？</p>
 <p>这时候，虚拟内存的好处就来了。刚刚说虚拟内存还有个很大的好处是他可以在虚拟地址（或者叫上层感知到的地址）完全不变的情况下，在底层做一些特殊操作。vllm sleep mode通过在torch框架完全不感知的情况下，完成了对handle的卸载/加载。torch还以为自己的显存管理的好好的，殊不知在底层已经被偷偷的unmap掉了。vllm社区的大佬水平确实高，这个方案完美结合了torch/虚拟内存的底层各种机制，做到了vllm和torch的解耦。</p>
 <p>当然，这套方案也不是完全没缺点，一个主要的缺点就是，因为是对torch框架的隐瞒，torch只要在sleep之后做了任何对这些tensor的读写操作，都会直接触发底层的ERROR，因为虚拟地址并没有映射到对应的物理地址。python的灵活性这么高，这个报错或者校验在vllm层是没法做的。</p>
