@@ -17,7 +17,7 @@
 <meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/LLM-RL%E5%85%A5%E9%97%A8_img_1.jpg">
 <meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/LLM-RL%E5%85%A5%E9%97%A8_img_2.jpg">
 <meta property="article:published_time" content="2025-06-09T16:00:00.000Z">
-<meta property="article:modified_time" content="2026-04-19T16:18:38.575Z">
+<meta property="article:modified_time" content="2026-04-19T16:37:16.833Z">
 <meta property="article:author" content="Reku">
 <meta property="article:tag" content="zhihu">
 <meta name="twitter:card" content="summary">
@@ -267,7 +267,15 @@
 <p>GRPO是对PPO算法的简化。之前的PPO训练模型中有actor推理、actor训练、critic、ref、reward 5个模型（因为训练和推理需要用不同的框架来加速，策略一般也不同）。GRPO一下子把critic和reward全干掉了，大力出奇迹。其实很多人在复现GRPO的过程中表示和ref model的对齐会影响效果，去掉ref model反而出来深度思考的过程了。那是不是可以幻想一下，以后只需要actor推理、actor训练，actor就和环境做互动就行了？大道至简。</p>
 <p>下一篇文章会分析一下当前业界比较优秀的RL框架（openrlhf/verl/chatlearn），结合代码再深入理解一下LLM RL的细节。</p>
 <h2 id="参考">参考</h2>
-<p><a href="https://link.zhihu.com/?target=https%3A//www.bilibili.com/video/BV1ou411874G/">B站：李宏毅强化学习教程</a><a href="https://link.zhihu.com/?target=https%3A//arxiv.org/pdf/2402.03300">DeepSeekMath (arxiv:2402.03300)</a><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/13467768873">知乎专栏</a><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/15677409107">知乎专栏</a><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/7461863937">知乎专栏</a><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/10766825126/answer/88583863333">知乎回答</a><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/25067791857">知乎专栏</a></p>
+<ol type="1">
+<li><p>[B站首推！李宏毅大佬花一周讲完！2023公认最通俗易懂的【强化学习教程】小白也能信手拈来（人工智能|机器学习|深度学习|强化学习）_哔哩哔哩_bilibili](https://link.zhihu.com/?target=https%3A//www.bilibili.com/video/BV1ou411874G/)</p></li>
+<li><p><a href="https://link.zhihu.com/?target=https%3A//arxiv.org/pdf/2402.03300">[2402.03300] DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models</a></p></li>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/13467768873">【LLM】PPO理论推导+代码实战 - 知乎</a></p></li>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/15677409107">【LLM】GRPO：改进PPO增强推理能力 - 知乎</a></p></li>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/7461863937">人人都能看懂的RL-PPO理论知识 - 知乎</a></p></li>
+<li><p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/10766825126/answer/88583863333">DeepSeek的GRPO算法是什么？ - 知乎</a></p></li>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/25067791857">GRPO简化Tricks, 性能暴涨10%, 只改一个参数? - 知乎</a></p></li>
+</ol>
 
   </div>
 </article>
