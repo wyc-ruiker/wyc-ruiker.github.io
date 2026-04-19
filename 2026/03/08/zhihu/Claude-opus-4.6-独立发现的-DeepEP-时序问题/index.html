@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="原文链接: https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;2013987217081644893  背景 前几天同事在跑实验，发现某些场景下 EP 通信方式用 DeepEP 会导致梯度变成 nan，通信方式改成 allgather 就好了。组里大哥们一起尝试复现了一下，发现了几点：  可以把网络规模缩小的很小，单机就可以复现 开启 CUDA_LAUNCH_BLOCKING&#x3D;1 后问题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Claude opus 4.6 独立发现的 DeepEP 时序问题">
+<meta property="og:url" content="https://wyc-ruiker.github.io/2026/03/08/zhihu/Claude-opus-4.6-%E7%8B%AC%E7%AB%8B%E5%8F%91%E7%8E%B0%E7%9A%84-DeepEP-%E6%97%B6%E5%BA%8F%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="Reku">
+<meta property="og:description" content="原文链接: https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;2013987217081644893  背景 前几天同事在跑实验，发现某些场景下 EP 通信方式用 DeepEP 会导致梯度变成 nan，通信方式改成 allgather 就好了。组里大哥们一起尝试复现了一下，发现了几点：  可以把网络规模缩小的很小，单机就可以复现 开启 CUDA_LAUNCH_BLOCKING&#x3D;1 后问题">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-03-07T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-19T16:18:38.574Z">
+<meta property="article:author" content="Reku">
+<meta property="article:tag" content="zhihu">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Claude opus 4.6 独立发现的 DeepEP 时序问题</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="Reku" type="application/atom+xml" />
+    
+	<!-- mathjax -->
+	
+		<script>
+		MathJax = {
+			tex: {
+				inlineMath: [['$', '$'], ['\\(', '\\)']],
+				displayMath: [['$$', '$$'], ['\\[', '\\]']],
+				processEscapes: true,
+				processEnvironments: true
+			},
+			options: {
+				skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+			}
+		};
+		</script>
+		<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2026/03/01/zhihu/ThunderKittens-2.0(1)_-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-Ulysses/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wyc-ruiker.github.io/2026/03/08/zhihu/Claude-opus-4.6-%E7%8B%AC%E7%AB%8B%E5%8F%91%E7%8E%B0%E7%9A%84-DeepEP-%E6%97%B6%E5%BA%8F%E9%97%AE%E9%A2%98/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wyc-ruiker.github.io/2026/03/08/zhihu/Claude-opus-4.6-%E7%8B%AC%E7%AB%8B%E5%8F%91%E7%8E%B0%E7%9A%84-DeepEP-%E6%97%B6%E5%BA%8F%E9%97%AE%E9%A2%98/&text=Claude opus 4.6 独立发现的 DeepEP 时序问题"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wyc-ruiker.github.io/2026/03/08/zhihu/Claude-opus-4.6-%E7%8B%AC%E7%AB%8B%E5%8F%91%E7%8E%B0%E7%9A%84-DeepEP-%E6%97%B6%E5%BA%8F%E9%97%AE%E9%A2%98/&title=Claude opus 4.6 独立发现的 DeepEP 时序问题"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyc-ruiker.github.io/2026/03/08/zhihu/Claude-opus-4.6-%E7%8B%AC%E7%AB%8B%E5%8F%91%E7%8E%B0%E7%9A%84-DeepEP-%E6%97%B6%E5%BA%8F%E9%97%AE%E9%A2%98/&is_video=false&description=Claude opus 4.6 独立发现的 DeepEP 时序问题"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Claude opus 4.6 独立发现的 DeepEP 时序问题&body=Check out this article: https://wyc-ruiker.github.io/2026/03/08/zhihu/Claude-opus-4.6-%E7%8B%AC%E7%AB%8B%E5%8F%91%E7%8E%B0%E7%9A%84-DeepEP-%E6%97%B6%E5%BA%8F%E9%97%AE%E9%A2%98/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wyc-ruiker.github.io/2026/03/08/zhihu/Claude-opus-4.6-%E7%8B%AC%E7%AB%8B%E5%8F%91%E7%8E%B0%E7%9A%84-DeepEP-%E6%97%B6%E5%BA%8F%E9%97%AE%E9%A2%98/&title=Claude opus 4.6 独立发现的 DeepEP 时序问题"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wyc-ruiker.github.io/2026/03/08/zhihu/Claude-opus-4.6-%E7%8B%AC%E7%AB%8B%E5%8F%91%E7%8E%B0%E7%9A%84-DeepEP-%E6%97%B6%E5%BA%8F%E9%97%AE%E9%A2%98/&title=Claude opus 4.6 独立发现的 DeepEP 时序问题"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wyc-ruiker.github.io/2026/03/08/zhihu/Claude-opus-4.6-%E7%8B%AC%E7%AB%8B%E5%8F%91%E7%8E%B0%E7%9A%84-DeepEP-%E6%97%B6%E5%BA%8F%E9%97%AE%E9%A2%98/&title=Claude opus 4.6 独立发现的 DeepEP 时序问题"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wyc-ruiker.github.io/2026/03/08/zhihu/Claude-opus-4.6-%E7%8B%AC%E7%AB%8B%E5%8F%91%E7%8E%B0%E7%9A%84-DeepEP-%E6%97%B6%E5%BA%8F%E9%97%AE%E9%A2%98/&title=Claude opus 4.6 独立发现的 DeepEP 时序问题"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wyc-ruiker.github.io/2026/03/08/zhihu/Claude-opus-4.6-%E7%8B%AC%E7%AB%8B%E5%8F%91%E7%8E%B0%E7%9A%84-DeepEP-%E6%97%B6%E5%BA%8F%E9%97%AE%E9%A2%98/&name=Claude opus 4.6 独立发现的 DeepEP 时序问题&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wyc-ruiker.github.io/2026/03/08/zhihu/Claude-opus-4.6-%E7%8B%AC%E7%AB%8B%E5%8F%91%E7%8E%B0%E7%9A%84-DeepEP-%E6%97%B6%E5%BA%8F%E9%97%AE%E9%A2%98/&t=Claude opus 4.6 独立发现的 DeepEP 时序问题"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vibe-debug-%E6%B5%81%E6%B0%B4%E8%B4%A6"><span class="toc-number">2.</span> <span class="toc-text">vibe debug 流水账</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%80%83"><span class="toc-number">3.</span> <span class="toc-text">思考</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Claude opus 4.6 独立发现的 DeepEP 时序问题
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Reku</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2026-03-07T16:00:00.000Z" class="dt-published" itemprop="datePublished">2026-03-08</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/zhihu/">zhihu</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/zhihu/" rel="tag">zhihu</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <blockquote>
+<p>原文链接: https://zhuanlan.zhihu.com/p/2013987217081644893</p>
+</blockquote>
+<h2 id="背景">背景</h2>
+<p>前几天同事在跑实验，发现某些场景下 EP 通信方式用 DeepEP 会导致梯度变成 nan，通信方式改成 allgather 就好了。组里大哥们一起尝试复现了一下，发现了几点：</p>
+<ul>
+<li>可以把网络规模缩小的很小，单机就可以复现</li>
+<li>开启 CUDA_LAUNCH_BLOCKING=1 后问题消失</li>
+<li>有时候添加打印或者同步，问题又不复现</li>
+<li>EP 越小越容易复现</li>
+</ul>
+<p>顿时觉得头皮发麻，很显然是一种复杂的时序问题，不清楚是 megatron 的问题还是 DeepEP 的问题，也可能是在某种神秘场景，联合作用下导致的 bug。而 DeepEP 我又不怎么精通，感觉 debug 会非常困难。</p>
+<h2 id="vibe-debug-流水账">vibe debug 流水账</h2>
+<p>本周三临睡前，准备试一下用 cc (Claude Code) 去定位这个问题，因为我有个稳定的复现脚本（agent 可以直接观察他是不是 nan，信号很明确），各种源码也都有（agent 能拿到所有的上下文），理论上非常适合 vibe。把复现脚本、megatron 代码、DeepEP 代码都给 claude 准备好，不过我们还没什么项目 skills，cc 的领域知识只能从源码获取，只告诉 cc 这个脚本有 bug，去研究一下为什么。yolo 一开直接睡觉。</p>
+<p>周四感觉 vibe 情况不是非常乐观，cc 给出了几个错误的猜想都被我否定了，就开始自暴自弃，说什么问题很难定位不出来。我准备换个思路，让他先定界是 megatron 的问题还是 DeepEP 的问题，尝试把这个网络的 DeepEP 相关业务逻辑抠出来，脱离 megatron 进行复现。</p>
+<p>周四周五公司有活动，大部分时间都在坐飞机/吃饭/喝酒/吹牛逼/听别人吹牛逼，只能每隔几个小时去看一下 cc 的 debug 情况，我和同事戏称为“收菜”。但实际上 cc 的定位进度还是堪忧，脱离 megatron 也没法复现，而且特别容易放弃，只能反复让他尝试。</p>
+<p>复现到了周五晚上也没什么进展，准备再换个思路，不尝试脱离 megatron 复现，而是让他简化 megatron，一步步的把没用的组件剥离出去，yolo 一开继续睡觉。</p>
+<p>周六一早，发现很牛逼，直接和我说复现出来了，我自己一跑发现确实如此，脚本的现象是这样的：</p>
+<ul>
+<li>torch 开启 deterministic + DeepEP 有 nan</li>
+<li>torch 关闭 deterministic + DeepEP 没有 nan</li>
+<li>torch 开启 deterministic + DeepEP + CUDA_LAUNCH_BLOCKING 没有 nan</li>
+</ul>
+<p>需要 deterministic + DeepEP + cpu 异步同时满足，非常神秘啊。yolo 一开，继续让 cc 找一下问题根因。</p>
+<p>周六吃喝玩乐一天，晚上回家发现已经搞定了，根因如下：</p>
+<ul>
+<li>同事为了对精度，开了 <code>torch.use_deterministic_algorithms(True)</code></li>
+<li>开启确定性之后，torch 会自动把新分配出来的显存写成 nan，参考 <a href="https://link.zhihu.com/?target=https%3A//docs.pytorch.org/docs/stable/deterministic.html">torch.utils.deterministic.fill_uninitialized_memory</a></li>
+<li>而 DeepEP 的业务逻辑是这样的：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// Step 1: stream_wait synchronizes comm_stream with compute_stream</span><br><span class="line">//         comm_stream will wait for everything *currently* enqueued on compute_stream</span><br><span class="line">stream_wait(comm_stream, compute_stream);</span><br><span class="line"></span><br><span class="line">// Step 2: torch::empty() allocates tensors AFTER the sync point</span><br><span class="line">//         When fill_uninitialized_memory=True, this launches a NaN-fill kernel</span><br><span class="line">//         on compute_stream — which comm_stream does NOT wait for</span><br><span class="line">auto recv_x = torch::empty(&#123;num_recv_tokens, hidden&#125;, x.options());</span><br><span class="line"></span><br><span class="line">// Step 3: communication kernel runs on comm_stream, writing to recv_x</span><br><span class="line">intranode::combine(..., recv_x.data_ptr(), ..., comm_stream, ...);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ul>
+<li>DeepEP 分配一块 empty 当输出，本来只有通信流在写数据，现在主流也会往里面写 nan，导致两个写操作并发了，制造了时序问题。这个问题的复现频率与 EP 执行速度、算子下发速度都有关系，所以看起来很复杂。</li>
+<li>本质是 torch 框架在 deterministic 的场景下破坏了约定，在 empty 的时候有写操作。但很难说是 bug 还是 feature。</li>
+</ul>
+<h2 id="思考">思考</h2>
+<p>claude debug 成功之后，我是非常震撼的，因为这不是一个很简单的 bug，涉及到很多功能的交叉。各位 ai infra 程序员可以扪心自问一下，直接面对这个问题，大家要花几个工作日能定位出来，定位过程中心态会不会出现问题。但现在，我只是在娱乐过程中随便 prompt 了几下，claude 就全搞定了。</p>
+<p>当然整个 vibe debug 过程没有这么顺利，如果公司没有活动，是正常的工作日，我可能对 claude 也没有这么多的耐心。这说明我们还是需要 agent 工程、需要 skills。但模型的智能已经够了，我觉得我不算很菜的程序员，但 opus 4.6 比我要强。</p>
+<p>如何把智能充分发挥出来只是个时间问题，tipping point 已经来临了。</p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vibe-debug-%E6%B5%81%E6%B0%B4%E8%B4%A6"><span class="toc-number">2.</span> <span class="toc-text">vibe debug 流水账</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%80%83"><span class="toc-number">3.</span> <span class="toc-text">思考</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wyc-ruiker.github.io/2026/03/08/zhihu/Claude-opus-4.6-%E7%8B%AC%E7%AB%8B%E5%8F%91%E7%8E%B0%E7%9A%84-DeepEP-%E6%97%B6%E5%BA%8F%E9%97%AE%E9%A2%98/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wyc-ruiker.github.io/2026/03/08/zhihu/Claude-opus-4.6-%E7%8B%AC%E7%AB%8B%E5%8F%91%E7%8E%B0%E7%9A%84-DeepEP-%E6%97%B6%E5%BA%8F%E9%97%AE%E9%A2%98/&text=Claude opus 4.6 独立发现的 DeepEP 时序问题"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wyc-ruiker.github.io/2026/03/08/zhihu/Claude-opus-4.6-%E7%8B%AC%E7%AB%8B%E5%8F%91%E7%8E%B0%E7%9A%84-DeepEP-%E6%97%B6%E5%BA%8F%E9%97%AE%E9%A2%98/&title=Claude opus 4.6 独立发现的 DeepEP 时序问题"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyc-ruiker.github.io/2026/03/08/zhihu/Claude-opus-4.6-%E7%8B%AC%E7%AB%8B%E5%8F%91%E7%8E%B0%E7%9A%84-DeepEP-%E6%97%B6%E5%BA%8F%E9%97%AE%E9%A2%98/&is_video=false&description=Claude opus 4.6 独立发现的 DeepEP 时序问题"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Claude opus 4.6 独立发现的 DeepEP 时序问题&body=Check out this article: https://wyc-ruiker.github.io/2026/03/08/zhihu/Claude-opus-4.6-%E7%8B%AC%E7%AB%8B%E5%8F%91%E7%8E%B0%E7%9A%84-DeepEP-%E6%97%B6%E5%BA%8F%E9%97%AE%E9%A2%98/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wyc-ruiker.github.io/2026/03/08/zhihu/Claude-opus-4.6-%E7%8B%AC%E7%AB%8B%E5%8F%91%E7%8E%B0%E7%9A%84-DeepEP-%E6%97%B6%E5%BA%8F%E9%97%AE%E9%A2%98/&title=Claude opus 4.6 独立发现的 DeepEP 时序问题"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wyc-ruiker.github.io/2026/03/08/zhihu/Claude-opus-4.6-%E7%8B%AC%E7%AB%8B%E5%8F%91%E7%8E%B0%E7%9A%84-DeepEP-%E6%97%B6%E5%BA%8F%E9%97%AE%E9%A2%98/&title=Claude opus 4.6 独立发现的 DeepEP 时序问题"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wyc-ruiker.github.io/2026/03/08/zhihu/Claude-opus-4.6-%E7%8B%AC%E7%AB%8B%E5%8F%91%E7%8E%B0%E7%9A%84-DeepEP-%E6%97%B6%E5%BA%8F%E9%97%AE%E9%A2%98/&title=Claude opus 4.6 独立发现的 DeepEP 时序问题"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wyc-ruiker.github.io/2026/03/08/zhihu/Claude-opus-4.6-%E7%8B%AC%E7%AB%8B%E5%8F%91%E7%8E%B0%E7%9A%84-DeepEP-%E6%97%B6%E5%BA%8F%E9%97%AE%E9%A2%98/&title=Claude opus 4.6 独立发现的 DeepEP 时序问题"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wyc-ruiker.github.io/2026/03/08/zhihu/Claude-opus-4.6-%E7%8B%AC%E7%AB%8B%E5%8F%91%E7%8E%B0%E7%9A%84-DeepEP-%E6%97%B6%E5%BA%8F%E9%97%AE%E9%A2%98/&name=Claude opus 4.6 独立发现的 DeepEP 时序问题&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wyc-ruiker.github.io/2026/03/08/zhihu/Claude-opus-4.6-%E7%8B%AC%E7%AB%8B%E5%8F%91%E7%8E%B0%E7%9A%84-DeepEP-%E6%97%B6%E5%BA%8F%E9%97%AE%E9%A2%98/&t=Claude opus 4.6 独立发现的 DeepEP 时序问题"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    Reku
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'reku';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+<!-- utterances Comments -->
+
+</body>
+</html>

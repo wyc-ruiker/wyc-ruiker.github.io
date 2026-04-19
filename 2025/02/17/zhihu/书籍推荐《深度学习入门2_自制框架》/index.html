@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="原文链接: https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;22879442357  作者使用纯Python实现了一个名为DeZero的深度学习框架，其编程风格与PyTorch类似。通过结合代码实现，由浅入深地拆解了深度学习框架的前端功能，包括自动微分、Layer、Optimizer、DataLoader等模块。 深度学习入门2book.douban.com&#x2F;subject&#x2F;36303">
+<meta property="og:type" content="article">
+<meta property="og:title" content="书籍推荐《深度学习入门2:自制框架》">
+<meta property="og:url" content="https://wyc-ruiker.github.io/2025/02/17/zhihu/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B/index.html">
+<meta property="og:site_name" content="Reku">
+<meta property="og:description" content="原文链接: https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;22879442357  作者使用纯Python实现了一个名为DeZero的深度学习框架，其编程风格与PyTorch类似。通过结合代码实现，由浅入深地拆解了深度学习框架的前端功能，包括自动微分、Layer、Optimizer、DataLoader等模块。 深度学习入门2book.douban.com&#x2F;subject&#x2F;36303">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B_img_0.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B_img_1.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B_img_2.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B_img_3.jpg">
+<meta property="article:published_time" content="2025-02-16T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-19T16:18:38.576Z">
+<meta property="article:author" content="Reku">
+<meta property="article:tag" content="zhihu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wyc-ruiker.github.io/zhihu/images/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B_img_0.jpg">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>书籍推荐《深度学习入门2:自制框架》</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="Reku" type="application/atom+xml" />
+    
+	<!-- mathjax -->
+	
+		<script>
+		MathJax = {
+			tex: {
+				inlineMath: [['$', '$'], ['\\(', '\\)']],
+				displayMath: [['$$', '$$'], ['\\[', '\\]']],
+				processEscapes: true,
+				processEnvironments: true
+			},
+			options: {
+				skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+			}
+		};
+		</script>
+		<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2025/03/11/zhihu/%E5%93%81%E9%89%B4%E4%B8%80%E4%B8%8BOpenRLHF%E5%92%8Cverl%E7%9A%84%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/02/06/zhihu/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wyc-ruiker.github.io/2025/02/17/zhihu/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wyc-ruiker.github.io/2025/02/17/zhihu/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B/&text=书籍推荐《深度学习入门2:自制框架》"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wyc-ruiker.github.io/2025/02/17/zhihu/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B/&title=书籍推荐《深度学习入门2:自制框架》"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyc-ruiker.github.io/2025/02/17/zhihu/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B/&is_video=false&description=书籍推荐《深度学习入门2:自制框架》"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=书籍推荐《深度学习入门2:自制框架》&body=Check out this article: https://wyc-ruiker.github.io/2025/02/17/zhihu/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wyc-ruiker.github.io/2025/02/17/zhihu/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B/&title=书籍推荐《深度学习入门2:自制框架》"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wyc-ruiker.github.io/2025/02/17/zhihu/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B/&title=书籍推荐《深度学习入门2:自制框架》"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wyc-ruiker.github.io/2025/02/17/zhihu/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B/&title=书籍推荐《深度学习入门2:自制框架》"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wyc-ruiker.github.io/2025/02/17/zhihu/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B/&title=书籍推荐《深度学习入门2:自制框架》"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wyc-ruiker.github.io/2025/02/17/zhihu/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B/&name=书籍推荐《深度学习入门2:自制框架》&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wyc-ruiker.github.io/2025/02/17/zhihu/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B/&t=书籍推荐《深度学习入门2:自制框架》"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.</span> <span class="toc-text">参考</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        书籍推荐《深度学习入门2:自制框架》
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Reku</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-02-16T16:00:00.000Z" class="dt-published" itemprop="datePublished">2025-02-17</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/zhihu/">zhihu</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/zhihu/" rel="tag">zhihu</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <blockquote>
+<p>原文链接: https://zhuanlan.zhihu.com/p/22879442357</p>
+</blockquote>
+<p>作者使用纯Python实现了一个名为DeZero的深度学习框架，其编程风格与PyTorch类似。通过结合代码实现，由浅入深地拆解了深度学习框架的前端功能，包括自动微分、Layer、Optimizer、DataLoader等模块。</p>
+<p><a href="https://link.zhihu.com/?target=https%3A//book.douban.com/subject/36303408/"><img src="/zhihu/images/书籍推荐《深度学习入门2_自制框架》_img_0.jpg">深度学习入门2book.douban.com/subject/36303408/</a>这本书在国内比较冷门，但是我读过的最好的关于深度学习框架的书籍。这里所说的“好”，并不是指内容面面俱到，而是因为它的逻辑非常清晰，对入门十分友好。同时又不算很粗浅，像高阶微分这样的深度话题也有探讨。</p>
+<p>本书的作者是Chainer的核心开发者Koki Saitoh。Chainer可能是最早在Python实现的define by run的深度学习框架（更常见的叫法是<strong>动态图</strong>），非常具有前瞻性，可惜在2019年的时候母公司（Preferred Networks）转投了PyTorch，项目停止了维护<a href="#ref_1">[1]</a>。</p>
+<p>这个母公司Preferred Networks也值得聊一聊。从主页来看啥都搞，AI外包公司，像是日本的商汤科技。</p>
+<p><a href="https://link.zhihu.com/?target=https%3A//www.preferred.jp/en/projects/"><img src="/zhihu/images/书籍推荐《深度学习入门2_自制框架》_img_1.jpg">Projects - Preferred Networks, Inc.www.preferred.jp/en/projects/</a>创始人兼CEO叫Toru Nishikawa，代表东京大学参加了2006年ACM ICPC世界总决赛，荣获第19名。</p>
+<p><img src="/zhihu/images/书籍推荐《深度学习入门2_自制框架》_img_2.jpg"></p>
+<p>比较有意思的一点是前一年（2005）的ACM ICPC世界总决赛冠军是戴文渊大神，后来创建了第四范式，也是个AI外包公司。大神们的水平都不需要质疑，但最后都成为了AI外包公司，可能这就是这代人的宿命吧。。。</p>
+<p>Preferred Networks还有个很出名的项目叫CuPy<a href="#ref_2">[2]</a>，相当于numpy在cuda上的实现，也为书里的DeZero框架提供了GPU能力（不过这个前后端解耦设计其实不怎么合理，后端能拿到的前端信息太少了）。这个项目现在还活着，而且还在发版本。从产出来看，Preferred Networks确实聚集了一批日本AI仙人，做出了一些很有前瞻性的且很有影响力的软件，希望该公司业务蒸蒸日上。</p>
+<p>再说一下书的内容，有几点我觉得是写的非常出色的：</p>
+<ol type="1">
+<li>每一章都基于代码讲解，接着上一章的代码一步步从简单到复杂，阅读体验很流畅。而且看DeZero的代码实现能学到很多技巧（对于我这种没怎么写过Python的人来说），例如Layer这一节通过重写__setattr__的魔术方法实现了每个深度学习层的Parameter自动统计。</li>
+<li>概念的逐步引入。DeZero不是一股脑给一堆概念，对着概念一顿实现就完事了，而是一步步的基于功能的需要引入这些概念。比如实现自动微分的时候为什么需要引入Variable和Function；为什么要进行运算符重载、Layer/Module/Optimizer/DataLoader的封装，通过这些方式能把代码优化到什么程度。这种写作方式类似OSTEP，围绕着虚拟化、并发和持久性，一层一层的展示每个功能为什么要做，做完的好处是什么。一个好教材甚至于说一个好项目都应该是这样的，不应该有太多无用的概念，每一层的抽象都得有明确的目的。</li>
+<li>组合的力量。看高阶微分这一章的时候让我想起了SICP，SICP的很多细节我早就忘得一干二净了，唯一剩下的就是对组合力量的深刻印象。</li>
+</ol>
+<figure>
+<img src="/zhihu/images/书籍推荐《深度学习入门2_自制框架》_img_3.jpg" alt="高阶微分"><figcaption aria-hidden="true">高阶微分</figcaption>
+</figure>
+<p>组合其实就是通过简单的、模块化的组件组合，构建出复杂且强大的系统。这里的高阶微分就是一个例子。从一阶微分到高阶微分，通过完善的抽象设计，核心改动只需要将反向实现从调用numpy接口变成调用DeZero的运算符重载。后面的Layer设计其实也是组合的力量，从一个玩具框架最后组合出了rnn、cnn等网络，到真正的加载vgg的预训练模型，这些组合的力量让人印象深刻。</p>
+<p>从这几点来看，我觉得这本书不仅是一个深度学习框架入门书籍，还是个极好的第二本Python书籍，适合学习完基本语法之后来看。他实现的是一个实打实的项目，肯定比实现什么算法之类的有意思多了，并且在实现该项目的同时，触及了一些计算机科学的本质。</p>
+<p>最后说一下Chainer为什么消亡。其实我在网上没搜到太多对于Chainer缺点的评论，在reddit上有一些关于Chainer为什么打不过PyTorch的讨论<a href="#ref_3">[3]</a> <a href="#ref_4">[4]</a> <a href="#ref_5">[5]</a>。</p>
+<p>从讨论来看，基本输给了生态。从易用性上Chainer没理由比PyTorch要差，只是日本的计算机圈子还是太小了，Preferred Networks比不上FB财大气粗。而且有人说大量的资料都是日语，导致Chainer更像是日本计算机小圈子的自娱自乐。Chainer的失败对国内的基础软件走向世界还是有很大启发的，虽然国内公司的深度学习基础软件看起来还没有Chainer成功。。。</p>
+<h2 id="参考">参考</h2>
+<ol type="1">
+<li><a href="#ref_1_0">^</a>Chainer/CuPy v7 release and Future of Chainer <a target="_blank" rel="noopener" href="https://chainer.org/announcement/2019/12/05/released-v7.html">https://chainer.org/announcement/2019/12/05/released-v7.html</a></li>
+<li><a href="#ref_2_0">^</a><a target="_blank" rel="noopener" href="https://cupy.dev/">https://cupy.dev/</a></li>
+<li><a href="#ref_3_0">^</a><a target="_blank" rel="noopener" href="https://www.reddit.com/r/MachineLearning/comments/e0pir2/dwhy_isnt_chainer_more_useddiscussed/">https://www.reddit.com/r/MachineLearning/comments/e0pir2/dwhy_isnt_chainer_more_useddiscussed/</a></li>
+<li><a href="#ref_4_0">^</a><a target="_blank" rel="noopener" href="https://www.reddit.com/r/MachineLearning/comments/e6dd7x/d_preferred_networks_creators_of_chainer/">https://www.reddit.com/r/MachineLearning/comments/e6dd7x/d_preferred_networks_creators_of_chainer/</a></li>
+<li><a href="#ref_5_0">^</a><a target="_blank" rel="noopener" href="https://www.reddit.com/r/MachineLearning/comments/7lb5n1/d_chainer_vs_pytorch/">https://www.reddit.com/r/MachineLearning/comments/7lb5n1/d_chainer_vs_pytorch/</a></li>
+</ol>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.</span> <span class="toc-text">参考</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wyc-ruiker.github.io/2025/02/17/zhihu/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wyc-ruiker.github.io/2025/02/17/zhihu/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B/&text=书籍推荐《深度学习入门2:自制框架》"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wyc-ruiker.github.io/2025/02/17/zhihu/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B/&title=书籍推荐《深度学习入门2:自制框架》"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyc-ruiker.github.io/2025/02/17/zhihu/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B/&is_video=false&description=书籍推荐《深度学习入门2:自制框架》"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=书籍推荐《深度学习入门2:自制框架》&body=Check out this article: https://wyc-ruiker.github.io/2025/02/17/zhihu/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wyc-ruiker.github.io/2025/02/17/zhihu/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B/&title=书籍推荐《深度学习入门2:自制框架》"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wyc-ruiker.github.io/2025/02/17/zhihu/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B/&title=书籍推荐《深度学习入门2:自制框架》"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wyc-ruiker.github.io/2025/02/17/zhihu/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B/&title=书籍推荐《深度学习入门2:自制框架》"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wyc-ruiker.github.io/2025/02/17/zhihu/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B/&title=书籍推荐《深度学习入门2:自制框架》"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wyc-ruiker.github.io/2025/02/17/zhihu/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B/&name=书籍推荐《深度学习入门2:自制框架》&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wyc-ruiker.github.io/2025/02/17/zhihu/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B/&t=书籍推荐《深度学习入门2:自制框架》"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    Reku
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'reku';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+<!-- utterances Comments -->
+
+</body>
+</html>

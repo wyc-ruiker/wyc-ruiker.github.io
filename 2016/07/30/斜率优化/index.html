@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="高中的时候做过几道斜率优化的题目，不过一直没有搞的太懂。 这次填一下坑。 http:&#x2F;&#x2F;www.lydsy.com&#x2F;JudgeOnline&#x2F;problem.php?id&#x3D;4518">
+<meta property="og:type" content="article">
+<meta property="og:title" content="斜率优化">
+<meta property="og:url" content="https://wyc-ruiker.github.io/2016/07/30/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96/index.html">
+<meta property="og:site_name" content="Reku">
+<meta property="og:description" content="高中的时候做过几道斜率优化的题目，不过一直没有搞的太懂。 这次填一下坑。 http:&#x2F;&#x2F;www.lydsy.com&#x2F;JudgeOnline&#x2F;problem.php?id&#x3D;4518">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://www.lydsy.com/JudgeOnline/upload/201305/1(1).jpg">
+<meta property="article:published_time" content="2016-07-30T10:38:50.000Z">
+<meta property="article:modified_time" content="2021-12-16T12:08:13.000Z">
+<meta property="article:author" content="Reku">
+<meta property="article:tag" content="动态规划">
+<meta property="article:tag" content="单调队列">
+<meta property="article:tag" content="斜率优化">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.lydsy.com/JudgeOnline/upload/201305/1(1).jpg">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>斜率优化</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="Reku" type="application/atom+xml" />
+    
+	<!-- mathjax -->
+	
+		<script>
+		MathJax = {
+			tex: {
+				inlineMath: [['$', '$'], ['\\(', '\\)']],
+				displayMath: [['$$', '$$'], ['\\[', '\\]']],
+				processEscapes: true,
+				processEnvironments: true
+			},
+			options: {
+				skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+			}
+		};
+		</script>
+		<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2016/08/21/%E4%BA%8C%E7%BB%B4%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2016/07/29/bzoj-4513-sdoi2016/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wyc-ruiker.github.io/2016/07/30/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wyc-ruiker.github.io/2016/07/30/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96/&text=斜率优化"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wyc-ruiker.github.io/2016/07/30/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96/&title=斜率优化"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyc-ruiker.github.io/2016/07/30/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96/&is_video=false&description=斜率优化"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=斜率优化&body=Check out this article: https://wyc-ruiker.github.io/2016/07/30/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wyc-ruiker.github.io/2016/07/30/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96/&title=斜率优化"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wyc-ruiker.github.io/2016/07/30/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96/&title=斜率优化"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wyc-ruiker.github.io/2016/07/30/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96/&title=斜率优化"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wyc-ruiker.github.io/2016/07/30/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96/&title=斜率优化"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wyc-ruiker.github.io/2016/07/30/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96/&name=斜率优化&description=&lt;p&gt;高中的时候做过几道斜率优化的题目，不过一直没有搞的太懂。 这次填一下坑。 &lt;a href=&#34;http://www.lydsy.com/JudgeOnline/problem.php?id=4518&#34;&gt;http://www.lydsy.com/JudgeOnline/problem.php?id=4518&lt;/a&gt;&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wyc-ruiker.github.io/2016/07/30/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96/&t=斜率优化"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        斜率优化
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Reku</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2016-07-30T10:38:50.000Z" class="dt-published" itemprop="datePublished">2016-07-30</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/acm/">acm</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="tag">动态规划</a>, <a class="p-category" href="/tags/%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97/" rel="tag">单调队列</a>, <a class="p-category" href="/tags/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96/" rel="tag">斜率优化</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p>高中的时候做过几道斜率优化的题目，不过一直没有搞的太懂。 这次填一下坑。 <a target="_blank" rel="noopener" href="http://www.lydsy.com/JudgeOnline/problem.php?id=4518">http://www.lydsy.com/JudgeOnline/problem.php?id=4518</a> <span id="more"></span></p>
+<blockquote>
+<p>Pine开始了从S地到T地的征途。从S地到T地的路可以划分成n段，相邻两段路的分界点设有休息站。 Pine计划用m天到达T地。除第m天外，每一天晚上Pine都必须在休息站过夜。所以，一段路必须在同一天中走完。 Pine希望每一天走的路长度尽可能相近，所以他希望每一天走的路的长度的方差尽可能小。 帮助Pine求出最小方差是多少。 设方差是v，可以证明，v×m<sup>2是一个整数。为了避免精度误差，输出结果时输出v×m</sup>2。</p>
+</blockquote>
+<p>设每一天的路程为<span class="math inline">\(x_i\)</span>，<span class="math inline">\(S=\sum_{i=1}^{n}x_i\)</span> 所求即为： <span class="math display">\[ans = m^2 \times \sum\limits_{i=1}^m \frac{(x_i - \frac{S}{m}) ^ 2}{m}\]</span> 化简为： <span class="math display">\[ans = m \times \sum\limits_{i=1}^m x_{i}^2 - S^2\]</span> 因为<span class="math inline">\(S\)</span>为定值，只需使<span class="math inline">\(\sum_{i=1}^{m}x_i\)</span>最小即可 设<span class="math inline">\(f[i][j]\)</span>表示前<span class="math inline">\(j\)</span>短路在前<span class="math inline">\(i\)</span>天分配的最小平方和 则<span class="math display">\[f[i][j]=min(f[i-1][j-k]+(sum[j]-sum[j-k])^2) k=1..j\]</span> 假设<span class="math inline">\(x&gt;y\)</span>，且<span class="math inline">\(j\)</span>由<span class="math inline">\(x\)</span>转移比从<span class="math inline">\(y\)</span>转移更优，则 <span class="math display">\[f[i-1][x]+(sum[j]-sum[x])^2\]</span></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">int</span> n,m;</span><br><span class="line"><span class="type">long</span> <span class="type">long</span> sum[<span class="number">3010</span>]=&#123;&#125;;</span><br><span class="line"><span class="type">long</span> <span class="type">long</span> f[<span class="number">3010</span>]=&#123;&#125;;</span><br><span class="line"><span class="type">long</span> <span class="type">long</span> g[<span class="number">3010</span>]=&#123;&#125;;</span><br><span class="line"><span class="type">long</span> <span class="type">long</span> q[<span class="number">3010</span>]=&#123;&#125;;</span><br><span class="line"><span class="function"><span class="type">long</span> <span class="type">long</span> <span class="title">fz</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> g[x]-g[y]+sum[x]*sum[x]-sum[y]*sum[y];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">long</span> <span class="type">long</span> <span class="title">fm</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> sum[x]-sum[y];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">long</span> <span class="type">long</span> p;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>,&amp;n,&amp;m);</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">&quot;%lld&quot;</span>,&amp;p);</span><br><span class="line">		sum[i]=sum[i<span class="number">-1</span>]+p;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">memset</span>(f,<span class="number">0x7f</span>,<span class="built_in">sizeof</span>(f));</span><br><span class="line">	f[<span class="number">0</span>]=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=m;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">memcpy</span>(g,f,<span class="built_in">sizeof</span>(f));</span><br><span class="line">		<span class="built_in">memset</span>(q,<span class="number">0</span>,<span class="built_in">sizeof</span>(q));</span><br><span class="line">		<span class="type">int</span> head=<span class="number">0</span>,tail=<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>;j&lt;=n;j++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">while</span>(head&lt;tail&amp;&amp;<span class="built_in">fz</span>(q[head<span class="number">+1</span>],q[head])&lt;<span class="number">2</span>*sum[j]*<span class="built_in">fm</span>(q[head<span class="number">+1</span>],q[head])) head++;</span><br><span class="line">			f[j]=<span class="built_in">min</span>(f[j],g[q[head]]+(sum[j]-sum[q[head]])*(sum[j]-sum[q[head]]));</span><br><span class="line">			<span class="keyword">while</span>(head&lt;tail&amp;&amp;(<span class="built_in">fz</span>(q[tail],q[tail<span class="number">-1</span>])*<span class="built_in">fm</span>(j,q[tail])&gt;<span class="built_in">fz</span>(j,q[tail])*<span class="built_in">fm</span>(q[tail],q[tail<span class="number">-1</span>]))) tail--;</span><br><span class="line">			q[++tail]=j;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%lld\n&quot;</span>,f[n]*m-sum[n]*sum[n]);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="http://www.lydsy.com/JudgeOnline/problem.php?id=1597">http://www.lydsy.com/JudgeOnline/problem.php?id=1597</a></p>
+<blockquote>
+<p>农夫John准备扩大他的农场,他正在考虑N (1 &lt;= N &lt;= 50,000) 块长方形的土地. 每块土地的长宽满足(1 &lt;= 宽 &lt;= 1,000,000; 1 &lt;= 长 &lt;= 1,000,000). 每块土地的价格是它的面积,但FJ可以同时购买多快土地. 这些土地的价格是它们最大的长乘以它们最大的宽, 但是土地的长宽不能交换. 如果FJ买一块3x5的地和一块5x3的地,则他需要付5x5=25. FJ希望买下所有的土地,但是他发现分组来买这些土地可以节省经费. 他需要你帮助他找到最小的经费.</p>
+</blockquote>
+<p>首先，我们发现，如果一个矩形能完全包括另一个矩形，那么另一个矩形就是完全没有意义的。 我们可以通过排序用一个栈把所有被包括的矩形去掉，然后剩下的矩形按照长度不下降排序的话，长度如果不下降，宽度一定不上升。 于是我们得到了一个显然的动态规划方程：<span class="math display">\[f_i=\min\limits_{j=1}^{i-1}(f_i,f_j+a_i \times b_{j+1})\]</span> 这是一个<span class="math inline">\(O(n^2)\)</span>的算法，需要优化。 对于<span class="math inline">\(x&gt;y\)</span>，如果<span class="math inline">\(x\)</span>优于<span class="math inline">\(y\)</span> 即<span class="math display">\[f_x+a_i \times b_{x+1}\]</span></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">int</span> n,m;</span><br><span class="line"><span class="type">long</span> <span class="type">long</span> sum[<span class="number">3010</span>]=&#123;&#125;;</span><br><span class="line"><span class="type">long</span> <span class="type">long</span> f[<span class="number">3010</span>]=&#123;&#125;;</span><br><span class="line"><span class="type">long</span> <span class="type">long</span> g[<span class="number">3010</span>]=&#123;&#125;;</span><br><span class="line"><span class="type">long</span> <span class="type">long</span> q[<span class="number">3010</span>]=&#123;&#125;;</span><br><span class="line"><span class="function"><span class="type">long</span> <span class="type">long</span> <span class="title">fz</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> g[x]-g[y]+sum[x]*sum[x]-sum[y]*sum[y];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">long</span> <span class="type">long</span> <span class="title">fm</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> sum[x]-sum[y];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">long</span> <span class="type">long</span> p;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>,&amp;n,&amp;m);</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">&quot;%lld&quot;</span>,&amp;p);</span><br><span class="line">		sum[i]=sum[i<span class="number">-1</span>]+p;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">memset</span>(f,<span class="number">0x7f</span>,<span class="built_in">sizeof</span>(f));</span><br><span class="line">	f[<span class="number">0</span>]=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=m;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">memcpy</span>(g,f,<span class="built_in">sizeof</span>(f));</span><br><span class="line">		<span class="built_in">memset</span>(q,<span class="number">0</span>,<span class="built_in">sizeof</span>(q));</span><br><span class="line">		<span class="type">int</span> head=<span class="number">0</span>,tail=<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>;j&lt;=n;j++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">while</span>(head&lt;tail&amp;&amp;<span class="built_in">fz</span>(q[head<span class="number">+1</span>],q[head])&lt;<span class="number">2</span>*sum[j]*<span class="built_in">fm</span>(q[head<span class="number">+1</span>],q[head])) head++;</span><br><span class="line">			f[j]=<span class="built_in">min</span>(f[j],g[q[head]]+(sum[j]-sum[q[head]])*(sum[j]-sum[q[head]]));</span><br><span class="line">			<span class="keyword">while</span>(head&lt;tail&amp;&amp;(<span class="built_in">fz</span>(q[tail],q[tail<span class="number">-1</span>])*<span class="built_in">fm</span>(j,q[tail])&gt;<span class="built_in">fz</span>(j,q[tail])*<span class="built_in">fm</span>(q[tail],q[tail<span class="number">-1</span>]))) tail--;</span><br><span class="line">			q[++tail]=j;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%lld\n&quot;</span>,f[n]*m-sum[n]*sum[n]);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="http://www.lydsy.com/JudgeOnline/problem.php?id=3156">http://www.lydsy.com/JudgeOnline/problem.php?id=3156</a></p>
+<figure>
+<img src="http://www.lydsy.com/JudgeOnline/upload/201305/1(1).jpg" alt="题目"><figcaption aria-hidden="true">题目</figcaption>
+</figure>
+<p>依然是斜率优化。 先看最普通的动态规划，设状态<span class="math inline">\(f[i]\)</span>代表最后一个守护塔放在<span class="math inline">\(i\)</span>处的最小花费。 于是动态规划方程：<span class="math display">\[f[i]=\min\limits_{j=i+1}^{n}(f[i],f[j]+\frac{(j-i-1)\times(j-i)}{2}+a[i])\]</span> 当<span class="math inline">\(x2 \times i+1\)</span> 这样我们就可以维护一个上凸壳。 （其实在单调队列中的大于小于情况最多就有四种，感觉枚举一下就可以了...）</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">int</span> n;</span><br><span class="line"><span class="type">long</span> <span class="type">long</span> a[<span class="number">1000010</span>]=&#123;&#125;;</span><br><span class="line"><span class="type">long</span> <span class="type">long</span> f[<span class="number">1000010</span>]=&#123;&#125;;</span><br><span class="line"><span class="type">int</span> q[<span class="number">1000010</span>]=&#123;&#125;;</span><br><span class="line"><span class="function"><span class="type">long</span> <span class="type">long</span> <span class="title">fz</span><span class="params">(<span class="type">long</span> <span class="type">long</span> x,<span class="type">long</span> <span class="type">long</span> y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">2</span>*f[x]+x*x<span class="number">-2</span>*f[y]-y*y;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">long</span> <span class="type">long</span> <span class="title">fm</span><span class="params">(<span class="type">long</span> <span class="type">long</span> x,<span class="type">long</span> <span class="type">long</span> y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> x-y;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;n);</span><br><span class="line">	a[<span class="number">0</span>]=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">&quot;%lld&quot;</span>,&amp;a[i]);</span><br><span class="line">	&#125;</span><br><span class="line">	f[n]=a[n];</span><br><span class="line">	<span class="type">int</span> head=<span class="number">0</span>,tail=<span class="number">0</span>;</span><br><span class="line">	q[<span class="number">0</span>]=n;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">long</span> <span class="type">long</span> i=n<span class="number">-1</span>;i&gt;=<span class="number">0</span>;i--)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">while</span>(head&lt;tail&amp;&amp;<span class="built_in">fz</span>(q[head<span class="number">+1</span>],q[head])&lt;(<span class="number">2</span>*i<span class="number">+1</span>)*<span class="built_in">fm</span>(q[head<span class="number">+1</span>],q[head])) head++;</span><br><span class="line">		<span class="type">long</span> <span class="type">long</span> j=q[head];</span><br><span class="line">		f[i]=f[j]+(j-i<span class="number">-1</span>)*(j-i)/<span class="number">2</span>+a[i];</span><br><span class="line">		<span class="keyword">while</span>(head&lt;tail&amp;&amp;<span class="built_in">fz</span>(q[tail],q[tail<span class="number">-1</span>])*<span class="built_in">fm</span>(i,q[tail])&lt;<span class="built_in">fm</span>(q[tail],q[tail<span class="number">-1</span>])*<span class="built_in">fz</span>(i,q[tail])) tail--;</span><br><span class="line">		q[++tail]=i;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%lld&quot;</span>,f[<span class="number">0</span>]);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wyc-ruiker.github.io/2016/07/30/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wyc-ruiker.github.io/2016/07/30/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96/&text=斜率优化"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wyc-ruiker.github.io/2016/07/30/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96/&title=斜率优化"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyc-ruiker.github.io/2016/07/30/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96/&is_video=false&description=斜率优化"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=斜率优化&body=Check out this article: https://wyc-ruiker.github.io/2016/07/30/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wyc-ruiker.github.io/2016/07/30/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96/&title=斜率优化"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wyc-ruiker.github.io/2016/07/30/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96/&title=斜率优化"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wyc-ruiker.github.io/2016/07/30/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96/&title=斜率优化"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wyc-ruiker.github.io/2016/07/30/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96/&title=斜率优化"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wyc-ruiker.github.io/2016/07/30/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96/&name=斜率优化&description=&lt;p&gt;高中的时候做过几道斜率优化的题目，不过一直没有搞的太懂。 这次填一下坑。 &lt;a href=&#34;http://www.lydsy.com/JudgeOnline/problem.php?id=4518&#34;&gt;http://www.lydsy.com/JudgeOnline/problem.php?id=4518&lt;/a&gt;&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wyc-ruiker.github.io/2016/07/30/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96/&t=斜率优化"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    Reku
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'reku';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+<!-- utterances Comments -->
+
+</body>
+</html>

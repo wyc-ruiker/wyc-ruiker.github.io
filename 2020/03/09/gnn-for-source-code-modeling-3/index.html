@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="实际上 GNN 在 Source Code 上的应用和创新还有很多。之前的两篇文章都是关于 GNN 建图以及 GNN 跟其他任务相结合的工作，这篇文章就讲一下对 GNN 本身的创新。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GNN for Source Code Modeling（三）">
+<meta property="og:url" content="https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/index.html">
+<meta property="og:site_name" content="Reku">
+<meta property="og:description" content="实际上 GNN 在 Source Code 上的应用和创新还有很多。之前的两篇文章都是关于 GNN 建图以及 GNN 跟其他任务相结合的工作，这篇文章就讲一下对 GNN 本身的创新。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/1-1.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/2-1.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/3-1.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/4-1.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/5-1.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/6-1.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/7-1.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/8-1.png">
+<meta property="article:published_time" content="2020-03-09T12:51:24.000Z">
+<meta property="article:modified_time" content="2021-12-16T11:28:06.000Z">
+<meta property="article:author" content="Reku">
+<meta property="article:tag" content="program">
+<meta property="article:tag" content="graph">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/1-1.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>GNN for Source Code Modeling（三）</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="Reku" type="application/atom+xml" />
+    
+	<!-- mathjax -->
+	
+		<script>
+		MathJax = {
+			tex: {
+				inlineMath: [['$', '$'], ['\\(', '\\)']],
+				displayMath: [['$$', '$$'], ['\\[', '\\]']],
+				processEscapes: true,
+				processEnvironments: true
+			},
+			options: {
+				skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+			}
+		};
+		</script>
+		<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2020/10/13/mit-os/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2020/03/08/gnn-for-source-code-modeling-2/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/&text=GNN for Source Code Modeling（三）"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/&title=GNN for Source Code Modeling（三）"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/&is_video=false&description=GNN for Source Code Modeling（三）"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=GNN for Source Code Modeling（三）&body=Check out this article: https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/&title=GNN for Source Code Modeling（三）"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/&title=GNN for Source Code Modeling（三）"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/&title=GNN for Source Code Modeling（三）"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/&title=GNN for Source Code Modeling（三）"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/&name=GNN for Source Code Modeling（三）&description=&lt;p&gt;实际上 GNN 在 Source Code 上的应用和创新还有很多。之前的两篇文章都是关于 GNN 建图以及 GNN 跟其他任务相结合的工作，这篇文章就讲一下对 GNN 本身的创新。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/&t=GNN for Source Code Modeling（三）"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        GNN for Source Code Modeling（三）
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Reku</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-03-09T12:51:24.000Z" class="dt-published" itemprop="datePublished">2020-03-09</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/graph/" rel="tag">graph</a>, <a class="p-category" href="/tags/program/" rel="tag">program</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p>实际上 GNN 在 Source Code 上的应用和创新还有很多。之前的两篇文章都是关于 GNN 建图以及 GNN 跟其他任务相结合的工作，这篇文章就讲一下对 GNN 本身的创新。</p>
+<span id="more"></span>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1904.12787">Graph Matching Networks for Learning the Similarity of Graph Structured Objects. ICML 2019</a> 就是一个利用 GNN 解决二进制函数相似性问题的工作。这个问题也是 Source Code Modeling 领域的经典问题之一。 二进制函数相似性是一个在信息安全领域应用很广泛的问题。因为很多软件都是不开源的，放在用户电脑上的只能是一些二进制代码。因为编译器、编译选项以及平台的不同，同一个函数的二进制代码也经常是不同的。如果一个函数被检查出了安全漏洞，那这个函数所编译出的所有二进制代码也会有安全漏洞。这些二进制代码放在成千上万用户的电脑上，造成非常大的安全隐患，所以及时找到这些代码是非常重要的。因为二进制代码本身会有一个 Control-flow-graph，所以利用 GNN 解决二进制函数相似性就成为 GNN 的一个应用。</p>
+<p><img src="/2020/03/09/gnn-for-source-code-modeling-3/1-1.png"></p>
+<p>论文中给出两种方式来解决这个问题。第一种是输入一个图输出一个 embedding，通过优化这个 embedding 使得两个相似的图的 embedding 会离得更近。第二种更加直接，输入两个图，输出他们的相似性。这两种方式都是在 GNN 的基础上做的。</p>
+<p><img src="/2020/03/09/gnn-for-source-code-modeling-3/2-1.png"></p>
+<p>第一种方法计算 embedding 的过程没啥好说的，就是输入<span class="math inline">\((G_1, G_2)\)</span>输出<span class="math inline">\((h_{G_1},h_{G_2})\)</span>。重点在于最后的 loss 设计，因为跟第二种可以共用相同的 loss，所以放到一起最后讲。 对于第二种方法，大多数步骤跟 GNN 都是一样的。主要区别在于在聚合邻居信息的时候，也要聚合另一张图的信息 <span class="math inline">\(\mu\)</span>：</p>
+<p><img src="/2020/03/09/gnn-for-source-code-modeling-3/3-1.png"></p>
+<p>其中<span class="math inline">\(\mu\)</span>的计算方式如下，上面的<span class="math inline">\(f_s\)</span>和下面的<span class="math inline">\(s_h\)</span>都是可以替换的向量相似度计算方式：</p>
+<p><img src="/2020/03/09/gnn-for-source-code-modeling-3/4-1.png"></p>
+<p>观察公式<span class="math inline">\((11)\)</span>可以发现，attention 值越大，两个点越相似。所以这个<span class="math inline">\(\Sigma\mu\)</span>其实就是该点的 embedding 跟另一张图最相似的点的 embedding 的差。如果两个图完全一样，那这个<span class="math inline">\(\Sigma\mu\)</span>就会一直是<span class="math inline">\(0\)</span>。所以这个 GMN 的优势就是通过一个图的表示可以更改另一个图的表示，从而捕捉两个图的不相似程度。 下面是两种方法的 loss。论文定义了两种 label，第一种是<span class="math inline">\((G_1,G_2,t)\)</span>，两个图相似<span class="math inline">\(t=1\)</span>，不相似<span class="math inline">\(t=-1\)</span>。第二种是<span class="math inline">\((G_1,G_2,G_3)\)</span>，其中<span class="math inline">\(G_1\)</span>跟<span class="math inline">\(G_2\)</span>更加相似。如果向量相似性用欧拉距离来度量，那可以用一种类似合页 loss 的方式来进行优化：</p>
+<p><img src="/2020/03/09/gnn-for-source-code-modeling-3/5-1.png"></p>
+<p><img src="/2020/03/09/gnn-for-source-code-modeling-3/6-1.png"></p>
+<p>公式<span class="math inline">\((12)\)</span>可以看做当两个图相似的时候，距离应该小于<span class="math inline">\(1-\gamma\)</span>，当两个图不相似的时候，距离应该大于<span class="math inline">\(1+\gamma\)</span>。 公式<span class="math inline">\((13)\)</span>可以看做<span class="math inline">\(d(G_1,G_2)\lt d(G_1,G_3)-\gamma\)</span>。</p>
+<p><img src="/2020/03/09/gnn-for-source-code-modeling-3/7-1.png"> 也可以按照上面的公式，用 Hamming 相似度来算，这样的好处是向量里面每一维度都是<span class="math inline">\([1,-1]\)</span>，容易在大型数据库中快速的查询。</p>
+<p><img src="/2020/03/09/gnn-for-source-code-modeling-3/8-1.png"></p>
+<p>可以看到，效果有一定的提升。这里的 baseline 是 Google 的一个二进制代码查询工具，利用手工构造的图 hash 来寻找相同的代码。</p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/&text=GNN for Source Code Modeling（三）"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/&title=GNN for Source Code Modeling（三）"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/&is_video=false&description=GNN for Source Code Modeling（三）"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=GNN for Source Code Modeling（三）&body=Check out this article: https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/&title=GNN for Source Code Modeling（三）"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/&title=GNN for Source Code Modeling（三）"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/&title=GNN for Source Code Modeling（三）"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/&title=GNN for Source Code Modeling（三）"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/&name=GNN for Source Code Modeling（三）&description=&lt;p&gt;实际上 GNN 在 Source Code 上的应用和创新还有很多。之前的两篇文章都是关于 GNN 建图以及 GNN 跟其他任务相结合的工作，这篇文章就讲一下对 GNN 本身的创新。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wyc-ruiker.github.io/2020/03/09/gnn-for-source-code-modeling-3/&t=GNN for Source Code Modeling（三）"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    Reku
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'reku';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+<!-- utterances Comments -->
+
+</body>
+</html>

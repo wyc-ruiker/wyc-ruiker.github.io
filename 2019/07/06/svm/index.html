@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="其实是标题党啦... SVM 推导作为最臭名昭著的机器学习面试题，其实我在去年的这个时候准备头条实习面试的期间就已经“背诵”过了，但完全没有理解自己推导的是个什么东西。最近看台大的《机器学习技法》的课程视频，感觉这个 SVM 推导过程讲的非常清晰。最关键的是每一步的 motivation 都讲的非常清楚，正好博客也好久好久好久没有更新了，这里简单重复一下，以证明自己学会了 SVM 的推导吧~">
+<meta property="og:type" content="article">
+<meta property="og:title" content="支持向量机的清晰推导">
+<meta property="og:url" content="https://wyc-ruiker.github.io/2019/07/06/svm/index.html">
+<meta property="og:site_name" content="Reku">
+<meta property="og:description" content="其实是标题党啦... SVM 推导作为最臭名昭著的机器学习面试题，其实我在去年的这个时候准备头条实习面试的期间就已经“背诵”过了，但完全没有理解自己推导的是个什么东西。最近看台大的《机器学习技法》的课程视频，感觉这个 SVM 推导过程讲的非常清晰。最关键的是每一步的 motivation 都讲的非常清楚，正好博客也好久好久好久没有更新了，这里简单重复一下，以证明自己学会了 SVM 的推导吧~">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/07/06/svm/a.png">
+<meta property="article:published_time" content="2019-07-06T06:12:16.000Z">
+<meta property="article:modified_time" content="2021-12-16T11:32:34.000Z">
+<meta property="article:author" content="Reku">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wyc-ruiker.github.io/2019/07/06/svm/a.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>支持向量机的清晰推导</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="Reku" type="application/atom+xml" />
+    
+	<!-- mathjax -->
+	
+		<script>
+		MathJax = {
+			tex: {
+				inlineMath: [['$', '$'], ['\\(', '\\)']],
+				displayMath: [['$$', '$$'], ['\\[', '\\]']],
+				processEscapes: true,
+				processEnvironments: true
+			},
+			options: {
+				skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+			}
+		};
+		</script>
+		<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2019/07/26/adaboost/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2017/12/20/goodbye-icpc/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wyc-ruiker.github.io/2019/07/06/svm/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wyc-ruiker.github.io/2019/07/06/svm/&text=支持向量机的清晰推导"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wyc-ruiker.github.io/2019/07/06/svm/&title=支持向量机的清晰推导"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyc-ruiker.github.io/2019/07/06/svm/&is_video=false&description=支持向量机的清晰推导"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=支持向量机的清晰推导&body=Check out this article: https://wyc-ruiker.github.io/2019/07/06/svm/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wyc-ruiker.github.io/2019/07/06/svm/&title=支持向量机的清晰推导"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wyc-ruiker.github.io/2019/07/06/svm/&title=支持向量机的清晰推导"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wyc-ruiker.github.io/2019/07/06/svm/&title=支持向量机的清晰推导"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wyc-ruiker.github.io/2019/07/06/svm/&title=支持向量机的清晰推导"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wyc-ruiker.github.io/2019/07/06/svm/&name=支持向量机的清晰推导&description=&lt;p&gt;其实是标题党啦... SVM 推导作为最臭名昭著的机器学习面试题，其实我在去年的这个时候准备头条实习面试的期间就已经“背诵”过了，但完全没有理解自己推导的是个什么东西。最近看台大的《机器学习技法》的课程视频，感觉这个 SVM 推导过程讲的非常清晰。最关键的是每一步的 motivation 都讲的非常清楚，正好博客也好久好久好久没有更新了，这里简单重复一下，以证明自己学会了 SVM 的推导吧~&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wyc-ruiker.github.io/2019/07/06/svm/&t=支持向量机的清晰推导"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8E%E7%BA%BF%E6%80%A7%E5%88%86%E5%89%B2%E8%AF%B4%E8%B5%B7"><span class="toc-number">1.</span> <span class="toc-text">从线性分割说起</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%88%91%E4%BB%AC%E9%9C%80%E8%A6%81%E5%AF%B9%E5%81%B6%E9%97%AE%E9%A2%98"><span class="toc-number">2.</span> <span class="toc-text">为什么我们需要对偶问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%85%E7%AD%89%E4%BA%86%E6%A0%B8%E6%96%B9%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">久等了，核方法！</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E5%81%87%E7%9A%84-svm-%E5%92%8C%E7%9C%9F%E6%AD%A3%E7%9A%84-svm"><span class="toc-number">4.</span> <span class="toc-text">虚假的 SVM 和真正的 SVM</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        支持向量机的清晰推导
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Reku</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-07-06T06:12:16.000Z" class="dt-published" itemprop="datePublished">2019-07-06</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p>其实是标题党啦... SVM 推导作为最臭名昭著的机器学习面试题，其实我在去年的这个时候准备头条实习面试的期间就已经“背诵”过了，但完全没有理解自己推导的是个什么东西。最近看台大的《机器学习技法》的课程视频，感觉这个 SVM 推导过程讲的非常清晰。最关键的是每一步的 motivation 都讲的非常清楚，正好博客也好久好久好久没有更新了，这里简单重复一下，以证明自己学会了 SVM 的推导吧~</p>
+<span id="more"></span>
+<h2 id="从线性分割说起"><strong>从线性分割说起</strong></h2>
+<p>在《机器学习基石》课程中讲了一个基于迭代的简单线性分类算法 PLA，但是对一个二分类的数据集，合法的分类线普遍是无数条。对于这无数条线我们应该选择哪条线作为我们最终分类的结果才比较好呢？</p>
+<p><img src="/2019/07/06/svm/a.png"></p>
+<p>从上图来看，显然最右边这一列是比较合理的分割方法。也就说，离分类线的最近的点要尽可能的远，这样对各种噪音误差的兼容性是最好的。 用数学的定义来说就是： <span class="math display">\[max_{w}min_{n=1...N}distance(x_n, w)\]</span></p>
+<p>对于每个点来说都必须存在<span class="math inline">\(y_nw^Tx_n&gt;0\)</span>（如果一定要每个点都没有分割错误的话）。 在计算距离的时候，bias 显然是不应该参与进来的，所以需要把 bias 从矩阵中拆出来，变成<span class="math inline">\(h(x)=sign(w^Tx+b)\)</span>的形式，距离就从<span class="math inline">\(distance(x,w)\)</span>变成了<span class="math inline">\(distance(x,b,w)\)</span>。 下面要计算点<span class="math inline">\(x\)</span>到超平面<span class="math inline">\(w^Tx+b\)</span>的距离，这个就是一个简单的投影，得到 <span class="math display">\[distance(x,b,w)=\frac{|w^Tx+b|}{||w||}\]</span></p>
+<p>因为上面有对于每个点来说都必须存在<span class="math inline">\(y_n(w^Tx_n+b)&gt;0\)</span>的条件，所以分子里面这个麻烦的绝对值式子可以直接用<span class="math inline">\(y_n(w^Tx_n+b)\)</span>来代替（反正<span class="math inline">\(y_n\)</span>要么是<span class="math inline">\(1\)</span>要么是<span class="math inline">\(-1\)</span>，不会对结果有任何影响），所以得到以下式子： <span class="math display">\[distance(x,b,w)=\frac{y_n(w^Tx_n+b)}{||w||}\]</span></p>
+<p>又因为<span class="math inline">\(w^Tx_n+b\)</span>这个东西是可以加常数放缩的，也就是说<span class="math inline">\(w^Tx_n+b\)</span>跟<span class="math inline">\(3w^Tx_n+3b\)</span>所代表的平面是完全一致的，所以我们完全可以通过放缩使得最小的平面求出来的值等于<span class="math inline">\(1\)</span>，这样的好处是，最小的 distance 一定是 <span class="math inline">\(\frac{1}{||w||}\)</span>。这样做我们要求的数学式子就变为： <span class="math display">\[max_{w}\frac{1}{||w||}min_{n=1...N}y_n(w^Tx_n+b)=1\]</span></p>
+<p>但是接下来有个奇怪的问题，如果我们限制的条件是所有的<span class="math inline">\(y_n(w^Tx_n+b)\ge 1\)</span>，那一定会有一个<span class="math inline">\(w\)</span>使得<span class="math inline">\(y_n(w^Tx_n+b)=1\)</span>吗？ 这个证明其实很简单，如果最优的<span class="math inline">\(w\)</span>使得<span class="math inline">\(y_n(w^Tx_n+b)=1.126\)</span>，那么我们只要取<span class="math inline">\((b/1.126, w/1.126)\)</span>这样一组解，就会比之前的<span class="math inline">\(w\)</span>更优了。 现在优化目标已经很明显了，为了之后陈述方便，我们将最大化<span class="math inline">\(\frac{1}{||w||}\)</span>变成最小化<span class="math inline">\(w^Tw\)</span>。为了后续的推导方便，加了一个<span class="math inline">\(\frac{1}{2}\)</span>的放缩。于是我们的优化函数就变成了下面这样： <span class="math display">\[min_{w}\frac{1}{2}w^Tw\]</span><span class="math display">\[min_{n=1...N}y_n(w^Tx_n+b)\ge 1\]</span></p>
+<p>现在有了优化函数，如何求解呢？可以很简单的发现，这是一个非常经典的二次规划问题！给出一堆<span class="math inline">\(w\)</span>的限制，求解一个<span class="math inline">\(w\)</span>二次项的最优解！ 对于非线性的情况，我们只要把线性的映射到非线性情况就行了，非常的 easy，真是太爽了！</p>
+<h2 id="为什么我们需要对偶问题"><strong>为什么我们需要对偶问题</strong></h2>
+<p>不是都爽了吗？还要搞啥呢？ 真的爽吗？我们想一下，线性的情况确实蛮爽的，但是非线性的情况，当我们要将低维的特征映射的高维的时候，将<span class="math inline">\(x_n\)</span>映射到<span class="math inline">\(z_n\)</span>，这个代价是非常巨大的。比如一个<span class="math inline">\(x_n=(x1, x2)\)</span>特征，映射到二维就需要<span class="math inline">\(z_n=(1, x1, x2, x1^2, x2^2, x1x2)\)</span>这么多东西，更高的维度需要的代价会更大。 为了解决这个问题，我们首先需要了解一个叫做 Lagrange Mulitipliers 的东西。这个东西在正则化的时候，我们其实已经了解过了，大致是这个形式： <span class="math display">\[min_wE_{in}(w), w^Tw\le C \cong min_w(E_{aug}(w)=E_{in}(w)+\frac{\lambda}{N}w^Tw)\]</span></p>
+<p>既然<span class="math inline">\(w^Tw\le C\)</span>我们可以通过在后面加一个<span class="math inline">\(\frac{\lambda}{N}w^Tw\)</span>来获得等价问题，那么<span class="math inline">\(y_n(w^Tz_n+b)\ge 1\)</span>这个条件我们显然也可以如法炮制，大致是这个形式： <span class="math display">\[L(b,w,a)=\frac{1}{2}w^Tw+\sum_{n=1}^N\alpha_n(1-y_n(w^Tz_n+b))\]</span><span class="math display">\[\min_{b,w}(max_{\alpha_n\ge 0}L(b,w,\alpha))\]</span>我们保证<span class="math inline">\(\alpha_n\ge 0\)</span>这样的条件，这样就可以使得所有<span class="math inline">\(1-y_n(w^Tz_n+b)\)</span>都符合不超过<span class="math inline">\(0\)</span>的要求。因为如果有一个<span class="math inline">\(1-y_n(w^Tz_n+b)ge 0\)</span>，那就可以让对应的<span class="math inline">\(\alpha_n\)</span>为无穷，优化的 max 就是无穷大了。 但是这个东西我们还是不会优化，这时候就需要引入一个叫做拉格朗日对偶问题的东西，这个东西通过一系列的证明，表示在我们这个优化形式下，这两个问题是完全等价的： <span class="math display">\[min_{b,w}(max_{a_n\ge 0}L(b,w,\alpha))\cong max_{a_n\ge0}(min_{b,w}L(b,w,\alpha))\]</span></p>
+<p>展开来写的话就是： <span class="math display">\[max_{a_n\ge0}(min_{b,w}\frac{1}{2}w^Tw+\sum_{n=1}^N\alpha_n(1-y_n(w^Tz_n+b)))\]</span></p>
+<p>下面开始魔法时刻~</p>
+<p>如果里面的那个最小值优化是一个最值的话，那么对于每一个参数的偏导都应该是<span class="math inline">\(0\)</span>。基于这一点，我们就可以做一些有趣的事情了。 首先对里面的<span class="math inline">\(L(b,w,\alpha)\)</span>求<span class="math inline">\(b\)</span>的偏导，可以得到如下式子： <span class="math display">\[\frac{\partial L(b,w,\alpha)}{\partial b}=-\sum_{n=1}^N\alpha_ny_n=0\]</span></p>
+<p>这个结论其实就有点神奇了，但是更神奇的地方在于，我们把<span class="math inline">\(L(b,w,\alpha)\)</span>展开，发现<span class="math inline">\(b\)</span>的系数恰好就是这个<span class="math inline">\(-\sum_{n=1}^N\alpha_ny_n\)</span>！也就说<span class="math inline">\(b\)</span>这一项直接就可以消掉！</p>
+<p>继续我们的魔法之旅，下面对<span class="math inline">\(L(b,w,\alpha)\)</span>求<span class="math inline">\(w_i\)</span>的偏导： <span class="math display">\[\frac{\partial L(b,w,\alpha)}{\partial w_i}=w_i-\sum_{n=1}^N\alpha_ny_nz_{n,i}=0\]</span></p>
+<p>这样就得到了一个有趣的结论，<span class="math inline">\(w=\sum_{n=1}^N\alpha_ny_nz_n\)</span>。 将这个结论带入回原来的式子，可以得到： <span class="math display">\[max(\frac{1}{2}||\sum_{n=1}^N\alpha_ny_nz_n||+\sum_{n=1}^N\alpha_n)\\ a_n\ge0, \sum_{n=1}^N\alpha_ny_n=0, w=\sum_{n=1}^N\alpha_ny_nz_n\]</span></p>
+<p>所谓的 KKT 条件，其实也就是上面式子的几个条件了，还有一个原来定义中的条件<span class="math inline">\(y_n(w^Tx_n+b)\ge1\)</span>，当然还有一个最有趣的 KKT 条件就是<span class="math inline">\(\alpha_n(1-y_n(w^Tz_n+b))=0\)</span>，因为在优化的过程中，我们要求最后结果的最大值，而两个非负数相乘最后想要结果最大的话，必须其中一个为<span class="math inline">\(0\)</span>，那么上面这个条件就必须成立。 通过取负数将优化最大值变成优化最小值，然后展开可以得到： <span class="math display">\[min_{\alpha}\frac{1}{2}\sum_{n=1}^N\sum_{m=1}^N\alpha_n\alpha_my_ny_mz_n^Tz_m-\sum_{n=1}^N\alpha_n\\ a_n\ge0, \sum_{n=1}^N\alpha_ny_n=0\]</span></p>
+<p>诶，这个东西的形式是不是有点眼熟？没错，就是二次规划，太爽了，对偶问题我们现在也会求解了！ 求解出<span class="math inline">\(\alpha\)</span>之后，就可以通过<span class="math inline">\(w=\sum_{n=1}^N\alpha_ny_nz_n\)</span>求出<span class="math inline">\(w\)</span>。那我们的 bias 呢？还记得<span class="math inline">\(\alpha_n(1-y_n(w^Tz_n+b))=0\)</span>这个 KKT 条件吗？在<span class="math inline">\(\alpha_n&gt;0\)</span>的时候，我们就可以求出对应的 bias 了，而那些<span class="math inline">\(\alpha_n&gt;0\)</span>所对应的<span class="math inline">\(n\)</span>，其实就是所谓的支持向量！ 当然了，这个时候聪明的读者就会发现，你这个不还是有一个<span class="math inline">\(z_n^Tz_m\)</span>吗？复杂度并没有降低啊？</p>
+<h2 id="久等了核方法"><strong>久等了，核方法！</strong></h2>
+<p>核方法其实跟 SVM 的推导并没有什么直接关系，但是在 SVM 的使用中却是大放异彩的。 所谓的核方法，其实就是一些神奇的<span class="math inline">\(z_n^Tz_m\)</span>求法，这些核方法可以完成很好的空间变换功能，甚至将原来的特征空间变换到无限维，正是核方法的出现，才使得 SVM 在某一个历史时期“一统江湖”的。 比如我们有一个垃圾特征空间变换，将<span class="math inline">\(x_n=(x_1, x_2, x_3, ..., x_d)\)</span>变换到<span class="math inline">\(\phi_n=(1, x_1, x_2, ..., x_d, x_1x_2, ..., x_1x_d, x_2x_1, x_2^2, ..., x_2x_d, ..., x_d^2)\)</span>。 现在我们想知道<span class="math inline">\(\phi_n(x)^T\phi_n(x^*)\)</span>，直接乘起来的话复杂度是<span class="math inline">\(O(d^2)\)</span>。我们通过观察式子，进行一定程度的优化可以发现<span class="math inline">\(\phi_n(x)^T\phi_n(x)=1+x^Tx^*+(x^Tx^*)(x^Tx^*)\)</span>。这样复杂度就是<span class="math inline">\(O(d)\)</span>了，是不是很棒？ 当然了，还有很多例如 RBF 之类的比较复杂的核方法，这里就不加赘述了，在实际应用中通常将<span class="math inline">\(z_n^Tz_m\)</span>换成<span class="math inline">\(K(x_n, x_m)\)</span>就代表核方法啦。</p>
+<h2 id="虚假的-svm-和真正的-svm"><strong>虚假的 SVM 和真正的 SVM</strong></h2>
+<p>其实上面讲的 SVM 跟实际使用的 SVM 并不完全一致，主要问题出现在大前提上，就是<span class="math inline">\(y_n(w^Tx_n+b)\ge1\)</span>这个定义。这个定义要求我们每个点都不能分割错误，过于严格，因为有一些噪音的结果是不需要考虑的。我们的 SVM 需要容忍一些分割错误。 我们将原来的 SVM 扩展一下，形式如下： <span class="math display">\[min_{b,w,\xi}\frac{1}{2}w^Tw+C\sum_{n=1}^N\xi_n\\ y_n(w^Tz_n+b)\ge1-\xi_n, \xi_n\ge0\]</span></p>
+<p>其中参数<span class="math inline">\(C\)</span>就是用来 trade-off 容错率和分割线的鲁棒性的，参数<span class="math inline">\(\xi_n\)</span>就是表示这个点到底犯了多少错。 用 Lagrange Mulitipliers 重写这个优化式子，形式是这样： <span class="math display">\[L(b,w,\xi,\alpha,\beta)=\frac{1}{2}w^Tw+C\sum_{n=1}^N\xi_n+\sum_{n=1}^N\alpha_n(1-\xi_n-y_n(w^Tz_n+b))+\sum_{n=1}^N\beta_n(-\xi_n)\]</span></p>
+<p><span class="math display">\[max_{\alpha_n\ge0, \beta_n\ge0}(min_{b,w,\xi}L(b,w,\xi,\alpha,\beta))\]</span></p>
+<p>跟原来一样，通过求<span class="math inline">\(\xi_n\)</span>的偏导可以发现： <span class="math display">\[\frac{\partial L(b,w,\xi,\alpha,\beta)}{\partial \xi_n}=C-\alpha_n-\beta_n=0\]</span> 跟之前的 bias 一样，我们将式子展开之后，发现<span class="math inline">\(\xi_n\)</span>的系数就是上面这个等于<span class="math inline">\(0\)</span>的式子，所以<span class="math inline">\(\xi_n\)</span>这一项就没了。但是需要多一个<span class="math inline">\(0\le\alpha_n\le C\)</span>的条件。很神奇，这一项没了之后，我们的式子又开始变得眼熟起来： <span class="math display">\[max_{0\le\alpha_n\le C}(min_{b,w}\frac{1}{2}w^Tw+\sum_{n=1}^N\alpha_n(1-y_n(w^Tz_n+b)))\]</span></p>
+<p>后面的事情就很显而易见了，前面都推导过了，这里也就不加赘述了。</p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8E%E7%BA%BF%E6%80%A7%E5%88%86%E5%89%B2%E8%AF%B4%E8%B5%B7"><span class="toc-number">1.</span> <span class="toc-text">从线性分割说起</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%88%91%E4%BB%AC%E9%9C%80%E8%A6%81%E5%AF%B9%E5%81%B6%E9%97%AE%E9%A2%98"><span class="toc-number">2.</span> <span class="toc-text">为什么我们需要对偶问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%85%E7%AD%89%E4%BA%86%E6%A0%B8%E6%96%B9%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">久等了，核方法！</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E5%81%87%E7%9A%84-svm-%E5%92%8C%E7%9C%9F%E6%AD%A3%E7%9A%84-svm"><span class="toc-number">4.</span> <span class="toc-text">虚假的 SVM 和真正的 SVM</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wyc-ruiker.github.io/2019/07/06/svm/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wyc-ruiker.github.io/2019/07/06/svm/&text=支持向量机的清晰推导"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wyc-ruiker.github.io/2019/07/06/svm/&title=支持向量机的清晰推导"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyc-ruiker.github.io/2019/07/06/svm/&is_video=false&description=支持向量机的清晰推导"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=支持向量机的清晰推导&body=Check out this article: https://wyc-ruiker.github.io/2019/07/06/svm/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wyc-ruiker.github.io/2019/07/06/svm/&title=支持向量机的清晰推导"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wyc-ruiker.github.io/2019/07/06/svm/&title=支持向量机的清晰推导"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wyc-ruiker.github.io/2019/07/06/svm/&title=支持向量机的清晰推导"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wyc-ruiker.github.io/2019/07/06/svm/&title=支持向量机的清晰推导"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wyc-ruiker.github.io/2019/07/06/svm/&name=支持向量机的清晰推导&description=&lt;p&gt;其实是标题党啦... SVM 推导作为最臭名昭著的机器学习面试题，其实我在去年的这个时候准备头条实习面试的期间就已经“背诵”过了，但完全没有理解自己推导的是个什么东西。最近看台大的《机器学习技法》的课程视频，感觉这个 SVM 推导过程讲的非常清晰。最关键的是每一步的 motivation 都讲的非常清楚，正好博客也好久好久好久没有更新了，这里简单重复一下，以证明自己学会了 SVM 的推导吧~&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wyc-ruiker.github.io/2019/07/06/svm/&t=支持向量机的清晰推导"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    Reku
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'reku';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+<!-- utterances Comments -->
+
+</body>
+</html>

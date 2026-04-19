@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="各种课程资料请参考上一篇文章">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSE 599W: SYSTEMS FOR ML 课程笔记 7-12">
+<meta property="og:url" content="https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/index.html">
+<meta property="og:site_name" content="Reku">
+<meta property="og:description" content="各种课程资料请参考上一篇文章">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/1.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/2.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/3.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/4.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/5.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/1-1.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/2-1.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/3-1.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/4-1.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/5-1.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/1-2.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/2-2.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/3-2.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/4-2.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/1-3.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/2-3.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/3-3.png">
+<meta property="og:image" content="https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/4-3.png">
+<meta property="article:published_time" content="2019-11-21T07:04:48.000Z">
+<meta property="article:modified_time" content="2021-12-16T11:33:10.000Z">
+<meta property="article:author" content="Reku">
+<meta property="article:tag" content="learning">
+<meta property="article:tag" content="system">
+<meta property="article:tag" content="机器学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/1.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>CSE 599W: SYSTEMS FOR ML 课程笔记 7-12</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="Reku" type="application/atom+xml" />
+    
+	<!-- mathjax -->
+	
+		<script>
+		MathJax = {
+			tex: {
+				inlineMath: [['$', '$'], ['\\(', '\\)']],
+				displayMath: [['$$', '$$'], ['\\[', '\\]']],
+				processEscapes: true,
+				processEnvironments: true
+			},
+			options: {
+				skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+			}
+		};
+		</script>
+		<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2019/12/30/autotvm-1/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2019/11/08/cse-599w-systems-for-ml-1-6/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/&text=CSE 599W: SYSTEMS FOR ML 课程笔记 7-12"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/&title=CSE 599W: SYSTEMS FOR ML 课程笔记 7-12"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/&is_video=false&description=CSE 599W: SYSTEMS FOR ML 课程笔记 7-12"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=CSE 599W: SYSTEMS FOR ML 课程笔记 7-12&body=Check out this article: https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/&title=CSE 599W: SYSTEMS FOR ML 课程笔记 7-12"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/&title=CSE 599W: SYSTEMS FOR ML 课程笔记 7-12"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/&title=CSE 599W: SYSTEMS FOR ML 课程笔记 7-12"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/&title=CSE 599W: SYSTEMS FOR ML 课程笔记 7-12"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/&name=CSE 599W: SYSTEMS FOR ML 课程笔记 7-12&description=&lt;p&gt;各种课程资料请参考&lt;a href=&#34;https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/&#34;&gt;上一篇文章&lt;/a&gt;&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/&t=CSE 599W: SYSTEMS FOR ML 课程笔记 7-12"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#lecture-7-automatic-code-generation---tvm-stack"><span class="toc-number">1.</span> <span class="toc-text">Lecture 7: Automatic Code Generation - TVM Stack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lecture-8-hardware-specialization-in-deep-learning"><span class="toc-number">2.</span> <span class="toc-text">Lecture 8: Hardware Specialization in Deep Learning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lecture-9-memory-optimization"><span class="toc-number">3.</span> <span class="toc-text">Lecture 9: Memory Optimization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lecture-10-parallel-scheduling"><span class="toc-number">4.</span> <span class="toc-text">Lecture 10: Parallel Scheduling</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lecture-11-distributed-training-and-communication-protocols"><span class="toc-number">5.</span> <span class="toc-text">Lecture 11: Distributed Training and Communication Protocols</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lecture-12-model-serving"><span class="toc-number">6.</span> <span class="toc-text">Lecture 12: Model Serving</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        CSE 599W: SYSTEMS FOR ML 课程笔记 7-12
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Reku</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-21T07:04:48.000Z" class="dt-published" itemprop="datePublished">2019-11-21</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/system/">system</a> › <a class="category-link" href="/categories/system/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/learning/" rel="tag">learning</a>, <a class="p-category" href="/tags/system/" rel="tag">system</a>, <a class="p-category" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p>各种课程资料请参考<a target="_blank" rel="noopener" href="https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/">上一篇文章</a></p>
+<span id="more"></span>
+<h2 id="lecture-7-automatic-code-generation---tvm-stack">Lecture 7: Automatic Code Generation - TVM Stack</h2>
+<p>现在深度学习的框架非常多，而这些乱七八糟框架写出来的代码通常又跑在乱七八糟的设备上。这其中最为关键的问题就是：如何让深度学习代码在不同的设备上都跑出最好的效果。 众所周知，如果软件架构出现了什么难以解决的问题，那就加个中间层，看看能不能解决。如果还不能解决，那就再加个中间层（ 目前各家（比如 TensorFlow XLA、NVIDIA TensorRT 等）采用的设计思路就是将各个框架写出来的网络转换成一种统一的表示形式，也就是所谓的 Graph IR。</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/1.png"></p>
+<p>当然了，最后 IR 如果想要运行，那你还是要把 IR 变成机器码才可以。对于不同的硬件平台、数据格式、精度、线程结构都要写一堆不同的代码生成规则和优化规则。 这个问题是 TVM 的技术背景了。前面说了，如果还解决不了问题，那就再加个中间层。TVM 加的中间层就是所谓的 Tensor Expression Language 表示方法。这个 idea 来自于 Halide，核心在于把代码的计算和调度分开。</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/2.png"></p>
+<p>举个具体的例子，最简单的一个向量相加，用 TVM 实现起来长这样：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">C = tvm.compute((n,), <span class="keyword">lambda</span> i: A[i] + B[i])</span><br><span class="line">s = tvm.create_schedule(C.op)</span><br></pre></td></tr></table></figure>
+<p>得到的 C 代码是：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</span><br><span class="line">&#123;</span><br><span class="line">    C[i] = A[i] + B[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>加上一些额外的循环控制（就是上篇文章中讲的 cache 优化）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">C = tvm.compute((n,), <span class="keyword">lambda</span> i: A[i] + B[i])</span><br><span class="line">s = tvm.create_schedule(C.op)</span><br><span class="line">xo, xi = s[C].split(s[C].axis[<span class="number">0</span>], factor=<span class="number">32</span>)</span><br></pre></td></tr></table></figure>
+<p>生成的代码就变成了：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int</span> xo = <span class="number">0</span>; xo &lt; <span class="built_in">ceil</span>(n / <span class="number">32</span>); ++xo)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> xi = <span class="number">0</span>; xi &lt; <span class="number">32</span>; ++xi)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> i = xo * <span class="number">32</span> + xi;</span><br><span class="line">        <span class="keyword">if</span> (i &lt; n)</span><br><span class="line">        &#123;</span><br><span class="line">            C[i] = A[i] + B[i];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>甚至可以绑定特定的变量：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">C = tvm.compute((n,), <span class="keyword">lambda</span> i: A[i] + B[i])</span><br><span class="line">s = tvm.create_schedule(C.op)</span><br><span class="line">xo, xi = s[C].split(s[C].axis[<span class="number">0</span>], factor=<span class="number">32</span>)</span><br><span class="line">s[C].recorder(xi, xo)</span><br><span class="line">s[C].bind(xo, tvm.thread_axis(“blockIdx.x”)</span><br><span class="line">s[C].bind(xi, tvm.thread_axis(“threadIdx.x”)</span><br></pre></td></tr></table></figure>
+<p>这样就出来一个 CUDA kernel 代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> i = threadIdx.x * <span class="number">32</span> + blockIdx.x;</span><br><span class="line"><span class="keyword">if</span> (i &lt; n)</span><br><span class="line">&#123;</span><br><span class="line">    C[i] = A[i] + B[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>TVM 的核心就是一些调度原语，比如下图这些：</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/3.png"></p>
+<p>还有 TVM 最有趣的部分 AutoTVM，可以用 learning 的方式对代码进行自动优化，不过这个东西在课程中并不是重点，所以只是简单的提及了一下。</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/4.png"></p>
+<p>在我理解，TVM 就是一个 Graph IR 的优化框架，或者说是底层算子的高阶表示。</p>
+<h2 id="lecture-8-hardware-specialization-in-deep-learning">Lecture 8: Hardware Specialization in Deep Learning</h2>
+<p>这一讲主要介绍 TVM 技术栈中的重要部分 VTA。对于硬件我不是特别熟悉，也不是特别感兴趣，所以这章就随便看看了。 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/39635145">VTA: 开源AI芯片栈</a> Tianqi 的这篇文章概括性的讲述了 VTA 的意义。 总体来说，就是根据 RISC 的思想，设计了一套硬件架构。TVM 充当编译器，VTA 充当底层计算硬件，两者配合达到良好的效果。</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/5.png"></p>
+<h2 id="lecture-9-memory-optimization">Lecture 9: Memory Optimization</h2>
+<p>这一讲我觉得还蛮有意思的，讲的是深度学习的内存优化。 主要内容来自于这篇论文：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1604.06174">Training Deep Nets with Sublinear Memory Cost</a> 这一讲的核心问题在于，为什么我们要用 autograd 来形成计算图，而不是直接使用 BP？</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/1-1.png"></p>
+<p>这个问题的答案其实就本节课的标题：Memory Optimization。我们要优化内存的使用，所以要用计算图。 假如只有前向传播的话，我们其实可以通过计算图的层次结构来复用内存：</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/2-1.png"></p>
+<p>这个内存复用有两个原则：Inplace 和 Normal Sharing。 所谓 Inplace 就是输出的内容直接存到输入内存的地方。Normal Sharing 则是重复使用那些不被需要的内存。 显然 Inplace 也有一些失效的时候，当输入的内容还被其他输出依赖时，我们之前的输出就不能使用这块内存。</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/3-1.png"></p>
+<p>回到我们最开始的问题，为什么我们要用 autograd 的计算图来代替 BP？</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/4-1.png"></p>
+<p>这个问题其实没有在 slides 中说清楚。看了看其他人的理解，都是觉得 BP 要存中间结果，所以比较费内存。但是计算图也要存中间结果啊？所以有点费解。我的理解是，计算图可以更好的捕获变量之间的依赖性，就像上面这个图一样。如果用 BP，每一步中间结果都要存起来，但是如果用 autograd，就可以全程 Inplace。 后面讲了一些利用两个原则优化内存的例子，都不是很难理解。但是问题在于，不管我们怎么复用，整体的空间复杂度仍然是线性增长的。</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/5-1.png"></p>
+<p>这时候有个牛逼做法就是保存 <span class="math inline">\(\sqrt{N}\)</span> 个中间节点，每次需要反向传播的时候，就从这个中间节点往下算 <span class="math inline">\(\sqrt{N}\)</span> 步。这样内存就是 <span class="math inline">\(O(\sqrt{N})\)</span> 级别了，是不是跟 ICPC 竞赛里面常见的分块算法一模一样？ 感觉内存优化这部分还是有些东西不太清楚，需要回头看一下论文。看完论文补充一下这部分的内容。 接下来是 assignment 2。 这次作业感觉工作量还是很大的，首先是要满足作业的第一个要求，把 test_tvm_op.py 里面的所有测试都跑通：</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/1-2.png"></p>
+<p>这一步主要要参考 <a target="_blank" rel="noopener" href="https://docs.tvm.ai/index.html">TVM Documentation</a> 的写法，把这些算子都补齐。其中一些算子的作用还是比较迷惑的，要看测试才知道是什么意思。TVM 的写法有些地方也比较古怪，要自己慢慢尝试。 然后是满足第二个要求，跑通 mnist 的两个方法：</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/2-2.png"></p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/3-2.png"></p>
+<p>这一步是要把 autodiff 的内容补全，其实很简单，但是有些地方可能不太清楚他到底想让你写什么东西，仔细看看调用代码，然后把函数补全就好了。 从上面的截图可以看出，我们自己写的算子效果非常垃圾，跑一遍 mlp 要 80s，下面就是如何优化矩阵乘法算子了：</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/4-2.png"></p>
+<p>主要思路还是来自于 <a target="_blank" rel="noopener" href="http://dlsys.cs.washington.edu/pdf/lecture6.pdf">Lecture 6</a>，只要简单的把矩阵分一下块，调整一下循环顺序，然后再并行一下，就可以得到 20x 的优化效果。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">s = tvm.create_schedule(C.op)</span><br><span class="line">xo, yo, xi, yi = s[C].tile(C.op.axis[<span class="number">0</span>], C.op.axis[<span class="number">1</span>], x_factor=<span class="number">32</span>, y_factor=<span class="number">64</span>)</span><br><span class="line">xk, yk = s[C].split(k, factor=<span class="number">8</span>)</span><br><span class="line">s[C].reorder(xo, yo, xk, xi, yi, yk)</span><br><span class="line">s[C].parallel(xo)</span><br><span class="line">s[C].unroll(yk)</span><br><span class="line">f = tvm.build(s, [A, B, C], tgt, target_host=tgt_host, name=func_name)</span><br></pre></td></tr></table></figure>
+<p>更多精细的优化在 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/75203171">如何利用TVM快速实现超越Numpy的GEMM</a> 这篇文章中可以找到，非常牛逼。</p>
+<h2 id="lecture-10-parallel-scheduling">Lecture 10: Parallel Scheduling</h2>
+<p>在内存分配之后，第10讲讲的是并行调度的问题。 首先讲了一下 Model Parallel 和 Data Parallel 的模式，比较基础。</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/1-3.png"></p>
+<p>因为现实的运算中存在着各种复杂的同步关系，所以我们需要一个自动调度器。 这个自动调度器需要调度各种各样的资源，包括数据、随机数生成器、网络通信等等；也要调度各种各样的操作。 对于深度学习来说，基于计算图的调度就非常自然。因为计算图是一个 DAG，各种依赖复用关系都非常明显。但是基于计算图的这种调度对于一些什么写后读、读后写的问题可能不是特别敏感，所以还增加需要 mutation aware 这种调度方式。</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/2-3.png"></p>
+<p>后面给了一个很简单的队列调度的例子，看看就能懂。</p>
+<h2 id="lecture-11-distributed-training-and-communication-protocols">Lecture 11: Distributed Training and Communication Protocols</h2>
+<p>这一讲讲的主要是参数的 Synchronization 问题。 首先介绍了一种叫做 Allreduce 的操作，感觉就是在中间把分布式程序拦了一下：</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/3-3.png"></p>
+<p>然后讲了几种网络拓扑对 Allreduce 操作的影响，看起来比较简单。 之后介绍了 Parameter Server，这个在实习的时候接触的蛮多，其实就是个 KV，用 PS 去更新和获取参数，他们内部甚至搞了个无锁 hash 表...</p>
+<h2 id="lecture-12-model-serving">Lecture 12: Model Serving</h2>
+<p>终于到了最后一讲，这一讲主要讲的是模型部署在现实应用中的问题。</p>
+<p><img src="/2019/11/21/cse-599w-systems-for-ml-7-12/4-3.png"></p>
+<p>主要分为模型压缩和服务系统两个部分来进行讲解。 模型压缩的第一个部分是矩阵/向量分解，这个矩阵分解套路很简单很常见，向量分解没见过，也没太看懂，有空可以仔细研究一下。大概是把一个 cnn 分解成几个 cnn，但是能达到相似的效果。 然后网络剪枝，其中一个思路是 prune the connections。想法很简单，每次增加前向传播的 theshold，减少连通性。 第二个思路是 weight sharing，首先对参数进行聚类，相似的参数就看做一个参数，再对他们进行统一的更新。 模型的低比特量化也是一个很有趣的思路，通过降低模型数据存储的精度，来压缩模型并且尽量保持精度。 还有知识蒸馏，用一个大模型去训练一个小模型。上周末实验室讲座有个大哥讲的就是这个内容，但是我因为家里有急事所以没听到，不过获得了 PPT，之后自己补一补吧。 第二个部分就是服务系统了，服务系统的目标是编写程序的灵活性、GPU 上面的高效率以及延迟满足 SLA（service-level agreement）。 然后讲了一个叫 Nexus 的系统，看起来有些难以理解，先略过吧~</p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#lecture-7-automatic-code-generation---tvm-stack"><span class="toc-number">1.</span> <span class="toc-text">Lecture 7: Automatic Code Generation - TVM Stack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lecture-8-hardware-specialization-in-deep-learning"><span class="toc-number">2.</span> <span class="toc-text">Lecture 8: Hardware Specialization in Deep Learning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lecture-9-memory-optimization"><span class="toc-number">3.</span> <span class="toc-text">Lecture 9: Memory Optimization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lecture-10-parallel-scheduling"><span class="toc-number">4.</span> <span class="toc-text">Lecture 10: Parallel Scheduling</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lecture-11-distributed-training-and-communication-protocols"><span class="toc-number">5.</span> <span class="toc-text">Lecture 11: Distributed Training and Communication Protocols</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lecture-12-model-serving"><span class="toc-number">6.</span> <span class="toc-text">Lecture 12: Model Serving</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/&text=CSE 599W: SYSTEMS FOR ML 课程笔记 7-12"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/&title=CSE 599W: SYSTEMS FOR ML 课程笔记 7-12"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/&is_video=false&description=CSE 599W: SYSTEMS FOR ML 课程笔记 7-12"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=CSE 599W: SYSTEMS FOR ML 课程笔记 7-12&body=Check out this article: https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/&title=CSE 599W: SYSTEMS FOR ML 课程笔记 7-12"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/&title=CSE 599W: SYSTEMS FOR ML 课程笔记 7-12"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/&title=CSE 599W: SYSTEMS FOR ML 课程笔记 7-12"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/&title=CSE 599W: SYSTEMS FOR ML 课程笔记 7-12"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/&name=CSE 599W: SYSTEMS FOR ML 课程笔记 7-12&description=&lt;p&gt;各种课程资料请参考&lt;a href=&#34;https://reku1997.gitee.io/2019/11/08/cse-599w-systems-for-ml-1-6/&#34;&gt;上一篇文章&lt;/a&gt;&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wyc-ruiker.github.io/2019/11/21/cse-599w-systems-for-ml-7-12/&t=CSE 599W: SYSTEMS FOR ML 课程笔记 7-12"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    Reku
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'reku';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+<!-- utterances Comments -->
+
+</body>
+</html>

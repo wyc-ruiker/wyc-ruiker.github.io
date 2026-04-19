@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="原文链接: https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;2011494527026894039  本文主要参考资料： One Kernel for All Your GPUs https:&#x2F;&#x2F;github.com&#x2F;HazyResearch&#x2F;ThunderKittens 部分写作 powered by Kimi K2.5，学习过程 powered by Claude opus 4.6">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ThunderKittens 2.0(1): 如何优化 Ulysses">
+<meta property="og:url" content="https://wyc-ruiker.github.io/2026/03/01/zhihu/ThunderKittens-2.0(1)_-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-Ulysses/index.html">
+<meta property="og:site_name" content="Reku">
+<meta property="og:description" content="原文链接: https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;2011494527026894039  本文主要参考资料： One Kernel for All Your GPUs https:&#x2F;&#x2F;github.com&#x2F;HazyResearch&#x2F;ThunderKittens 部分写作 powered by Kimi K2.5，学习过程 powered by Claude opus 4.6">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/ThunderKittens-2.0(1)_-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-Ulysses_img_0.jpg">
+<meta property="article:published_time" content="2026-02-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-19T16:18:38.575Z">
+<meta property="article:author" content="Reku">
+<meta property="article:tag" content="zhihu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wyc-ruiker.github.io/zhihu/images/ThunderKittens-2.0(1)_-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-Ulysses_img_0.jpg">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>ThunderKittens 2.0(1): 如何优化 Ulysses</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="Reku" type="application/atom+xml" />
+    
+	<!-- mathjax -->
+	
+		<script>
+		MathJax = {
+			tex: {
+				inlineMath: [['$', '$'], ['\\(', '\\)']],
+				displayMath: [['$$', '$$'], ['\\[', '\\]']],
+				processEscapes: true,
+				processEnvironments: true
+			},
+			options: {
+				skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+			}
+		};
+		</script>
+		<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2026/03/08/zhihu/Claude-opus-4.6-%E7%8B%AC%E7%AB%8B%E5%8F%91%E7%8E%B0%E7%9A%84-DeepEP-%E6%97%B6%E5%BA%8F%E9%97%AE%E9%A2%98/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/06/21/zhihu/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wyc-ruiker.github.io/2026/03/01/zhihu/ThunderKittens-2.0(1)_-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-Ulysses/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wyc-ruiker.github.io/2026/03/01/zhihu/ThunderKittens-2.0(1)_-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-Ulysses/&text=ThunderKittens 2.0(1): 如何优化 Ulysses"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wyc-ruiker.github.io/2026/03/01/zhihu/ThunderKittens-2.0(1)_-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-Ulysses/&title=ThunderKittens 2.0(1): 如何优化 Ulysses"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyc-ruiker.github.io/2026/03/01/zhihu/ThunderKittens-2.0(1)_-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-Ulysses/&is_video=false&description=ThunderKittens 2.0(1): 如何优化 Ulysses"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=ThunderKittens 2.0(1): 如何优化 Ulysses&body=Check out this article: https://wyc-ruiker.github.io/2026/03/01/zhihu/ThunderKittens-2.0(1)_-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-Ulysses/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wyc-ruiker.github.io/2026/03/01/zhihu/ThunderKittens-2.0(1)_-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-Ulysses/&title=ThunderKittens 2.0(1): 如何优化 Ulysses"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wyc-ruiker.github.io/2026/03/01/zhihu/ThunderKittens-2.0(1)_-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-Ulysses/&title=ThunderKittens 2.0(1): 如何优化 Ulysses"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wyc-ruiker.github.io/2026/03/01/zhihu/ThunderKittens-2.0(1)_-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-Ulysses/&title=ThunderKittens 2.0(1): 如何优化 Ulysses"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wyc-ruiker.github.io/2026/03/01/zhihu/ThunderKittens-2.0(1)_-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-Ulysses/&title=ThunderKittens 2.0(1): 如何优化 Ulysses"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wyc-ruiker.github.io/2026/03/01/zhihu/ThunderKittens-2.0(1)_-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-Ulysses/&name=ThunderKittens 2.0(1): 如何优化 Ulysses&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wyc-ruiker.github.io/2026/03/01/zhihu/ThunderKittens-2.0(1)_-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-Ulysses/&t=ThunderKittens 2.0(1): 如何优化 Ulysses"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ulysses-%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%80%9D%E8%B7%AF"><span class="toc-number">1.</span> <span class="toc-text">Ulysses 的基本思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#parallelkittens"><span class="toc-number">2.</span> <span class="toc-text">ParallelKittens</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF"><span class="toc-number">2.1.</span> <span class="toc-text">核心思路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%8E%E4%B9%88%E5%81%9A%E5%88%B0%E7%9A%84"><span class="toc-number">2.2.</span> <span class="toc-text">怎么做到的</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E9%99%90%E5%88%B6"><span class="toc-number">3.</span> <span class="toc-text">一些限制</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        ThunderKittens 2.0(1): 如何优化 Ulysses
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Reku</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2026-02-28T16:00:00.000Z" class="dt-published" itemprop="datePublished">2026-03-01</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/zhihu/">zhihu</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/zhihu/" rel="tag">zhihu</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <blockquote>
+<p>原文链接: https://zhuanlan.zhihu.com/p/2011494527026894039</p>
+</blockquote>
+<p>本文主要参考资料：</p>
+<p><a href="https://link.zhihu.com/?target=https%3A//hazyresearch.stanford.edu/blog/2025-09-22-pgl">One Kernel for All Your GPUs</a></p>
+<p><a href="https://link.zhihu.com/?target=https%3A//github.com/HazyResearch/ThunderKittens">https://github.com/HazyResearch/ThunderKittens</a></p>
+<p>部分写作 powered by Kimi K2.5，学习过程 powered by Claude opus 4.6。</p>
+<h2 id="ulysses-的基本思路">Ulysses 的基本思路</h2>
+<p>Transformer 里除了 Attention 都是 element-wise 的操作，这些部分切序列长度 N 很方便。但 Attention 切 N 比较麻烦，切 head 才顺手。</p>
+<p>Ulysses 的做法是在进出 Attention 的时候做"切 N"到"切 head"的转换，用 all-to-all 通信来做这个分布式转置。</p>
+<p>实际 PyTorch 代码里，Ulysses 需要在通信前后做数据重排：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 通信前（切的是 N， HEAD 是完整的）</span><br><span class="line">input_t = input.view(B, N_per_rank, world_size, H_per_rank, D) \</span><br><span class="line">               .permute(2, 1, 0, 3, 4).contiguous()   # 一次完整拷贝</span><br><span class="line"></span><br><span class="line"># 通信</span><br><span class="line">torch.distributed.all_to_all_single(output_t, input_t)</span><br><span class="line"></span><br><span class="line"># 通信后 （切的是 HEAD，N 是完整的）</span><br><span class="line">output.copy_(output_t.permute(2, 0, 1, 3, 4)</span><br><span class="line">                      .reshape(B, N, H_per_rank, D))   # 又一次拷贝</span><br></pre></td></tr></table></figure>
+<p>all to all 要求输入必须连续，那两个 <code>contiguous()</code> 导致 all to all 的带宽根本没法跑满。用 <a href="https://link.zhihu.com/?target=https%3A//github.com/HazyResearch/ThunderKittens/blob/main/kernels/parallel/all_to_all/benchmark.py">https://github.com/HazyResearch/ThunderKittens/blob/main/kernels/parallel/all_to_all/benchmark.py</a> 在 8p H20 上面跑，NCCL 的 Ulysses 方案只能跑到 155 GB/s，而不考虑拷贝，纯 all to all 能跑到 285 GB/s。</p>
+<h2 id="parallelkittens">ParallelKittens</h2>
+<p><a href="https://link.zhihu.com/?target=https%3A//hazyresearch.stanford.edu/blog/2025-11-17-pk">ParallelKittens: Simple and Fast Multi-GPU AI Kernels</a></p>
+<p>ParallelKittens 是 ThunderKittens 的多 GPU 扩展版本，也是 ThunderKittens 2.0 的一部分。通过 ParallelKittens 做 Ulysses 能在 8p H20 上做到 344 GB/s 的带宽。</p>
+<h3 id="核心思路">核心思路</h3>
+<p>PK 的做法很直接：kernel 内部通过坐标计算直接确定每个 tile 该去哪，不需要显式的数据重排。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">每个 GPU 跑同一个 kernel，每个 block 1 个线程，处理 1 个 tile：</span><br><span class="line"></span><br><span class="line">GPU_i 的 block_j:</span><br><span class="line">  1. TMA load:  本 GPU HBM → SMEM（硬件 DMA）</span><br><span class="line">  2. 索引计算:  确定目标 GPU 和目标位置</span><br><span class="line">  3. TMA store: SMEM → 目标 GPU HBM（通过 NVLink）</span><br></pre></td></tr></table></figure>
+<p>kernel 也没几行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">template &lt;int SCATTER_AXIS, int GATHER_AXIS&gt;</span><br><span class="line">__device__ inline void kernel(const globals &amp;G) &#123;</span><br><span class="line">    static_assert(0 &lt;= SCATTER_AXIS &amp;&amp; SCATTER_AXIS &lt; 4 &amp;&amp; 0 &lt;= GATHER_AXIS &amp;&amp; GATHER_AXIS &lt; 4, </span><br><span class="line">        &quot;Scatter and gather axes must be 0, 1, 2, or 3&quot;);</span><br><span class="line">    static_assert(SCATTER_AXIS != GATHER_AXIS, &quot;Scatter and gather axes must be different&quot;);</span><br><span class="line"></span><br><span class="line">    extern __shared__ int __shm[];</span><br><span class="line">    tma_swizzle_allocator allocator((int*)&amp;__shm[0]);</span><br><span class="line">    globals::shared_tile &amp;tile = allocator.allocate&lt;globals::shared_tile&gt;();</span><br><span class="line"></span><br><span class="line">    // Calculate the input indices</span><br><span class="line">    int task_idx = blockIdx.x;</span><br><span class="line">    int batch_idx = task_idx / (G.input.depth() * (G.input.rows() / globals::ROW_BLOCK_SIZE) * (G.input.cols() / globals::COL_BLOCK_SIZE));</span><br><span class="line">    task_idx %= (G.input.depth() * (G.input.rows() / globals::ROW_BLOCK_SIZE) * (G.input.cols() / globals::COL_BLOCK_SIZE));</span><br><span class="line">    int depth_idx = task_idx / (G.input.rows() / globals::ROW_BLOCK_SIZE * (G.input.cols() / globals::COL_BLOCK_SIZE));</span><br><span class="line">    task_idx %= (G.input.rows() / globals::ROW_BLOCK_SIZE * (G.input.cols() / globals::COL_BLOCK_SIZE));</span><br><span class="line">    int row_block_idx = task_idx / (G.input.cols() / globals::COL_BLOCK_SIZE);</span><br><span class="line">    task_idx %= (G.input.cols() / globals::COL_BLOCK_SIZE);</span><br><span class="line">    int col_block_idx = task_idx;</span><br><span class="line"></span><br><span class="line">    // Load input data (assume a single-threaded block)</span><br><span class="line">    __shared__ semaphore arrived;</span><br><span class="line">    init_semaphore(arrived, 0, 1);</span><br><span class="line">    tma::expect_bytes(arrived, sizeof(tile));</span><br><span class="line">    tma::load_async(tile, G.input[G.dev_idx], &#123;batch_idx, depth_idx, row_block_idx, col_block_idx&#125;, arrived);</span><br><span class="line"></span><br><span class="line">    // Calculate the output indices</span><br><span class="line">    int dst_dev_idx;</span><br><span class="line"></span><br><span class="line">    if constexpr (SCATTER_AXIS == 0) &#123;</span><br><span class="line">        dst_dev_idx = batch_idx / G.output.batch();</span><br><span class="line">        batch_idx %= G.output.batch();</span><br><span class="line">    &#125; else if constexpr (SCATTER_AXIS == 1) &#123;</span><br><span class="line">        dst_dev_idx = depth_idx / G.output.depth();</span><br><span class="line">        depth_idx %= G.output.depth();</span><br><span class="line">    &#125; else if constexpr (SCATTER_AXIS == 2) &#123;</span><br><span class="line">        dst_dev_idx = row_block_idx / (G.output.rows() / globals::ROW_BLOCK_SIZE);</span><br><span class="line">        row_block_idx %= (G.output.rows() / globals::ROW_BLOCK_SIZE);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        dst_dev_idx = col_block_idx / (G.output.cols() / globals::COL_BLOCK_SIZE);</span><br><span class="line">        col_block_idx %= (G.output.cols() / globals::COL_BLOCK_SIZE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if constexpr (GATHER_AXIS == 0) &#123;</span><br><span class="line">        batch_idx += G.input.batch() * G.dev_idx;</span><br><span class="line">    &#125; else if constexpr (GATHER_AXIS == 1) &#123;</span><br><span class="line">        depth_idx += G.input.depth() * G.dev_idx;</span><br><span class="line">    &#125; else if constexpr (GATHER_AXIS == 2) &#123;</span><br><span class="line">        row_block_idx += (G.input.rows() / globals::ROW_BLOCK_SIZE) * G.dev_idx;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        col_block_idx += (G.input.cols() / globals::COL_BLOCK_SIZE) * G.dev_idx;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // Wait for inputs to arrive and store data to destination device</span><br><span class="line">    wait(arrived, 0);</span><br><span class="line">    tma::store_async(G.output[dst_dev_idx], tile, </span><br><span class="line">        &#123;batch_idx, depth_idx, row_block_idx, col_block_idx&#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="怎么做到的">怎么做到的</h3>
+<p><strong>1. 跨 GPU 内存访问（IPC + VMM）</strong></p>
+<p>要让 GPU 直接写别的 GPU 显存，先用 CUDA 的 Virtual Memory Management API：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. VMM 分配 (cuMemCreate + cuMemMap + cuMemSetAccess)</span><br><span class="line">2. 交换 IPC handle（Unix Domain Socket）</span><br><span class="line">3. 映射远端内存（cuMemImportFromShareableHandle + cuMemMap）</span><br></pre></td></tr></table></figure>
+<p>最后每个 GPU 都能通过本地指针访问其他 7 个 GPU 的显存。博客里面有个图：</p>
+<p><img src="/zhihu/images/ThunderKittens-2.0(1)_-如何优化-Ulysses_img_0.jpg"></p>
+<p><strong>2. PGL（Parallel Global Layout）</strong></p>
+<p>TK 搞了个 <code>pgl</code> 结构管理跨 GPU tensor：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">template&lt;GL, NUM_DEVICES=8&gt;</span><br><span class="line">struct pgl &#123;</span><br><span class="line">    GL gls[NUM_DEVICES];  // 8 个 GL，每个包含 raw_ptr 和 TMA 描述符</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><code>G.output[dst_dev_idx]</code> 返回目标 GPU 的 GL，其 TMA 描述符指向远端显存。</p>
+<p><strong>3. Kernel 逻辑</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">__device__ void kernel(const globals &amp;G) &#123;</span><br><span class="line">    // 从 blockIdx.x 解码 4D 坐标</span><br><span class="line">    (batch_idx, depth_idx, row_block_idx, col_block_idx) ← blockIdx.x</span><br><span class="line"></span><br><span class="line">    // TMA load: 本 GPU HBM → SMEM</span><br><span class="line">    tma::load_async(tile, G.input[G.dev_idx], coords, semaphore);</span><br><span class="line"></span><br><span class="line">    // 计算目标 GPU 和目标坐标</span><br><span class="line">    dst_dev_idx = ...;</span><br><span class="line">    output_coords = ...;</span><br><span class="line"></span><br><span class="line">    // TMA store 到远端</span><br><span class="line">    wait(semaphore, 0);</span><br><span class="line">    tma::store_async(G.output[dst_dev_idx], tile, output_coords);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>关键就是<strong>索引重映射替代了显式 permute</strong>。kernel 里算好坐标，数据直接搬到目标位置。</p>
+<p><strong>4. TMA（Tensor Memory Accelerator）</strong></p>
+<p>用的 PTX 指令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># Load: HBM → SMEM（异步，硬件 DMA）</span><br><span class="line">cp.async.bulk.tensor.4d.shared::cluster.global.tile.mbarrier::complete_tx::bytes</span><br><span class="line"></span><br><span class="line"># Store: SMEM → HBM（异步，可写远端）</span><br><span class="line">cp.async.bulk.tensor.5d.global.shared::cta.tile.bulk_group</span><br></pre></td></tr></table></figure>
+<p>TMA 是硬件 DMA，不占用 SM 计算资源，1 个线程就能驱动。目标地址是 IPC 映射的远端指针时，TMA 自动走 NVLink 传输。</p>
+<h2 id="一些限制">一些限制</h2>
+<p>主要限制在于跨 GPU 内存访问，只能在一个 NVLink 域内通信。</p>
+<p>还有一点是对于超节点 （例如 GB200 NVL72， 一个容器只能拿到四个卡），没法通过单机进程通信交换 handle。不过 NV 对此早有考虑 ，CUDA 12.4+ 有 <code>CU_MEM_HANDLE_TYPE_FABRIC</code>，配合 nvidia-imex daemon 可以跨节点交换 handle。只是 TK 还没支持这个场景，能拿到超节点的大哥可以试试看效果。</p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ulysses-%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%80%9D%E8%B7%AF"><span class="toc-number">1.</span> <span class="toc-text">Ulysses 的基本思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#parallelkittens"><span class="toc-number">2.</span> <span class="toc-text">ParallelKittens</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF"><span class="toc-number">2.1.</span> <span class="toc-text">核心思路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%8E%E4%B9%88%E5%81%9A%E5%88%B0%E7%9A%84"><span class="toc-number">2.2.</span> <span class="toc-text">怎么做到的</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E9%99%90%E5%88%B6"><span class="toc-number">3.</span> <span class="toc-text">一些限制</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wyc-ruiker.github.io/2026/03/01/zhihu/ThunderKittens-2.0(1)_-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-Ulysses/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wyc-ruiker.github.io/2026/03/01/zhihu/ThunderKittens-2.0(1)_-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-Ulysses/&text=ThunderKittens 2.0(1): 如何优化 Ulysses"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wyc-ruiker.github.io/2026/03/01/zhihu/ThunderKittens-2.0(1)_-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-Ulysses/&title=ThunderKittens 2.0(1): 如何优化 Ulysses"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyc-ruiker.github.io/2026/03/01/zhihu/ThunderKittens-2.0(1)_-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-Ulysses/&is_video=false&description=ThunderKittens 2.0(1): 如何优化 Ulysses"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=ThunderKittens 2.0(1): 如何优化 Ulysses&body=Check out this article: https://wyc-ruiker.github.io/2026/03/01/zhihu/ThunderKittens-2.0(1)_-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-Ulysses/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wyc-ruiker.github.io/2026/03/01/zhihu/ThunderKittens-2.0(1)_-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-Ulysses/&title=ThunderKittens 2.0(1): 如何优化 Ulysses"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wyc-ruiker.github.io/2026/03/01/zhihu/ThunderKittens-2.0(1)_-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-Ulysses/&title=ThunderKittens 2.0(1): 如何优化 Ulysses"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wyc-ruiker.github.io/2026/03/01/zhihu/ThunderKittens-2.0(1)_-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-Ulysses/&title=ThunderKittens 2.0(1): 如何优化 Ulysses"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wyc-ruiker.github.io/2026/03/01/zhihu/ThunderKittens-2.0(1)_-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-Ulysses/&title=ThunderKittens 2.0(1): 如何优化 Ulysses"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wyc-ruiker.github.io/2026/03/01/zhihu/ThunderKittens-2.0(1)_-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-Ulysses/&name=ThunderKittens 2.0(1): 如何优化 Ulysses&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wyc-ruiker.github.io/2026/03/01/zhihu/ThunderKittens-2.0(1)_-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-Ulysses/&t=ThunderKittens 2.0(1): 如何优化 Ulysses"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    Reku
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'reku';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+<!-- utterances Comments -->
+
+</body>
+</html>

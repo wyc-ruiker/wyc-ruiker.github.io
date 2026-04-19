@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="原文链接: https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;21525151726  DualPipe是DeepSeek V3里面infra部分的重头戏，既能减少bubble还能做到通信掩盖，整个编排方式看起来神乎其技。而且对于一些国产芯片复现DeepSeek V3（FP8很难用起来、也没法用SM去控制网卡），DualPipe几乎是论文里面infra部分唯一能参考的优化点。我用我半吊子">
+<meta property="og:type" content="article">
+<meta property="og:title" content="对DualPipe的一些想法">
+<meta property="og:url" content="https://wyc-ruiker.github.io/2025/02/06/zhihu/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95/index.html">
+<meta property="og:site_name" content="Reku">
+<meta property="og:description" content="原文链接: https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;21525151726  DualPipe是DeepSeek V3里面infra部分的重头戏，既能减少bubble还能做到通信掩盖，整个编排方式看起来神乎其技。而且对于一些国产芯片复现DeepSeek V3（FP8很难用起来、也没法用SM去控制网卡），DualPipe几乎是论文里面infra部分唯一能参考的优化点。我用我半吊子">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95_img_0.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95_img_1.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95_img_2.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95_img_3.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95_img_4.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95_img_5.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95_img_6.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95_img_7.jpg">
+<meta property="article:published_time" content="2025-02-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-19T16:18:38.577Z">
+<meta property="article:author" content="Reku">
+<meta property="article:tag" content="zhihu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wyc-ruiker.github.io/zhihu/images/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95_img_0.jpg">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>对DualPipe的一些想法</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="Reku" type="application/atom+xml" />
+    
+	<!-- mathjax -->
+	
+		<script>
+		MathJax = {
+			tex: {
+				inlineMath: [['$', '$'], ['\\(', '\\)']],
+				displayMath: [['$$', '$$'], ['\\[', '\\]']],
+				processEscapes: true,
+				processEnvironments: true
+			},
+			options: {
+				skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+			}
+		};
+		</script>
+		<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2025/02/17/zhihu/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90%E3%80%8A%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A82_%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6%E3%80%8B/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2020/10/13/mit-os/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wyc-ruiker.github.io/2025/02/06/zhihu/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wyc-ruiker.github.io/2025/02/06/zhihu/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95/&text=对DualPipe的一些想法"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wyc-ruiker.github.io/2025/02/06/zhihu/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95/&title=对DualPipe的一些想法"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyc-ruiker.github.io/2025/02/06/zhihu/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95/&is_video=false&description=对DualPipe的一些想法"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=对DualPipe的一些想法&body=Check out this article: https://wyc-ruiker.github.io/2025/02/06/zhihu/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wyc-ruiker.github.io/2025/02/06/zhihu/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95/&title=对DualPipe的一些想法"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wyc-ruiker.github.io/2025/02/06/zhihu/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95/&title=对DualPipe的一些想法"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wyc-ruiker.github.io/2025/02/06/zhihu/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95/&title=对DualPipe的一些想法"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wyc-ruiker.github.io/2025/02/06/zhihu/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95/&title=对DualPipe的一些想法"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wyc-ruiker.github.io/2025/02/06/zhihu/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95/&name=对DualPipe的一些想法&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wyc-ruiker.github.io/2025/02/06/zhihu/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95/&t=对DualPipe的一些想法"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E6%9C%BA%E7%8C%9C%E6%83%B3"><span class="toc-number">1.</span> <span class="toc-text">动机猜想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98"><span class="toc-number">2.</span> <span class="toc-text">一些问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%9B%E7%A0%96%E5%BC%95%E7%8E%89"><span class="toc-number">3.</span> <span class="toc-text">抛砖引玉</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        对DualPipe的一些想法
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Reku</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-02-05T16:00:00.000Z" class="dt-published" itemprop="datePublished">2025-02-06</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/zhihu/">zhihu</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/zhihu/" rel="tag">zhihu</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <blockquote>
+<p>原文链接: https://zhuanlan.zhihu.com/p/21525151726</p>
+</blockquote>
+<p>DualPipe是DeepSeek V3里面infra部分的重头戏，既能减少bubble还能做到通信掩盖，整个编排方式看起来神乎其技。而且对于一些国产芯片复现DeepSeek V3（FP8很难用起来、也没法用SM去控制网卡），DualPipe几乎是论文里面infra部分唯一能参考的优化点。我用我半吊子的大模型并行知识，猜想一下这个东西是怎么构造出来的，以及落地上可能遇到的难度。</p>
+<h2 id="动机猜想">动机猜想</h2>
+<p>对于DeepSeek V3，性能的最大瓶颈就是正反向里面巨大的AllToAll通信，根据论文里面的说法，计算和通信大概是1:1的水平。而且整体拓扑关系是attention-&gt;alltoall-&gt;mlp-&gt;alltoall这样的顺序，前后有严格的依赖，根本没什么掩盖空间。</p>
+<p>对于这种类型的通信，比较常见的做法是bs或者seq维度切一切，把1层拆成两个没有数据依赖的小层，互相做掩盖，类似下图：</p>
+<p><img src="/zhihu/images/对DualPipe的一些想法_img_0.jpg"></p>
+<p>但是每个micro的bs为了省activation的显存，基本都是1；切seq的话，MLP会被切小，可能导致算子本身性能下降，都不算是最好的做法。</p>
+<p>这是两个正向或者两个反向互相做掩盖的场景，如果这个不好搞的话，就可能会想到，一个正向和一个反向能不能做掩盖，因为对于1f1b的调度来说，一定有正反向交替的阶段：</p>
+<p><img src="/zhihu/images/对DualPipe的一些想法_img_1.jpg"></p>
+<p><img src="/zhihu/images/对DualPipe的一些想法_img_2.jpg"></p>
+<p>画一画，会发现不怎么对劲，如果强行掩盖相邻部分的正反向通信，会导致bubble变的巨大：</p>
+<p><img src="/zhihu/images/对DualPipe的一些想法_img_3.jpg"></p>
+<p>那现在的问题就是，需要一个合适的pipeline排布，既可以正反向做掩盖，bubble也不会增大。估计DeepSeek的大神们很快想到了Chimera，因为这个是双向的pp，上面rank灌进来的micro和下面rank灌进来的micro，相互之间的依赖关系没有这么重，如果相邻的正反向是不同方向的micro，是可以掩盖起来的，而且不会增大bubble：</p>
+<figure>
+<img src="/zhihu/images/对DualPipe的一些想法_img_4.jpg" alt="想象一下上面的图micro再多一点"><figcaption aria-hidden="true">想象一下上面的图micro再多一点</figcaption>
+</figure>
+<p>结合上zero bubble的优化点，把dw拆出来，最后就形成了DualPipe：</p>
+<p><img src="/zhihu/images/对DualPipe的一些想法_img_5.jpg"></p>
+<h2 id="一些问题">一些问题</h2>
+<p>DualPipe的编排相比最常用的pp或者vpp甚至zero bubble，都复杂许多，想在工程落地会有很多问题：</p>
+<ul>
+<li>实现逻辑的就很复杂。我不确定他们这个20micro的排布是基于策略写出来的还是基于一套算法搜出来的，想泛化感觉很不容易。</li>
+<li>因为pp的编排复杂，会导致在超大集群下类似精度对比（需要沿着stage往上找输入）、快慢卡识别（会沿着pp传递）、首报错节点识别（要分析通信关系）都变的复杂很多。可能DeepSeek V3用的是2048卡，还不够大，这些问题还没那么重要，上了万卡规模，这些东西定位起来都很痛苦。</li>
+<li>因为是双向的pp，需要每个rank放两个stage，导致param要翻个两倍。这个对于国产芯片可能很致命，显存没有那么多不说，暂时还不能用fp8训练，雪上加霜。</li>
+</ul>
+<h2 id="抛砖引玉">抛砖引玉</h2>
+<p>虽然普通的pp不行，但是对于vpp来说，很多地方都是可以做掩盖的：</p>
+<p><img src="/zhihu/images/对DualPipe的一些想法_img_6.jpg"></p>
+<p>红框标注的地方都可以掩盖，而且这个方式相比普通的vpp显存没有任何增加，实现逻辑也比DualPipe简单多了，感觉是个比较靠谱的落地方向。</p>
+<p>或者更本质的，能不能用类似<a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/2406.06858">FLUX: Fast Software-based Communication Overlap On GPUs Through Kernel Fusion</a>的思路搞一个AllToAll MLP AllToAll的融合算子，这样对上层业务来说是最轻松的。但这个领域不太熟，不确定能不能做到。</p>
+<p><img src="/zhihu/images/对DualPipe的一些想法_img_7.jpg"></p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E6%9C%BA%E7%8C%9C%E6%83%B3"><span class="toc-number">1.</span> <span class="toc-text">动机猜想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98"><span class="toc-number">2.</span> <span class="toc-text">一些问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%9B%E7%A0%96%E5%BC%95%E7%8E%89"><span class="toc-number">3.</span> <span class="toc-text">抛砖引玉</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wyc-ruiker.github.io/2025/02/06/zhihu/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wyc-ruiker.github.io/2025/02/06/zhihu/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95/&text=对DualPipe的一些想法"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wyc-ruiker.github.io/2025/02/06/zhihu/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95/&title=对DualPipe的一些想法"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyc-ruiker.github.io/2025/02/06/zhihu/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95/&is_video=false&description=对DualPipe的一些想法"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=对DualPipe的一些想法&body=Check out this article: https://wyc-ruiker.github.io/2025/02/06/zhihu/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wyc-ruiker.github.io/2025/02/06/zhihu/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95/&title=对DualPipe的一些想法"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wyc-ruiker.github.io/2025/02/06/zhihu/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95/&title=对DualPipe的一些想法"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wyc-ruiker.github.io/2025/02/06/zhihu/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95/&title=对DualPipe的一些想法"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wyc-ruiker.github.io/2025/02/06/zhihu/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95/&title=对DualPipe的一些想法"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wyc-ruiker.github.io/2025/02/06/zhihu/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95/&name=对DualPipe的一些想法&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wyc-ruiker.github.io/2025/02/06/zhihu/%E5%AF%B9DualPipe%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95/&t=对DualPipe的一些想法"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    Reku
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'reku';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+<!-- utterances Comments -->
+
+</body>
+</html>

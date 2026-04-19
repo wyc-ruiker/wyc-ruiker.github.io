@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="https:&#x2F;&#x2F;nanti.jisuanke.com&#x2F;t&#x2F;11217">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计蒜之道复赛 补题">
+<meta property="og:url" content="https://wyc-ruiker.github.io/2016/07/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932016/index.html">
+<meta property="og:site_name" content="Reku">
+<meta property="og:description" content="https:&#x2F;&#x2F;nanti.jisuanke.com&#x2F;t&#x2F;11217">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-07-04T12:14:44.000Z">
+<meta property="article:modified_time" content="2020-06-10T12:48:52.000Z">
+<meta property="article:author" content="Reku">
+<meta property="article:tag" content="网络流">
+<meta property="article:tag" content="floyd">
+<meta property="article:tag" content="计蒜客">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>计蒜之道复赛 补题</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="Reku" type="application/atom+xml" />
+    
+	<!-- mathjax -->
+	
+		<script>
+		MathJax = {
+			tex: {
+				inlineMath: [['$', '$'], ['\\(', '\\)']],
+				displayMath: [['$$', '$$'], ['\\[', '\\]']],
+				processEscapes: true,
+				processEnvironments: true
+			},
+			options: {
+				skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+			}
+		};
+		</script>
+		<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2016/07/06/ac%E8%87%AA%E5%8A%A8%E6%9C%BA/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2016/06/08/codeforces-div-2-d-51-55/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wyc-ruiker.github.io/2016/07/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932016/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wyc-ruiker.github.io/2016/07/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932016/&text=计蒜之道复赛 补题"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wyc-ruiker.github.io/2016/07/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932016/&title=计蒜之道复赛 补题"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyc-ruiker.github.io/2016/07/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932016/&is_video=false&description=计蒜之道复赛 补题"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=计蒜之道复赛 补题&body=Check out this article: https://wyc-ruiker.github.io/2016/07/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932016/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wyc-ruiker.github.io/2016/07/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932016/&title=计蒜之道复赛 补题"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wyc-ruiker.github.io/2016/07/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932016/&title=计蒜之道复赛 补题"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wyc-ruiker.github.io/2016/07/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932016/&title=计蒜之道复赛 补题"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wyc-ruiker.github.io/2016/07/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932016/&title=计蒜之道复赛 补题"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wyc-ruiker.github.io/2016/07/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932016/&name=计蒜之道复赛 补题&description=&lt;p&gt;&lt;a href=&#34;https://nanti.jisuanke.com/t/11217&#34;&gt;https://nanti.jisuanke.com/t/11217&lt;/a&gt;&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wyc-ruiker.github.io/2016/07/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932016/&t=计蒜之道复赛 补题"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        计蒜之道复赛 补题
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Reku</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2016-07-04T12:14:44.000Z" class="dt-published" itemprop="datePublished">2016-07-04</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/acm/">acm</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/floyd/" rel="tag">floyd</a>, <a class="p-category" href="/tags/%E7%BD%91%E7%BB%9C%E6%B5%81/" rel="tag">网络流</a>, <a class="p-category" href="/tags/%E8%AE%A1%E8%92%9C%E5%AE%A2/" rel="tag">计蒜客</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p><a target="_blank" rel="noopener" href="https://nanti.jisuanke.com/t/11217">https://nanti.jisuanke.com/t/11217</a> <span id="more"></span> 比赛时候一眼就看出了，肯定是flyod的变种...然而因为智商问题，并看不出来是怎么变种的... 因为这个题最傻逼的算法是一个四维的floyd，标算就是将第一维分治。 因为floyd的第一维对结果没有任何影响，所以就递归的每次加入一半的点就可以了 虽然所有结论都知道...但是这个算法却想不出来...所以还是挺神的...</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">int</span> n;</span><br><span class="line"><span class="type">int</span> e[<span class="number">310</span>][<span class="number">310</span>]=&#123;&#125;;</span><br><span class="line"><span class="type">long</span> <span class="type">long</span> ans=<span class="number">0ll</span>;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">ff</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> y,<span class="type">int</span> e[<span class="number">310</span>][<span class="number">310</span>])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(x==y)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>;j&lt;=n;j++)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">if</span>(i!=x&amp;&amp;j!=x) ans+=(<span class="type">long</span> <span class="type">long</span>)e[i][j];</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="type">int</span> mid=(x+y)/<span class="number">2</span>;</span><br><span class="line">	<span class="type">int</span> u[<span class="number">310</span>][<span class="number">310</span>]=&#123;&#125;;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>;j&lt;=n;j++)</span><br><span class="line">		&#123;</span><br><span class="line">			u[i][j]=e[i][j];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> k=x;k&lt;=mid;k++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>;j&lt;=n;j++)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">if</span>(u[i][j]==<span class="number">-1</span>&amp;&amp;u[i][k]!=<span class="number">-1</span>&amp;&amp;u[k][j]!=<span class="number">-1</span>)</span><br><span class="line">				&#123;</span><br><span class="line">					u[i][j]=u[i][k]+u[k][j];</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">else</span> <span class="keyword">if</span>(u[i][k]!=<span class="number">-1</span>&amp;&amp;u[k][j]!=<span class="number">-1</span>)</span><br><span class="line">				&#123;</span><br><span class="line">					u[i][j]=<span class="built_in">min</span>(u[i][j],u[i][k]+u[k][j]);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">ff</span>(mid<span class="number">+1</span>,y,u);</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>;j&lt;=n;j++)</span><br><span class="line">		&#123;</span><br><span class="line">			u[i][j]=e[i][j];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> k=mid<span class="number">+1</span>;k&lt;=y;k++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>;j&lt;=n;j++)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">if</span>(u[i][j]==<span class="number">-1</span>&amp;&amp;u[i][k]!=<span class="number">-1</span>&amp;&amp;u[k][j]!=<span class="number">-1</span>)</span><br><span class="line">				&#123;</span><br><span class="line">					u[i][j]=u[i][k]+u[k][j];</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">else</span> <span class="keyword">if</span>(u[i][k]!=<span class="number">-1</span>&amp;&amp;u[k][j]!=<span class="number">-1</span>)</span><br><span class="line">				&#123;</span><br><span class="line">					u[i][j]=<span class="built_in">min</span>(u[i][j],u[i][k]+u[k][j]);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">ff</span>(x,mid,u);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	cin&gt;&gt;n;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>;j&lt;=n;j++)</span><br><span class="line">		&#123;</span><br><span class="line">			cin&gt;&gt;e[i][j];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">ff</span>(<span class="number">1</span>,n,e);</span><br><span class="line">	cout&lt;&lt;ans;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://nanti.jisuanke.com/t/11215">https://nanti.jisuanke.com/t/11215</a> 经典的姿势，把一个点拆成一个入点和一个出点，通过控制流量为1，来保证每个点只经过一次。 源点为mid，汇点为a和b 注意，mid拆点之后连的边的流量应该为2...这里调了好长时间...</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> maxn 210</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">int</span> n,m;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Edge</span>&#123;</span><br><span class="line">	<span class="type">int</span> from,to,cap,flow;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Dinic</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> n,m,s,t;</span><br><span class="line">	vector&lt;Edge&gt; edges;</span><br><span class="line">	vector&lt;<span class="type">int</span>&gt; G[maxn];</span><br><span class="line">	<span class="type">bool</span> vis[maxn];</span><br><span class="line">	<span class="type">int</span> d[maxn];</span><br><span class="line">	<span class="type">int</span> cur[maxn];</span><br><span class="line">	<span class="type">int</span> an[maxn];</span><br><span class="line">	<span class="type">int</span> u=<span class="number">0</span>;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">AddEdge</span><span class="params">(<span class="type">int</span> from,<span class="type">int</span> to,<span class="type">int</span> cap)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		edges.<span class="built_in">push_back</span>((Edge)&#123;from,to,cap,<span class="number">0</span>&#125;);</span><br><span class="line">		edges.<span class="built_in">push_back</span>((Edge)&#123;to,from,<span class="number">0</span>,<span class="number">0</span>&#125;);</span><br><span class="line">		m=edges.<span class="built_in">size</span>();</span><br><span class="line">		G[from].<span class="built_in">push_back</span>(m<span class="number">-2</span>);</span><br><span class="line">		G[to].<span class="built_in">push_back</span>(m<span class="number">-1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="type">bool</span> <span class="title">bfs</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="built_in">memset</span>(vis,<span class="number">0</span>,<span class="built_in">sizeof</span>(vis));</span><br><span class="line">		queue&lt;<span class="type">int</span>&gt; Q;</span><br><span class="line">		Q.<span class="built_in">push</span>(s);</span><br><span class="line">		d[s]=<span class="number">0</span>;</span><br><span class="line">		vis[s]=<span class="number">1</span>;</span><br><span class="line">		<span class="keyword">while</span>(!Q.<span class="built_in">empty</span>())</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="type">int</span> x=Q.<span class="built_in">front</span>(); Q.<span class="built_in">pop</span>();</span><br><span class="line">			<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;G[x].<span class="built_in">size</span>();i++)</span><br><span class="line">			&#123;</span><br><span class="line">				Edge&amp; e=edges[G[x][i]];</span><br><span class="line">				<span class="keyword">if</span>(!vis[e.to]&amp;&amp;e.cap&gt;e.flow)</span><br><span class="line">				&#123;</span><br><span class="line">					vis[e.to]=<span class="number">1</span>;</span><br><span class="line">					d[e.to]=d[x]<span class="number">+1</span>;</span><br><span class="line">					Q.<span class="built_in">push</span>(e.to);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> vis[t];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="type">int</span> <span class="title">dfs</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> a)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(x==t||a==<span class="number">0</span>) <span class="keyword">return</span> a;</span><br><span class="line">		<span class="type">int</span> flow=<span class="number">0</span>,f;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span>&amp; i=cur[x];i&lt;G[x].<span class="built_in">size</span>();i++)</span><br><span class="line">		&#123;</span><br><span class="line">			Edge&amp; e=edges[G[x][i]];</span><br><span class="line">			<span class="keyword">if</span>(d[x]<span class="number">+1</span>==d[e.to]&amp;&amp;(f=<span class="built_in">dfs</span>(e.to,<span class="built_in">min</span>(a,e.cap-e.flow)))&gt;<span class="number">0</span>)</span><br><span class="line">			&#123;</span><br><span class="line">				e.flow+=f;</span><br><span class="line">				edges[G[x][i]^<span class="number">1</span>].flow-=f;</span><br><span class="line">				flow+=f;</span><br><span class="line">				a-=f;</span><br><span class="line">				<span class="keyword">if</span>(a==<span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> flow;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="type">int</span> <span class="title">Maxflow</span><span class="params">(<span class="type">int</span> s,<span class="type">int</span> t)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">this</span>-&gt;s=s;</span><br><span class="line">		<span class="keyword">this</span>-&gt;t=t;</span><br><span class="line">		<span class="type">int</span> flow=<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">while</span>(<span class="built_in">bfs</span>())</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">memset</span>(cur,<span class="number">0</span>,<span class="built_in">sizeof</span>(cur));</span><br><span class="line">			flow+=<span class="built_in">dfs</span>(s,<span class="number">2147483600</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> flow;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">ff</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> h)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(<span class="number">1</span>&lt;=x&amp;&amp;x&lt;=h)</span><br><span class="line">		&#123;</span><br><span class="line">			u++;</span><br><span class="line">			an[u]=x;</span><br><span class="line">		&#125;</span><br><span class="line">		vis[x]=<span class="number">1</span>;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;G[x].<span class="built_in">size</span>();i++)</span><br><span class="line">		&#123;</span><br><span class="line">			Edge&amp; e=edges[G[x][i]];</span><br><span class="line">			<span class="keyword">if</span>(!vis[e.to]&amp;&amp;e.cap==e.flow&amp;&amp;e.cap)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="built_in">ff</span>(e.to,h);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">ans</span><span class="params">(<span class="type">int</span> a,<span class="type">int</span> b,<span class="type">int</span> h)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="built_in">memset</span>(vis,<span class="number">0</span>,<span class="built_in">sizeof</span>(vis));</span><br><span class="line">		<span class="built_in">ff</span>(s,h);</span><br><span class="line">		<span class="type">bool</span> vv[maxn]=&#123;&#125;;</span><br><span class="line">		<span class="type">int</span> nu=<span class="number">0</span>;</span><br><span class="line">		<span class="type">bool</span> bj=<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> i=u;i&gt;=<span class="number">1</span>;i--)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span>(an[i]==a) bj=<span class="number">1</span>;</span><br><span class="line">			<span class="keyword">if</span>(an[i]==b) bj=<span class="number">0</span>;</span><br><span class="line">			<span class="keyword">if</span>(bj==<span class="number">1</span>) cout&lt;&lt;an[i]&lt;&lt;<span class="string">&quot; &quot;</span>,vv[i]=<span class="number">1</span>,nu++;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=u;i++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span>(vv[i]==<span class="number">0</span>)</span><br><span class="line">			&#123;</span><br><span class="line">				cout&lt;&lt;an[i];</span><br><span class="line">				nu++;</span><br><span class="line">				<span class="keyword">if</span>(nu!=u) cout&lt;&lt;<span class="string">&quot; &quot;</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		cout&lt;&lt;endl;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">work</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	Dinic dinic;</span><br><span class="line">	<span class="type">int</span> a,b,mid;</span><br><span class="line">	<span class="type">int</span> x,y;</span><br><span class="line">	cin&gt;&gt;n&gt;&gt;m;</span><br><span class="line">	cin&gt;&gt;a&gt;&gt;b&gt;&gt;mid;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(i!=mid) dinic.<span class="built_in">AddEdge</span>(i,i+n,<span class="number">1</span>);</span><br><span class="line">		<span class="keyword">else</span> dinic.<span class="built_in">AddEdge</span>(i,i+n,<span class="number">2</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	dinic.<span class="built_in">AddEdge</span>(a+n,<span class="number">0</span>,<span class="number">1</span>);</span><br><span class="line">	dinic.<span class="built_in">AddEdge</span>(b+n,<span class="number">0</span>,<span class="number">1</span>);</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=m;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		cin&gt;&gt;x&gt;&gt;y;</span><br><span class="line">		dinic.<span class="built_in">AddEdge</span>(x+n,y,<span class="number">1</span>);</span><br><span class="line">		dinic.<span class="built_in">AddEdge</span>(y+n,x,<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="type">int</span> o=dinic.<span class="built_in">Maxflow</span>(mid,<span class="number">0</span>);</span><br><span class="line">	dinic.<span class="built_in">ans</span>(a,b,n);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> T;</span><br><span class="line">	cin&gt;&gt;T;</span><br><span class="line">	<span class="keyword">while</span>(T--) <span class="built_in">work</span>();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wyc-ruiker.github.io/2016/07/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932016/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wyc-ruiker.github.io/2016/07/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932016/&text=计蒜之道复赛 补题"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wyc-ruiker.github.io/2016/07/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932016/&title=计蒜之道复赛 补题"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyc-ruiker.github.io/2016/07/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932016/&is_video=false&description=计蒜之道复赛 补题"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=计蒜之道复赛 补题&body=Check out this article: https://wyc-ruiker.github.io/2016/07/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932016/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wyc-ruiker.github.io/2016/07/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932016/&title=计蒜之道复赛 补题"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wyc-ruiker.github.io/2016/07/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932016/&title=计蒜之道复赛 补题"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wyc-ruiker.github.io/2016/07/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932016/&title=计蒜之道复赛 补题"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wyc-ruiker.github.io/2016/07/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932016/&title=计蒜之道复赛 补题"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wyc-ruiker.github.io/2016/07/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932016/&name=计蒜之道复赛 补题&description=&lt;p&gt;&lt;a href=&#34;https://nanti.jisuanke.com/t/11217&#34;&gt;https://nanti.jisuanke.com/t/11217&lt;/a&gt;&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wyc-ruiker.github.io/2016/07/04/%E8%AE%A1%E8%92%9C%E4%B9%8B%E9%81%932016/&t=计蒜之道复赛 补题"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    Reku
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'reku';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+<!-- utterances Comments -->
+
+</body>
+</html>

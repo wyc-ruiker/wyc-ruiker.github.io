@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="原文链接: https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;27172237359  工作需要，最近在入门强化学习。这个笔记面向工程老哥们，知道老哥们看不懂数学（因为我就不懂），忽略了大量推导，意会为主。其中可能有些理解错误，望大家多多指正。 LLM中的强化学习定义   智能体（Agent）: 经过预训练和SFT的LLM，可以对外界的输入做出回应，有一定的智能。 环境（Environm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LLM RL入门">
+<meta property="og:url" content="https://wyc-ruiker.github.io/2025/06/10/zhihu/LLM-RL%E5%85%A5%E9%97%A8/index.html">
+<meta property="og:site_name" content="Reku">
+<meta property="og:description" content="原文链接: https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;27172237359  工作需要，最近在入门强化学习。这个笔记面向工程老哥们，知道老哥们看不懂数学（因为我就不懂），忽略了大量推导，意会为主。其中可能有些理解错误，望大家多多指正。 LLM中的强化学习定义   智能体（Agent）: 经过预训练和SFT的LLM，可以对外界的输入做出回应，有一定的智能。 环境（Environm">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/LLM-RL%E5%85%A5%E9%97%A8_img_0.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/LLM-RL%E5%85%A5%E9%97%A8_img_1.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/LLM-RL%E5%85%A5%E9%97%A8_img_2.jpg">
+<meta property="article:published_time" content="2025-06-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-19T16:18:38.575Z">
+<meta property="article:author" content="Reku">
+<meta property="article:tag" content="zhihu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wyc-ruiker.github.io/zhihu/images/LLM-RL%E5%85%A5%E9%97%A8_img_0.jpg">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>LLM RL入门</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="Reku" type="application/atom+xml" />
+    
+	<!-- mathjax -->
+	
+		<script>
+		MathJax = {
+			tex: {
+				inlineMath: [['$', '$'], ['\\(', '\\)']],
+				displayMath: [['$$', '$$'], ['\\[', '\\]']],
+				processEscapes: true,
+				processEnvironments: true
+			},
+			options: {
+				skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+			}
+		};
+		</script>
+		<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2025/06/21/zhihu/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/03/23/zhihu/%5BAttention%5DFlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wyc-ruiker.github.io/2025/06/10/zhihu/LLM-RL%E5%85%A5%E9%97%A8/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wyc-ruiker.github.io/2025/06/10/zhihu/LLM-RL%E5%85%A5%E9%97%A8/&text=LLM RL入门"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wyc-ruiker.github.io/2025/06/10/zhihu/LLM-RL%E5%85%A5%E9%97%A8/&title=LLM RL入门"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyc-ruiker.github.io/2025/06/10/zhihu/LLM-RL%E5%85%A5%E9%97%A8/&is_video=false&description=LLM RL入门"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=LLM RL入门&body=Check out this article: https://wyc-ruiker.github.io/2025/06/10/zhihu/LLM-RL%E5%85%A5%E9%97%A8/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wyc-ruiker.github.io/2025/06/10/zhihu/LLM-RL%E5%85%A5%E9%97%A8/&title=LLM RL入门"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wyc-ruiker.github.io/2025/06/10/zhihu/LLM-RL%E5%85%A5%E9%97%A8/&title=LLM RL入门"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wyc-ruiker.github.io/2025/06/10/zhihu/LLM-RL%E5%85%A5%E9%97%A8/&title=LLM RL入门"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wyc-ruiker.github.io/2025/06/10/zhihu/LLM-RL%E5%85%A5%E9%97%A8/&title=LLM RL入门"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wyc-ruiker.github.io/2025/06/10/zhihu/LLM-RL%E5%85%A5%E9%97%A8/&name=LLM RL入门&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wyc-ruiker.github.io/2025/06/10/zhihu/LLM-RL%E5%85%A5%E9%97%A8/&t=LLM RL入门"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#llm%E4%B8%AD%E7%9A%84%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%AE%9A%E4%B9%89"><span class="toc-number">1.</span> <span class="toc-text">LLM中的强化学习定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%9F%BA%E7%A1%80%E5%81%9A%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">强化学习的基础做法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#actor-critic"><span class="toc-number">3.</span> <span class="toc-text">actor-critic</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%9D%A5%E6%BA%90"><span class="toc-number">3.1.</span> <span class="toc-text">数据来源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#actor%E7%9A%84%E4%BC%98%E5%8C%96"><span class="toc-number">3.2.</span> <span class="toc-text">actor的优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E5%8A%BF%E5%87%BD%E6%95%B0"><span class="toc-number">3.3.</span> <span class="toc-text">优势函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#critic%E7%9A%84%E4%BC%98%E5%8C%96"><span class="toc-number">3.4.</span> <span class="toc-text">critic的优化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ppo"><span class="toc-number">4.</span> <span class="toc-text">PPO</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E8%A6%81%E6%80%A7%E9%87%87%E6%A0%B7"><span class="toc-number">4.1.</span> <span class="toc-text">重要性采样</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gae"><span class="toc-number">4.2.</span> <span class="toc-text">GAE</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A3%81%E5%88%87%E8%AE%BE%E8%AE%A1"><span class="toc-number">4.3.</span> <span class="toc-text">裁切设计</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ref-model"><span class="toc-number">5.</span> <span class="toc-text">ref model</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#grpo"><span class="toc-number">6.</span> <span class="toc-text">GRPO</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">7.</span> <span class="toc-text">参考</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        LLM RL入门
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Reku</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-06-09T16:00:00.000Z" class="dt-published" itemprop="datePublished">2025-06-10</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/zhihu/">zhihu</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/zhihu/" rel="tag">zhihu</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <blockquote>
+<p>原文链接: https://zhuanlan.zhihu.com/p/27172237359</p>
+</blockquote>
+<p>工作需要，最近在入门强化学习。这个笔记面向工程老哥们，知道老哥们看不懂数学（因为我就不懂），忽略了大量推导，意会为主。其中可能有些理解错误，望大家多多指正。</p>
+<h2 id="llm中的强化学习定义">LLM中的强化学习定义</h2>
+<p><img src="/zhihu/images/LLM-RL入门_img_0.jpg"></p>
+<ul>
+<li>智能体（Agent）: 经过预训练和SFT的LLM，可以对外界的输入做出回应，有一定的智能。</li>
+<li>环境（Environment）: 其实是整个物理世界。如果是写算法题的话那就是leetcode平台，如果是RLHF的话，就是人类本身。</li>
+<li>状态（State）: 环境的状态，这个东西在LLM RL里面有点模糊，不像游戏AI那么清晰；可以认为LLM之前的所有输出作为环境的状态吗？</li>
+<li>动作（Action) : 对于LLM来说，就是decode过程中输出的每一个token。</li>
+<li>奖励（Reward）: 就是环境的反馈，比如人类喜不喜欢这个回答或者生成的代码能不能通过leetcode的评测，这里是搞头比较大的地方。</li>
+</ul>
+<h2 id="强化学习的基础做法">强化学习的基础做法</h2>
+<p><img src="/zhihu/images/LLM-RL入门_img_1.jpg"></p>
+<p>基础的强化学习分成两个角色，actor <span class="math inline">\(\pi\)</span> 和critic <span class="math inline">\(V_{\pi}\)</span> 。其中actor代表的就是agent，基于环境的状态和奖励能够做出决策；critic类似教师，基于当前的环境状态和actor的水平，判断一下这个状态的价值。有一点很关键，critic是『因材施教』的，critic的输出一定是针对当前的actor而言的。</p>
+<p>既然有两个概念，根据二进制，就有三种对应的做法：</p>
+<ol type="1">
+<li><p>只有critic的实体。如果critic能学的很好的话，很明显，actor只需要看看他的每一个决策critic的反应是什么，选critic反应最好的决策就行（假设action是离散的）。这个方法就叫做value-based，比较典型的是Q-learning。</p></li>
+<li><p>只有actor的实体。人教人教不会，事教人一下就会。有时候不需要critic，actor只需要和环境做互动，从环境拿反馈就行。这种方法叫做policy-based，就是一般的policy gradient方法。</p></li>
+<li><p>两个实体都有，两个模型可以互相迭代。critic的学习可能是有偏的，连续的action不好处理（value-based），而直接从环境拿反馈可能方差太大，训练不稳定（policy-based）。所以两个模型互相迭代的方法被广为采用，叫做actor-critic。</p></li>
+</ol>
+<h2 id="actor-critic">actor-critic</h2>
+<h3 id="数据来源">数据来源</h3>
+<p>RL是在LLM的后训练环节，数据是从actor <span class="math inline">\(\pi\)</span> 采样出来的。因为actor就是要训练的LLM本身，所以这个过程就是给一些prompt，decode出一些回答，基于回答的反馈去更新LLM。</p>
+<h3 id="actor的优化">actor的优化</h3>
+<p>我们先用SFT来理解。如果我们把所有的输入用来做SFT，那所有样本对于LLM都是要学习的。 先写个SFT的梯度：</p>
+<p><span class="math display">\[SFT_{\nabla}=\frac{1}{N}\sum_{i=1}^{n}\sum_{t=1}^{T_n-1}\nabla_{\theta}\pi_{\theta}(o_t|q,o_{&lt;t})\]</span></p>
+<p>其中 nn 代表seq数量， <span class="math inline">\(T_n\)</span> 代表seq长度。这个就是很经典的预测next token的loss。 那强化学习里面要怎么优化actor呢？很简单，就是在每个梯度前面乘上一个reward。</p>
+<p><span class="math display">\[Actor_{\nabla}=\frac{1}{N}\sum_{i=1}^{n}\sum_{t=1}^{T_n-1}R(\tau_n)\nabla_{\theta}\pi_{\theta}(o_t|q,o_{&lt;t})\]</span></p>
+<p>其中 <span class="math inline">\(R(\tau_n)\)</span> 代表的是每个seq对应的reward，这个东西怎么算先按下不表。感性理解就是reward越大，我越希望拟合这个seq；reward是负的，就需要极力避免这个seq。 写成强化学习的符号，就是：</p>
+<p><span class="math display">\[Actor_{\nabla}=\frac{1}{N}\sum_{i=1}^{n}\sum_{t=1}^{T_n-1}R(\tau_n)\nabla_{\theta}\pi_{\theta}(a_t|s_t)\]</span></p>
+<p>其中 <span class="math inline">\(a_t\)</span> 代表action， <span class="math inline">\(s_t\)</span> 代表状态。就是基于此，我猜想LLM RL中的状态就是之前输出的token，但这个定义其实很古怪，随着交互环境的复杂，后面应该会有变化。</p>
+<p>更加泛化一点， <span class="math inline">\(R(\tau_n)\)</span> 可以定义为 <span class="math inline">\(A_{\pi}(s_t, a_t)\)</span> ，因为这个奖励和actor本身、当前状态、当前动作都有关系。在很多资料中，这个也被叫做优势函数。</p>
+<p><span class="math display">\[Actor_{\nabla}=\frac{1}{N}\sum_{i=1}^{n}\sum_{t=1}^{T_n-1}A_{\pi}(s_t, a_t)\nabla_{\theta}\pi_{\theta}(a_t|s_t)\]</span></p>
+<h3 id="优势函数">优势函数</h3>
+<p><span class="math inline">\(A_{\pi}(s_t, a_t)\)</span> 怎么算？这个推导涉及到Q-learning，虽然这个推导不算难，但看完感觉工程同学根本没啥学的必要。只需要知道他是通过critic计算出来的：</p>
+<p><span class="math display">\[A_{\pi}(s_t, a_t)=r_t+\gamma V_{\pi}(s_{t+1})-V_{\pi}(s_t)\]</span></p>
+<p>其中 <span class="math inline">\(r_t\)</span> 是当前步骤的反馈，一般是通过reward model计算得来； <span class="math inline">\(V_{\pi}\)</span> 就是critic模型； <span class="math inline">\(s_{t+1}\)</span> 是从 <span class="math inline">\(s_t\)</span> 基于 <span class="math inline">\(a_t\)</span> 这个东西转移过来的。这个公式其实很直观，我们想一下，怎么让actor满足crtiic的需求？当然就是找到一个 <span class="math inline">\(a_t\)</span> ，使得转移过去的 <span class="math inline">\(s_{t+1}\)</span> 尽可能的好。</p>
+<h3 id="critic的优化">critic的优化</h3>
+<p>接上面的逻辑，对于一个完美的 <span class="math inline">\(V_{\pi}\)</span> ，他的递推式子就应该是（但和上面的东西结合起来有点怪异，actor需要讨好critic，但是critic又要尽量客观）：</p>
+<p><span class="math display">\[V_{\pi}(s_t)=r_t+\gamma V_{\pi}(s_{t+1})\]</span></p>
+<p>为什么有个 <span class="math inline">\(\gamma\)</span> ，因为后续状态对前面的影响应该是越来越小的，这个也比较直观。 那critic的loss就天然应该是一个MSE：</p>
+<p><span class="math display">\[Critic_{loss}=(r_t+\gamma V_{\pi}(s_{t+1})-V_{\pi}(s_t))^2\]</span></p>
+<h2 id="ppo">PPO</h2>
+<p>actor-critic的主要问题是，每次需要actor <span class="math inline">\(\pi\)</span> 去做采样，然后再回头更新出新的 <span class="math inline">\(\pi^*\)</span> ，再用 <span class="math inline">\(\pi^*\)</span> 去采样，循环往复。这个方法叫做on-policy。</p>
+<p>采样后要计算reward function、要计算ref model，这些都挺慢的。很容易就想到能不能采一次样，后面多迭代几轮，利用好之前的采样信息。这种方法就叫做off-policy。</p>
+<h3 id="重要性采样">重要性采样</h3>
+<p>off-policy的核心问题是，之前采样的 <span class="math inline">\(\pi\)</span> 和训练的 <span class="math inline">\(\pi^*\)</span> 分布是不同的，数学原理上难以保证训练的有效性。从某个分布采样的数据对另一个分布做训练，有个解决方法叫做重要性采样。数学原理很多地方都有，这里就不加赘述了，直接给出带重要性采样的更新公式，只是给之前的actor梯度加了一项：</p>
+<p><span class="math display">\[Actor_{\nabla}=\frac{1}{N}\sum_{i=1}^{n}\sum_{t=1}^{T_n-1}\frac{\pi_{\theta}(a_t|s_t)}{\pi_{\theta old}(a_t|s_t)}A_{\pi}(s_t, a_t)\nabla_{\theta}\pi_{\theta}(a_t|s_t)\]</span></p>
+<h3 id="gae">GAE</h3>
+<p>再回头看优势函数，我们之前的优势函数 <span class="math inline">\(A_{\pi}(s_t, a_t)\)</span> 是完全依赖 <span class="math inline">\(V_{\pi}\)</span> 的，但训练的初期 <span class="math inline">\(V_{\pi}\)</span> 一定是非常不准的。 <span class="math inline">\(A^{GAE}_{\pi}(s_t, a_t)\)</span> 就是平衡了 <span class="math inline">\(V_{\pi}\)</span> 的重要性和之后所有 <span class="math inline">\(r_t\)</span> 的重要性：</p>
+<p><span class="math display">\[A^{GAE}_{\pi}(s_t, a_t)=\sum_{l=0}^{\infty}(\gamma\lambda)^l\delta_{t+l}\]</span></p>
+<p>其中：</p>
+<p><span class="math display">\[\delta_{t}=r_t+\gamma V_{\pi}(s_{t+1})-V_{\pi}(s_t)\]</span></p>
+<p>可以很容易看出来 <span class="math inline">\(\lambda=0\)</span> 就是原来的 <span class="math inline">\(A_{\pi}(s_t, a_t)\)</span> 。如果 <span class="math inline">\(\lambda=1\)</span> ，那就是 <span class="math inline">\(-V_{\pi}(s_t)+\sum_{l=0}^{\infty}\gamma^lr_{t+l}\)</span> （可以展开几项写一写）。 <span class="math inline">\(\lambda\)</span> 的取值代表有多少后续的 <span class="math inline">\(r_{t+l}\)</span> 对优势函数产生了影响。</p>
+<h3 id="裁切设计">裁切设计</h3>
+<p>上面的两个内容都不难理解，结合起来，actor的梯度应该是：</p>
+<p><span class="math display">\[Actor_{\nabla}=\frac{1}{N}\sum_{i=1}^{n}\sum_{t=1}^{T_n-1}\frac{\pi_{\theta}(a_t|s_t)}{\pi_{\theta old}(a_t|s_t)}A^{GAE}_{\pi}(s_t, a_t)\nabla_{\theta}\pi_{\theta}(a_t|s_t)\]</span></p>
+<p>但通常来讲，PPO的loss形式都看起来很复杂，这是因为在更新的时候 <span class="math inline">\(\pi_{\theta}\)</span> 和 <span class="math inline">\(\pi_{\theta old}\)</span> 的差距不能太大，需要各种方式去限制两个分布的差异。效果最好的是对梯度进行裁切，如果两个分布偏差过大的话，直接加个裁切，不让他们更新的太远：</p>
+<p><span class="math display">\[Actor_{\nabla}=\frac{1}{N}\sum_{i=1}^{n}\sum_{t=1}^{T_n-1}min[\frac{\pi_{\theta}(a_t|s_t)}{\pi_{\theta old}(a_t|s_t)}A^{GAE}_{\pi}(s_t, a_t), clip(\frac{\pi_{\theta}(a_t|s_t)}{\pi_{\theta old}(a_t|s_t)}, 1 - \epsilon, 1 + \epsilon)A^{GAE}_{\pi}(s_t, a_t)]\nabla_{\theta}\pi_{\theta}(a_t|s_t)\]</span></p>
+<p>对于这个裁切的理解，下面的参考资料里面（李宏毅老师公开课和猛猿大神的文章）有基于折线图的很出色的解释，可以参考一下。</p>
+<p>上面说critic是『因材施教』的，critic的输出一定是针对当前的actor而言的，所以在actor更新的过程中，critic也要跟着更新。回忆一下之前的critic loss：</p>
+<p><span class="math display">\[Critic_{loss}=(r_t+\gamma V_{\pi}(s_{t+1})-V_{\pi}(s_t))^2\]</span></p>
+<p>在PPO中，给这地方增加了一项：</p>
+<p><span class="math display">\[Critic_{loss}=(r_t+\gamma V_{\pi}(s_{t+1})+\gamma\lambda A^{GAE}_{t+1}-V_{\pi}(s_t))^2\]</span></p>
+<p>我没怎么明白为什么，可能是为了增大 <span class="math inline">\(r_t\)</span> 的影响力。左边的 <span class="math inline">\(r_t+\gamma V_{\pi}(s_{t+1})+\gamma\lambda A^{GAE}_{t+1}\)</span> 我们简写为 <span class="math inline">\(R_t\)</span> ，这里 <span class="math inline">\(R_t\)</span> 都是提前算好的，所以用的 <span class="math inline">\(V_{\pi}\)</span> 都是 <span class="math inline">\(V_{\pi}^{old}\)</span> 。类似的，PPO也不希望 <span class="math inline">\(V_{\pi}^{new}\)</span> 和 <span class="math inline">\(V_{\pi}^{old}\)</span> 离得太远，所以最后也加了个裁切：</p>
+<p><span class="math display">\[Critic_{loss}=max([(V^{new}_{\pi}-R_t)^2, (clip(V^{new}_{\pi}, V^{old}_{\pi}-\epsilon, V^{old}_{\pi}+\epsilon)-R_t)^2])\]</span></p>
+<h2 id="ref-model">ref model</h2>
+<p>在LLM RL中，ref model是一个有点特殊的设计，之前RL提的不怎么多。主要目的是不让actor跑的太偏，依然保留一些之前预训练获得的能力。ref model和actor的初始化权重相同，一般训练很多步再更新一下权重或者根本不更新。在计算actor loss的时候，增加一项（比如KL散度），不让ref model和actor偏离的太远。</p>
+<h2 id="grpo">GRPO</h2>
+<p>GRPO因为deepseek成为了现在最火爆的强化学习算法。AIQL大神的回答里有个神图：</p>
+<p><img src="/zhihu/images/LLM-RL入门_img_2.jpg"></p>
+<p>GRPO最核心的点有两个：</p>
+<ol type="1">
+<li><p>干掉了critic model，直接通过一条prompt rollout一堆回复来采样数据集。通过增大采样来抵消方差。</p></li>
+<li><p>reward model也做了改动。对于很多问题，token level的奖励是不够合理的，DeepSeekMath引入了过程监督。DeepSeek-r1更是直接改成了rule-base。</p></li>
+</ol>
+<p>GRPO是对PPO算法的简化。之前的PPO训练模型中有actor推理、actor训练、critic、ref、reward 5个模型（因为训练和推理需要用不同的框架来加速，策略一般也不同）。GRPO一下子把critic和reward全干掉了，大力出奇迹。其实很多人在复现GRPO的过程中表示和ref model的对齐会影响效果，去掉ref model反而出来深度思考的过程了。那是不是可以幻想一下，以后只需要actor推理、actor训练，actor就和环境做互动就行了？大道至简。</p>
+<p>下一篇文章会分析一下当前业界比较优秀的RL框架（openrlhf/verl/chatlearn），结合代码再深入理解一下LLM RL的细节。</p>
+<h2 id="参考">参考</h2>
+<p><a href="https://link.zhihu.com/?target=https%3A//www.bilibili.com/video/BV1ou411874G/">B站：李宏毅强化学习教程</a><a href="https://link.zhihu.com/?target=https%3A//arxiv.org/pdf/2402.03300">DeepSeekMath (arxiv:2402.03300)</a><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/13467768873">知乎专栏</a><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/15677409107">知乎专栏</a><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/7461863937">知乎专栏</a><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/10766825126/answer/88583863333">知乎回答</a><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/25067791857">知乎专栏</a></p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#llm%E4%B8%AD%E7%9A%84%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%AE%9A%E4%B9%89"><span class="toc-number">1.</span> <span class="toc-text">LLM中的强化学习定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%9F%BA%E7%A1%80%E5%81%9A%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">强化学习的基础做法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#actor-critic"><span class="toc-number">3.</span> <span class="toc-text">actor-critic</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%9D%A5%E6%BA%90"><span class="toc-number">3.1.</span> <span class="toc-text">数据来源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#actor%E7%9A%84%E4%BC%98%E5%8C%96"><span class="toc-number">3.2.</span> <span class="toc-text">actor的优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E5%8A%BF%E5%87%BD%E6%95%B0"><span class="toc-number">3.3.</span> <span class="toc-text">优势函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#critic%E7%9A%84%E4%BC%98%E5%8C%96"><span class="toc-number">3.4.</span> <span class="toc-text">critic的优化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ppo"><span class="toc-number">4.</span> <span class="toc-text">PPO</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E8%A6%81%E6%80%A7%E9%87%87%E6%A0%B7"><span class="toc-number">4.1.</span> <span class="toc-text">重要性采样</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gae"><span class="toc-number">4.2.</span> <span class="toc-text">GAE</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A3%81%E5%88%87%E8%AE%BE%E8%AE%A1"><span class="toc-number">4.3.</span> <span class="toc-text">裁切设计</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ref-model"><span class="toc-number">5.</span> <span class="toc-text">ref model</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#grpo"><span class="toc-number">6.</span> <span class="toc-text">GRPO</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">7.</span> <span class="toc-text">参考</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wyc-ruiker.github.io/2025/06/10/zhihu/LLM-RL%E5%85%A5%E9%97%A8/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wyc-ruiker.github.io/2025/06/10/zhihu/LLM-RL%E5%85%A5%E9%97%A8/&text=LLM RL入门"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wyc-ruiker.github.io/2025/06/10/zhihu/LLM-RL%E5%85%A5%E9%97%A8/&title=LLM RL入门"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyc-ruiker.github.io/2025/06/10/zhihu/LLM-RL%E5%85%A5%E9%97%A8/&is_video=false&description=LLM RL入门"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=LLM RL入门&body=Check out this article: https://wyc-ruiker.github.io/2025/06/10/zhihu/LLM-RL%E5%85%A5%E9%97%A8/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wyc-ruiker.github.io/2025/06/10/zhihu/LLM-RL%E5%85%A5%E9%97%A8/&title=LLM RL入门"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wyc-ruiker.github.io/2025/06/10/zhihu/LLM-RL%E5%85%A5%E9%97%A8/&title=LLM RL入门"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wyc-ruiker.github.io/2025/06/10/zhihu/LLM-RL%E5%85%A5%E9%97%A8/&title=LLM RL入门"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wyc-ruiker.github.io/2025/06/10/zhihu/LLM-RL%E5%85%A5%E9%97%A8/&title=LLM RL入门"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wyc-ruiker.github.io/2025/06/10/zhihu/LLM-RL%E5%85%A5%E9%97%A8/&name=LLM RL入门&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wyc-ruiker.github.io/2025/06/10/zhihu/LLM-RL%E5%85%A5%E9%97%A8/&t=LLM RL入门"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    Reku
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'reku';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+<!-- utterances Comments -->
+
+</body>
+</html>

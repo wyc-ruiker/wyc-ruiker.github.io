@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="原文链接: https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;1919814348047623458  深度学习框架中的虚拟显存 CUDA和AscendCL都支持虚拟内存管理。两个硬件的API也基本是对齐的，以AscendCL为例，大概需要这么几个API：  CUDA和AscendCL的对应关系如下图：  核心就是解耦了虚拟内存和实际的物理内存，实际的物理内存被搞成handle，可以ma">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习框架中的虚拟显存&#x2F;vllm sleep mode">
+<meta property="og:url" content="https://wyc-ruiker.github.io/2025/06/21/zhihu/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode/index.html">
+<meta property="og:site_name" content="Reku">
+<meta property="og:description" content="原文链接: https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;1919814348047623458  深度学习框架中的虚拟显存 CUDA和AscendCL都支持虚拟内存管理。两个硬件的API也基本是对齐的，以AscendCL为例，大概需要这么几个API：  CUDA和AscendCL的对应关系如下图：  核心就是解耦了虚拟内存和实际的物理内存，实际的物理内存被搞成handle，可以ma">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode_img_0.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode_img_1.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode_img_2.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode_img_3.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode_img_4.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode_img_5.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode_img_6.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode_img_7.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode_img_8.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode_img_9.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode_img_10.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode_img_11.jpg">
+<meta property="article:published_time" content="2025-06-20T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-19T16:18:38.577Z">
+<meta property="article:author" content="Reku">
+<meta property="article:tag" content="zhihu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wyc-ruiker.github.io/zhihu/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode_img_0.jpg">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>深度学习框架中的虚拟显存/vllm sleep mode</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="Reku" type="application/atom+xml" />
+    
+	<!-- mathjax -->
+	
+		<script>
+		MathJax = {
+			tex: {
+				inlineMath: [['$', '$'], ['\\(', '\\)']],
+				displayMath: [['$$', '$$'], ['\\[', '\\]']],
+				processEscapes: true,
+				processEnvironments: true
+			},
+			options: {
+				skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+			}
+		};
+		</script>
+		<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2026/03/01/zhihu/ThunderKittens-2.0(1)_-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-Ulysses/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/06/10/zhihu/LLM-RL%E5%85%A5%E9%97%A8/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wyc-ruiker.github.io/2025/06/21/zhihu/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wyc-ruiker.github.io/2025/06/21/zhihu/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode/&text=深度学习框架中的虚拟显存/vllm sleep mode"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wyc-ruiker.github.io/2025/06/21/zhihu/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode/&title=深度学习框架中的虚拟显存/vllm sleep mode"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyc-ruiker.github.io/2025/06/21/zhihu/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode/&is_video=false&description=深度学习框架中的虚拟显存/vllm sleep mode"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=深度学习框架中的虚拟显存/vllm sleep mode&body=Check out this article: https://wyc-ruiker.github.io/2025/06/21/zhihu/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wyc-ruiker.github.io/2025/06/21/zhihu/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode/&title=深度学习框架中的虚拟显存/vllm sleep mode"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wyc-ruiker.github.io/2025/06/21/zhihu/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode/&title=深度学习框架中的虚拟显存/vllm sleep mode"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wyc-ruiker.github.io/2025/06/21/zhihu/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode/&title=深度学习框架中的虚拟显存/vllm sleep mode"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wyc-ruiker.github.io/2025/06/21/zhihu/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode/&title=深度学习框架中的虚拟显存/vllm sleep mode"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wyc-ruiker.github.io/2025/06/21/zhihu/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode/&name=深度学习框架中的虚拟显存/vllm sleep mode&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wyc-ruiker.github.io/2025/06/21/zhihu/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode/&t=深度学习框架中的虚拟显存/vllm sleep mode"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98"><span class="toc-number">1.</span> <span class="toc-text">深度学习框架中的虚拟显存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vllm-sleep-mode"><span class="toc-number">2.</span> <span class="toc-text">vllm sleep mode</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        深度学习框架中的虚拟显存/vllm sleep mode
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Reku</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-06-20T16:00:00.000Z" class="dt-published" itemprop="datePublished">2025-06-21</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/zhihu/">zhihu</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/zhihu/" rel="tag">zhihu</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <blockquote>
+<p>原文链接: https://zhuanlan.zhihu.com/p/1919814348047623458</p>
+</blockquote>
+<h3 id="深度学习框架中的虚拟显存">深度学习框架中的虚拟显存</h3>
+<p><a href="https://link.zhihu.com/?target=https%3A//developer.nvidia.com/blog/introducing-low-level-gpu-virtual-memory-management/">CUDA</a>和<a href="https://link.zhihu.com/?target=https%3A//www.hiascend.com/document/detail/zh/canncommercial/81RC1/apiref/appdevgapi/aclcppdevg_03_0114.html">AscendCL</a>都支持虚拟内存管理。两个硬件的API也基本是对齐的，以AscendCL为例，大概需要这么几个API：</p>
+<p><img src="/zhihu/images/深度学习框架中的虚拟显存_vllm-sleep-mode_img_0.jpg"></p>
+<p>CUDA和AscendCL的对应关系如下图：</p>
+<p><img src="/zhihu/images/深度学习框架中的虚拟显存_vllm-sleep-mode_img_1.jpg"></p>
+<p>核心就是解耦了虚拟内存和实际的物理内存，实际的物理内存被搞成handle，可以map到提前预留好的虚拟地址，也可以从现成的虚拟地址上面unmap掉。有了这些接口，就可以很方便的实现碎片整理等功能。</p>
+<p>具体而言，例如这样的场景，我们需要申请一个连续的2G的显存，但是显存池中只有两块不连续的1G的显存，在没有虚拟内存这一套接口的时候，只能抛出来OOM（Out Of Memory）这样的报错。</p>
+<figure>
+<img src="/zhihu/images/深度学习框架中的虚拟显存_vllm-sleep-mode_img_2.jpg" alt="OOM"><figcaption aria-hidden="true">OOM</figcaption>
+</figure>
+<p>但有了虚拟内存这一套接口，我们就可以让两个1G的虚拟地址对应的handle从这两个虚拟地址上面unmap掉，然后map到一个连续的2G的虚拟地址。</p>
+<figure>
+<img src="/zhihu/images/深度学习框架中的虚拟显存_vllm-sleep-mode_img_3.jpg" alt="碎片整理"><figcaption aria-hidden="true">碎片整理</figcaption>
+</figure>
+<p>这就是碎片整理，而且不需要框架层做类似传统碎片整理那样的搬运操作。torch里面的expandable_segments，mindspore的VMM，都是这个原理。缺点在于unmap和map这个过程有点慢，而且需要做流同步，需要打断device和host的流水。</p>
+<p>除了碎片整理，其实虚拟内存在显存管理上还有很多帮助。例如现代的深度学习框架，为了方便多个进程使用同一张卡，显存都是慢慢拓展出来的，那最后的显存就会是这种形式：</p>
+<p><img src="/zhihu/images/深度学习框架中的虚拟显存_vllm-sleep-mode_img_4.jpg"></p>
+<p>很显然，不论是cudaMalloc还是aclrtMalloc，都没法保证多次malloc出来的显存是连续的，这就会因为显存的不连续导致碎片。</p>
+<p>而虚拟内存就能做到，提前预留好一大块物理地址，不断的申请handle map到当前的物理地址上，这样不管怎么拓展显存，都是一个连续的大块显存。</p>
+<p><img src="/zhihu/images/深度学习框架中的虚拟显存_vllm-sleep-mode_img_5.jpg"></p>
+<p>当然如果有多池子的显存优化（大小显存池、param单独分池子），虚拟显存也可以做到用多少占用多少，不需要提前约定好每个池子占用的大小。而且经过一次碎片整理，不同池子的显存互相复用也会比较方便。（只要不在乎性能）</p>
+<p>对于深度学习框架来说，虚拟内存比较好用的点就是这些。其实虚拟内存还有个很大的好处是他可以在虚拟地址（或者叫上层感知到的地址）完全不变的情况下，在底层做一些特殊操作。例如<a href="https://link.zhihu.com/?target=https%3A//www.hiascend.com/graph-engine">Graph Engine</a>和<a href="https://link.zhihu.com/?target=https%3A//developer.nvidia.com/blog/cuda-graphs/">CUDA Graph</a>这种硬件底层的图调度对于地址使用都有些不可变的约束，如果能够结合虚拟内存，就能玩一些花活。但因为map/unmap这种操作确实代价有点大，一直没有想到一个比较好的整活场景。</p>
+<h3 id="vllm-sleep-mode">vllm sleep mode</h3>
+<p>最近研究了一下<a href="https://link.zhihu.com/?target=https%3A//github.com/vllm-project/vllm/pull/11743">vllm sleep mode</a>的实现，发现他通过虚拟内存的特性，在底层深度学习框架不感知的情况下完成了kvcache/weights的卸载/加载功能。</p>
+<p>sleep mode主要是在强化学习共部署的场景下，做完推理之后，得把推理的显存都释放出来给训练用。在没有这个功能的时候，适配强化学习共部署，想卸载kvcache，都是通过<a href="https://link.zhihu.com/?target=https%3A//objgraph.readthedocs.io/en/stable/">objgraph</a>等方式找到所有挂kvcache的python对象，然后一个个把持有kvcache的python对象都干掉，让python对象析构去触发框架显存的释放。跑推理之前还要一个个恢复回来，维护成本很高，每次升级vllm版本还要重新来。</p>
+<p>vllm实现sleep mode这个功能，首先是在csrc/cumem_allocator.cpp里面实现了一个简易的显存申请释放的接口，但都是通过虚拟内存的方式进行的。也就是说cumem_allocator里面每申请一块显存，都会包含虚拟地址和底层对应的handle两个信息。这些信息会通过callback记录到python层。</p>
+<p><img src="/zhihu/images/深度学习框架中的虚拟显存_vllm-sleep-mode_img_6.jpg"></p>
+<p>然后在sleep的时候，就申请一个cpu的tensor，把显存里面的内容都拷贝过去。虚拟地址不变，但是虚拟地址下面的handle都unmap并且释放掉。</p>
+<figure>
+<img src="/zhihu/images/深度学习框架中的虚拟显存_vllm-sleep-mode_img_7.jpg" alt="sleep（卸载）流程"><figcaption aria-hidden="true">sleep（卸载）流程</figcaption>
+</figure>
+<p>同理wake up的时候，就申请新的handle map到虚拟地址上，然后再把cpu里面的内容拷贝上来。</p>
+<figure>
+<img src="/zhihu/images/深度学习框架中的虚拟显存_vllm-sleep-mode_img_8.jpg" alt="wake up（恢复）流程"><figcaption aria-hidden="true">wake up（恢复）流程</figcaption>
+</figure>
+<p>那怎么让torch的显存申请走到cumem_allocator里面呢？vllm的大佬利用了<a href="https://link.zhihu.com/?target=https%3A//docs.pytorch.org/docs/stable/notes/cuda.html%23using-custom-memory-allocators-for-cuda">torch外挂显存池</a>的能力，如果在cumem定义的context中，就会自动走到对应cumem_allocator的显存申请流程：</p>
+<figure>
+<img src="/zhihu/images/深度学习框架中的虚拟显存_vllm-sleep-mode_img_9.jpg" alt="外置显存池context"><figcaption aria-hidden="true">外置显存池context</figcaption>
+</figure>
+<p>这样只要做好context管理就行了，总比管理python对象的引用关系方便很多：</p>
+<figure>
+<img src="/zhihu/images/深度学习框架中的虚拟显存_vllm-sleep-mode_img_10.jpg" alt="使用方法"><figcaption aria-hidden="true">使用方法</figcaption>
+</figure>
+<p>下面来分析，为什么这个东西非常的巧妙。先考虑我如果想实现这个功能会怎么搞？首先做好python对象的管理，然后基于python对象析构去触发显存释放是比较恶心的，也很容易出bug；还有一种方式是能不能把需要释放的tensor都调用一下to('cpu')？但pytorch的tensor to语义<a href="https://link.zhihu.com/?target=https%3A//stackoverflow.com/questions/53570334/documentation-for-pytorch-tocpu-or-tocuda">不是inplace的</a>。如果想要释放显存需要类似a=a.to('cpu')这样的书写方式，那就和第一种做好python对象的管理一模一样了，没有解决根本的问题。</p>
+<p>那我们自己管理显存呢？虽然torch做了外挂显存池的功能，但malloc和free接口都是torch框架来触发的。tensor.data_ptr()可以获取tensor的物理地址，但外部不能修改他。这也很好理解，如果外部能随便改data_ptr，框架的显存管理要怎么做呢？</p>
+<p>这时候，虚拟内存的好处就来了。刚刚说虚拟内存还有个很大的好处是他可以在虚拟地址（或者叫上层感知到的地址）完全不变的情况下，在底层做一些特殊操作。vllm sleep mode通过在torch框架完全不感知的情况下，完成了对handle的卸载/加载。torch还以为自己的显存管理的好好的，殊不知在底层已经被偷偷的unmap掉了。vllm社区的大佬水平确实高，这个方案完美结合了torch/虚拟内存的底层各种机制，做到了vllm和torch的解耦。</p>
+<p>当然，这套方案也不是完全没缺点，一个主要的缺点就是，因为是对torch框架的隐瞒，torch只要在sleep之后做了任何对这些tensor的读写操作，都会直接触发底层的ERROR，因为虚拟地址并没有映射到对应的物理地址。python的灵活性这么高，这个报错或者校验在vllm层是没法做的。</p>
+<p>一个可能的完美解决方案是让torch框架提供inplace to/原地offload这样的语义，这样也不需要做任何python对象的管理，推理框架适配起来也很轻松，报错也能做的非常清晰。问题就是这个语义可能对框架的冲击比较大，对于成图更是重量级：）</p>
+<p>从代码注释上看，这个方案也踩中了torch框架的一堆bug，蛮不容易的。比较令人在意的是这个：</p>
+<p><img src="/zhihu/images/深度学习框架中的虚拟显存_vllm-sleep-mode_img_11.jpg"></p>
+<p>用这个就不能用torch的expandable_segments了，而强化学习场景的load/offload又特别频繁，碎片会比较严重，长稳训练可能会出现一些问题。</p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98"><span class="toc-number">1.</span> <span class="toc-text">深度学习框架中的虚拟显存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vllm-sleep-mode"><span class="toc-number">2.</span> <span class="toc-text">vllm sleep mode</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wyc-ruiker.github.io/2025/06/21/zhihu/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wyc-ruiker.github.io/2025/06/21/zhihu/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode/&text=深度学习框架中的虚拟显存/vllm sleep mode"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wyc-ruiker.github.io/2025/06/21/zhihu/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode/&title=深度学习框架中的虚拟显存/vllm sleep mode"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyc-ruiker.github.io/2025/06/21/zhihu/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode/&is_video=false&description=深度学习框架中的虚拟显存/vllm sleep mode"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=深度学习框架中的虚拟显存/vllm sleep mode&body=Check out this article: https://wyc-ruiker.github.io/2025/06/21/zhihu/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wyc-ruiker.github.io/2025/06/21/zhihu/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode/&title=深度学习框架中的虚拟显存/vllm sleep mode"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wyc-ruiker.github.io/2025/06/21/zhihu/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode/&title=深度学习框架中的虚拟显存/vllm sleep mode"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wyc-ruiker.github.io/2025/06/21/zhihu/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode/&title=深度学习框架中的虚拟显存/vllm sleep mode"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wyc-ruiker.github.io/2025/06/21/zhihu/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode/&title=深度学习框架中的虚拟显存/vllm sleep mode"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wyc-ruiker.github.io/2025/06/21/zhihu/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode/&name=深度学习框架中的虚拟显存/vllm sleep mode&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wyc-ruiker.github.io/2025/06/21/zhihu/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%98%BE%E5%AD%98_vllm-sleep-mode/&t=深度学习框架中的虚拟显存/vllm sleep mode"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    Reku
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'reku';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+<!-- utterances Comments -->
+
+</body>
+</html>

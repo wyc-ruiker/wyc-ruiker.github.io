@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="http:&#x2F;&#x2F;hihocoder.com&#x2F;problemset&#x2F;problem&#x2F;1403">
+<meta property="og:type" content="article">
+<meta property="og:title" content="后缀数组复习">
+<meta property="og:url" content="https://wyc-ruiker.github.io/2016/12/22/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84%E5%A4%8D%E4%B9%A0/index.html">
+<meta property="og:site_name" content="Reku">
+<meta property="og:description" content="http:&#x2F;&#x2F;hihocoder.com&#x2F;problemset&#x2F;problem&#x2F;1403">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-12-22T13:21:35.000Z">
+<meta property="article:modified_time" content="2021-12-16T11:33:37.000Z">
+<meta property="article:author" content="Reku">
+<meta property="article:tag" content="acm">
+<meta property="article:tag" content="字符串">
+<meta property="article:tag" content="后缀数组">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>后缀数组复习</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="Reku" type="application/atom+xml" />
+    
+	<!-- mathjax -->
+	
+		<script>
+		MathJax = {
+			tex: {
+				inlineMath: [['$', '$'], ['\\(', '\\)']],
+				displayMath: [['$$', '$$'], ['\\[', '\\]']],
+				processEscapes: true,
+				processEnvironments: true
+			},
+			options: {
+				skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+			}
+		};
+		</script>
+		<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2017/02/03/kd-dis/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2016/10/30/%E8%BF%91%E6%9C%9F%E9%A2%98%E7%9B%AE-2/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wyc-ruiker.github.io/2016/12/22/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84%E5%A4%8D%E4%B9%A0/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wyc-ruiker.github.io/2016/12/22/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84%E5%A4%8D%E4%B9%A0/&text=后缀数组复习"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wyc-ruiker.github.io/2016/12/22/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84%E5%A4%8D%E4%B9%A0/&title=后缀数组复习"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyc-ruiker.github.io/2016/12/22/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84%E5%A4%8D%E4%B9%A0/&is_video=false&description=后缀数组复习"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=后缀数组复习&body=Check out this article: https://wyc-ruiker.github.io/2016/12/22/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84%E5%A4%8D%E4%B9%A0/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wyc-ruiker.github.io/2016/12/22/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84%E5%A4%8D%E4%B9%A0/&title=后缀数组复习"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wyc-ruiker.github.io/2016/12/22/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84%E5%A4%8D%E4%B9%A0/&title=后缀数组复习"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wyc-ruiker.github.io/2016/12/22/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84%E5%A4%8D%E4%B9%A0/&title=后缀数组复习"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wyc-ruiker.github.io/2016/12/22/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84%E5%A4%8D%E4%B9%A0/&title=后缀数组复习"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wyc-ruiker.github.io/2016/12/22/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84%E5%A4%8D%E4%B9%A0/&name=后缀数组复习&description=&lt;p&gt;&lt;a href=&#34;http://hihocoder.com/problemset/problem/1403&#34;&gt;http://hihocoder.com/problemset/problem/1403&lt;/a&gt;&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wyc-ruiker.github.io/2016/12/22/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84%E5%A4%8D%E4%B9%A0/&t=后缀数组复习"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        后缀数组复习
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Reku</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2016-12-22T13:21:35.000Z" class="dt-published" itemprop="datePublished">2016-12-22</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/acm/">acm</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/acm/" rel="tag">acm</a>, <a class="p-category" href="/tags/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84/" rel="tag">后缀数组</a>, <a class="p-category" href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="tag">字符串</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p><a target="_blank" rel="noopener" href="http://hihocoder.com/problemset/problem/1403">http://hihocoder.com/problemset/problem/1403</a> <span id="more"></span></p>
+<blockquote>
+<p>小Hi平时的一大兴趣爱好就是演奏钢琴。我们知道一个音乐旋律被表示为长度为 N 的数构成的数列。小Hi在练习过很多曲子以后发现很多作品自身包含一样的旋律。 旋律可以表示为一段连续的数列，相似的旋律在原数列不可重叠，比如在1 2 3 2 3 2 1 中 2 3 2 出现了一次，2 3 出现了两次，小Hi想知道一段旋律中出现次数至少为两次的旋律最长是多少？</p>
+</blockquote>
+<p>我感觉hihocoder上讲的还是非常清楚的。 求出来<span class="math inline">\(height\)</span>数组之后，就是一个二分，找到长度为<span class="math inline">\(k-1\)</span>的子序列的最大最小值就可以了，非常的裸。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">SuffixArray</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">const</span> <span class="type">static</span> <span class="type">int</span> MAXN = <span class="number">100000</span> + <span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> cnt[MAXN], tr[<span class="number">2</span>][MAXN], ts[MAXN];</span><br><span class="line">    <span class="type">int</span> sa[MAXN], rk[MAXN], ht[MAXN], len;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">construct</span><span class="params">(<span class="type">const</span> <span class="type">int</span> *s, <span class="type">int</span> n, <span class="type">int</span> m=<span class="number">256</span>)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> i,j,k,*x=tr[<span class="number">0</span>],*y=tr[<span class="number">1</span>]; <span class="keyword">this</span>-&gt;len = n;</span><br><span class="line">        <span class="built_in">memset</span>(cnt,<span class="number">0</span>,<span class="built_in">sizeof</span>(cnt[<span class="number">0</span>])*m); <span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;n;++i) cnt[s[i]]++;</span><br><span class="line">        <span class="built_in">partial_sum</span>(cnt,cnt+m,cnt); <span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;n;++i) rk[i]=cnt[s[i]]<span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">for</span> (k=<span class="number">1</span>;k&lt;=n;k&lt;&lt;=<span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;n;++i) x[i]=rk[i],y[i]=i+k&lt;n?rk[i+k]<span class="number">+1</span>:<span class="number">0</span>;</span><br><span class="line">            <span class="built_in">fill</span>(cnt,cnt+n<span class="number">+1</span>,<span class="number">0</span>); <span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;n;++i) cnt[y[i]]++;</span><br><span class="line">            <span class="built_in">partial_sum</span>(cnt,cnt+n<span class="number">+1</span>,cnt);</span><br><span class="line">            <span class="keyword">for</span> (i=n<span class="number">-1</span>;i&gt;=<span class="number">0</span>;--i) ts[--cnt[y[i]]]=i;</span><br><span class="line">            <span class="built_in">fill</span>(cnt,cnt+n<span class="number">+1</span>,<span class="number">0</span>); <span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;n;++i) cnt[x[i]]++;</span><br><span class="line">            <span class="built_in">partial_sum</span>(cnt,cnt+n<span class="number">+1</span>,cnt);</span><br><span class="line">            <span class="keyword">for</span> (i=n<span class="number">-1</span>;i&gt;=<span class="number">0</span>;--i) sa[--cnt[x[ts[i]]]]=ts[i];</span><br><span class="line">            <span class="keyword">for</span> (i=rk[sa[<span class="number">0</span>]]=<span class="number">0</span>;i<span class="number">+1</span>&lt;n;++i) &#123;</span><br><span class="line">                rk[sa[i<span class="number">+1</span>]]=rk[sa[i]]+(x[sa[i]]!=x[sa[i<span class="number">+1</span>]]||y[sa[i]]!=y[sa[i<span class="number">+1</span>]]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (i=<span class="number">0</span>,k=<span class="number">0</span>;i&lt;n;++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!rk[i]) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">for</span> (j=sa[rk[i]<span class="number">-1</span>];i+k&lt;n&amp;&amp;j+k&lt;n&amp;&amp;s[i+k]==s[j+k];) k++;</span><br><span class="line">            ht[rk[i]]=k; <span class="keyword">if</span> (k) k--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">rmq_init</span>(n);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">lcp</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">        a=rk[a],b=rk[b];</span><br><span class="line">        <span class="keyword">if</span> (a == b) <span class="keyword">return</span> len - a + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (a&gt;b) <span class="built_in">swap</span>(a,b);</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">rmq</span>(a<span class="number">+1</span>,b);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> mx[MAXN][<span class="number">20</span>], LOG[MAXN];</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">rmq_init</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i=-(LOG[<span class="number">0</span>]=<span class="number">-1</span>);i&lt;n;++i) LOG[i]=LOG[i&gt;&gt;<span class="number">1</span>]<span class="number">+1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;++i) mx[i][<span class="number">0</span>]=ht[i];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i,j=<span class="number">1</span>;(<span class="number">1</span>&lt;&lt;j)&lt;n;++j) &#123;</span><br><span class="line">            <span class="keyword">for</span> (i=<span class="number">0</span>;i+(<span class="number">1</span>&lt;&lt;j)&lt;=n;++i)</span><br><span class="line">                mx[i][j]=<span class="built_in">min</span>(mx[i][j<span class="number">-1</span>],mx[i+(<span class="number">1</span>&lt;&lt;(j<span class="number">-1</span>))][j<span class="number">-1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">rmq</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> k=LOG[b-a<span class="number">+1</span>];</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">min</span>(mx[a][k],mx[b-(<span class="number">1</span>&lt;&lt;k)<span class="number">+1</span>][k]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; nico;</span><br><span class="line"><span class="type">int</span> n,k;</span><br><span class="line"><span class="type">int</span> u[<span class="number">20010</span>]=&#123;&#125;;</span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">pan</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> num=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(nico.ht[i]&gt;=x) num++;</span><br><span class="line">		<span class="keyword">else</span> num=<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">if</span>(num&gt;=y) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>,&amp;n,&amp;k);</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;u[i]);</span><br><span class="line">	&#125;</span><br><span class="line">	nico.<span class="built_in">construct</span>(u,n,<span class="number">256</span>);</span><br><span class="line">	k--;</span><br><span class="line">	<span class="type">int</span> l=<span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> r=n;</span><br><span class="line">	<span class="keyword">while</span>(l&lt;r)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="type">int</span> mid=(l+r)/<span class="number">2</span><span class="number">+1</span>;</span><br><span class="line">		<span class="keyword">if</span>(<span class="built_in">pan</span>(mid,k)) l=mid;</span><br><span class="line">		<span class="keyword">else</span> r=mid<span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	cout&lt;&lt;l&lt;&lt;endl;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="http://hihocoder.com/problemset/problem/1407">http://hihocoder.com/problemset/problem/1407</a></p>
+<blockquote>
+<p>小Hi平时的一大兴趣爱好就是演奏钢琴。我们知道一个音乐旋律被表示为长度为 N 的数构成的数列。小Hi在练习过很多曲子以后发现很多作品自身包含一样的旋律。 旋律可以表示为一段连续的数列，相似的旋律在原数列不可重叠，比如在1 2 3 2 3 2 1 中 2 3 2 出现了一次，2 3 出现了两次，小Hi想知道一段旋律中出现次数至少为两次的旋律最长是多少？</p>
+</blockquote>
+<p>因为两次这个情况非常特殊，所以我们可以把字典序相邻的，整体公共前缀长度<span class="math inline">\(&gt;k\)</span>的打包，然后求一下最近的位置<span class="math inline">\(ma\)</span>和最远的位置<span class="math inline">\(mi\)</span>，用<span class="math inline">\(ma-mi&gt;=k\)</span>来判断这个公共前缀是否重复两次。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">SuffixArray</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">const</span> <span class="type">static</span> <span class="type">int</span> MAXN = <span class="number">100000</span> + <span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> cnt[MAXN], tr[<span class="number">2</span>][MAXN], ts[MAXN];</span><br><span class="line">    <span class="type">int</span> sa[MAXN], rk[MAXN], ht[MAXN], len;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">construct</span><span class="params">(<span class="type">const</span> <span class="type">int</span> *s, <span class="type">int</span> n, <span class="type">int</span> m=<span class="number">256</span>)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> i,j,k,*x=tr[<span class="number">0</span>],*y=tr[<span class="number">1</span>]; <span class="keyword">this</span>-&gt;len = n;</span><br><span class="line">        <span class="built_in">memset</span>(cnt,<span class="number">0</span>,<span class="built_in">sizeof</span>(cnt[<span class="number">0</span>])*m); <span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;n;++i) cnt[s[i]]++;</span><br><span class="line">        <span class="built_in">partial_sum</span>(cnt,cnt+m,cnt); <span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;n;++i) rk[i]=cnt[s[i]]<span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">for</span> (k=<span class="number">1</span>;k&lt;=n;k&lt;&lt;=<span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;n;++i) x[i]=rk[i],y[i]=i+k&lt;n?rk[i+k]<span class="number">+1</span>:<span class="number">0</span>;</span><br><span class="line">            <span class="built_in">fill</span>(cnt,cnt+n<span class="number">+1</span>,<span class="number">0</span>); <span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;n;++i) cnt[y[i]]++;</span><br><span class="line">            <span class="built_in">partial_sum</span>(cnt,cnt+n<span class="number">+1</span>,cnt);</span><br><span class="line">            <span class="keyword">for</span> (i=n<span class="number">-1</span>;i&gt;=<span class="number">0</span>;--i) ts[--cnt[y[i]]]=i;</span><br><span class="line">            <span class="built_in">fill</span>(cnt,cnt+n<span class="number">+1</span>,<span class="number">0</span>); <span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;n;++i) cnt[x[i]]++;</span><br><span class="line">            <span class="built_in">partial_sum</span>(cnt,cnt+n<span class="number">+1</span>,cnt);</span><br><span class="line">            <span class="keyword">for</span> (i=n<span class="number">-1</span>;i&gt;=<span class="number">0</span>;--i) sa[--cnt[x[ts[i]]]]=ts[i];</span><br><span class="line">            <span class="keyword">for</span> (i=rk[sa[<span class="number">0</span>]]=<span class="number">0</span>;i<span class="number">+1</span>&lt;n;++i) &#123;</span><br><span class="line">                rk[sa[i<span class="number">+1</span>]]=rk[sa[i]]+(x[sa[i]]!=x[sa[i<span class="number">+1</span>]]||y[sa[i]]!=y[sa[i<span class="number">+1</span>]]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (i=<span class="number">0</span>,k=<span class="number">0</span>;i&lt;n;++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!rk[i]) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">for</span> (j=sa[rk[i]<span class="number">-1</span>];i+k&lt;n&amp;&amp;j+k&lt;n&amp;&amp;s[i+k]==s[j+k];) k++;</span><br><span class="line">            ht[rk[i]]=k; <span class="keyword">if</span> (k) k--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">rmq_init</span>(n);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">lcp</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">        a=rk[a],b=rk[b];</span><br><span class="line">        <span class="keyword">if</span> (a == b) <span class="keyword">return</span> len - a + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (a&gt;b) <span class="built_in">swap</span>(a,b);</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">rmq</span>(a<span class="number">+1</span>,b);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">pan</span><span class="params">(<span class="type">int</span> k,<span class="type">int</span> n)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="type">int</span> ma,mi;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span>(ht[i]&lt;k)</span><br><span class="line">			&#123;</span><br><span class="line">				ma=sa[i];</span><br><span class="line">				mi=sa[i];</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">			&#123;</span><br><span class="line">				ma=<span class="built_in">max</span>(ma,sa[i]);</span><br><span class="line">				mi=<span class="built_in">min</span>(mi,sa[i]);</span><br><span class="line">				<span class="keyword">if</span>(ma-mi&gt;=k) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> mx[MAXN][<span class="number">20</span>], LOG[MAXN];</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">rmq_init</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i=-(LOG[<span class="number">0</span>]=<span class="number">-1</span>);i&lt;n;++i) LOG[i]=LOG[i&gt;&gt;<span class="number">1</span>]<span class="number">+1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;++i) mx[i][<span class="number">0</span>]=ht[i];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i,j=<span class="number">1</span>;(<span class="number">1</span>&lt;&lt;j)&lt;n;++j) &#123;</span><br><span class="line">            <span class="keyword">for</span> (i=<span class="number">0</span>;i+(<span class="number">1</span>&lt;&lt;j)&lt;=n;++i)</span><br><span class="line">                mx[i][j]=<span class="built_in">min</span>(mx[i][j<span class="number">-1</span>],mx[i+(<span class="number">1</span>&lt;&lt;(j<span class="number">-1</span>))][j<span class="number">-1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">rmq</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> k=LOG[b-a<span class="number">+1</span>];</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">min</span>(mx[a][k],mx[b-(<span class="number">1</span>&lt;&lt;k)<span class="number">+1</span>][k]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; nico;</span><br><span class="line"><span class="type">int</span> n;</span><br><span class="line"><span class="type">int</span> u[<span class="number">100010</span>]=&#123;&#125;;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;n);</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;u[i]);</span><br><span class="line">	&#125;</span><br><span class="line">	nico.<span class="built_in">construct</span>(u,n,<span class="number">256</span>);</span><br><span class="line">	<span class="type">int</span> l=<span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> r=n;</span><br><span class="line">	<span class="keyword">while</span>(l&lt;r)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="type">int</span> mid=(l+r)/<span class="number">2</span><span class="number">+1</span>;</span><br><span class="line">		<span class="keyword">if</span>(nico.<span class="built_in">pan</span>(mid,n)) l=mid;</span><br><span class="line">		<span class="keyword">else</span> r=mid<span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	cout&lt;&lt;l&lt;&lt;endl;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="http://hihocoder.com/problemset/problem/1415">http://hihocoder.com/problemset/problem/1415</a></p>
+<blockquote>
+<p>小Hi平时的一大兴趣爱好就是演奏钢琴。我们知道一个音乐旋律被表示为长度为 N 的数构成的数列。小Hi在练习过很多曲子以后发现很多作品中的旋律有共同的部分。 旋律是一段连续的数列，如果同一段旋律在作品A和作品B中同时出现过，这段旋律就是A和B共同的部分，比如在abab 在 bababab 和 cabacababc 中都出现过。小Hi想知道两部作品的共同旋律最长是多少？</p>
+</blockquote>
+<p>思路比较显然，就是把字符串合起来排个序，然后判断一下相邻字典序的后缀是不是属于两个串，感觉也可以推广到多个串？</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">SuffixArray</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">const</span> <span class="type">static</span> <span class="type">int</span> MAXN = <span class="number">300000</span> + <span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> cnt[MAXN], tr[<span class="number">2</span>][MAXN], ts[MAXN];</span><br><span class="line">    <span class="type">int</span> sa[MAXN], rk[MAXN], ht[MAXN], len;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">construct</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *s, <span class="type">int</span> n, <span class="type">int</span> m=<span class="number">256</span>)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> i,j,k,*x=tr[<span class="number">0</span>],*y=tr[<span class="number">1</span>]; <span class="keyword">this</span>-&gt;len = n;</span><br><span class="line">        <span class="built_in">memset</span>(cnt,<span class="number">0</span>,<span class="built_in">sizeof</span>(cnt[<span class="number">0</span>])*m); <span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;n;++i) cnt[s[i]]++;</span><br><span class="line">        <span class="built_in">partial_sum</span>(cnt,cnt+m,cnt); <span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;n;++i) rk[i]=cnt[s[i]]<span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">for</span> (k=<span class="number">1</span>;k&lt;=n;k&lt;&lt;=<span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;n;++i) x[i]=rk[i],y[i]=i+k&lt;n?rk[i+k]<span class="number">+1</span>:<span class="number">0</span>;</span><br><span class="line">            <span class="built_in">fill</span>(cnt,cnt+n<span class="number">+1</span>,<span class="number">0</span>); <span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;n;++i) cnt[y[i]]++;</span><br><span class="line">            <span class="built_in">partial_sum</span>(cnt,cnt+n<span class="number">+1</span>,cnt);</span><br><span class="line">            <span class="keyword">for</span> (i=n<span class="number">-1</span>;i&gt;=<span class="number">0</span>;--i) ts[--cnt[y[i]]]=i;</span><br><span class="line">            <span class="built_in">fill</span>(cnt,cnt+n<span class="number">+1</span>,<span class="number">0</span>); <span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;n;++i) cnt[x[i]]++;</span><br><span class="line">            <span class="built_in">partial_sum</span>(cnt,cnt+n<span class="number">+1</span>,cnt);</span><br><span class="line">            <span class="keyword">for</span> (i=n<span class="number">-1</span>;i&gt;=<span class="number">0</span>;--i) sa[--cnt[x[ts[i]]]]=ts[i];</span><br><span class="line">            <span class="keyword">for</span> (i=rk[sa[<span class="number">0</span>]]=<span class="number">0</span>;i<span class="number">+1</span>&lt;n;++i) &#123;</span><br><span class="line">                rk[sa[i<span class="number">+1</span>]]=rk[sa[i]]+(x[sa[i]]!=x[sa[i<span class="number">+1</span>]]||y[sa[i]]!=y[sa[i<span class="number">+1</span>]]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (i=<span class="number">0</span>,k=<span class="number">0</span>;i&lt;n;++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!rk[i]) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">for</span> (j=sa[rk[i]<span class="number">-1</span>];i+k&lt;n&amp;&amp;j+k&lt;n&amp;&amp;s[i+k]==s[j+k];) k++;</span><br><span class="line">            ht[rk[i]]=k; <span class="keyword">if</span> (k) k--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">rmq_init</span>(n);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">lcp</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">        a=rk[a],b=rk[b];</span><br><span class="line">        <span class="keyword">if</span> (a == b) <span class="keyword">return</span> len - a + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (a&gt;b) <span class="built_in">swap</span>(a,b);</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">rmq</span>(a<span class="number">+1</span>,b);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">pan</span><span class="params">(<span class="type">int</span> k,<span class="type">int</span> n)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="type">int</span> ma,mi;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span>(ht[i]&lt;k)</span><br><span class="line">			&#123;</span><br><span class="line">				ma=sa[i];</span><br><span class="line">				mi=sa[i];</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">			&#123;</span><br><span class="line">				ma=<span class="built_in">max</span>(ma,sa[i]);</span><br><span class="line">				mi=<span class="built_in">min</span>(mi,sa[i]);</span><br><span class="line">				<span class="keyword">if</span>(ma-mi&gt;=k) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> mx[MAXN][<span class="number">20</span>], LOG[MAXN];</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">rmq_init</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i=-(LOG[<span class="number">0</span>]=<span class="number">-1</span>);i&lt;n;++i) LOG[i]=LOG[i&gt;&gt;<span class="number">1</span>]<span class="number">+1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;++i) mx[i][<span class="number">0</span>]=ht[i];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i,j=<span class="number">1</span>;(<span class="number">1</span>&lt;&lt;j)&lt;n;++j) &#123;</span><br><span class="line">            <span class="keyword">for</span> (i=<span class="number">0</span>;i+(<span class="number">1</span>&lt;&lt;j)&lt;=n;++i)</span><br><span class="line">                mx[i][j]=<span class="built_in">min</span>(mx[i][j<span class="number">-1</span>],mx[i+(<span class="number">1</span>&lt;&lt;(j<span class="number">-1</span>))][j<span class="number">-1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">rmq</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> k=LOG[b-a<span class="number">+1</span>];</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">min</span>(mx[a][k],mx[b-(<span class="number">1</span>&lt;&lt;k)<span class="number">+1</span>][k]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; nico;</span><br><span class="line">string a,b;</span><br><span class="line"><span class="type">char</span> *c;</span><br><span class="line"><span class="type">int</span> n;</span><br><span class="line"><span class="type">int</span> t;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	cin&gt;&gt;a&gt;&gt;b;</span><br><span class="line">	t=a.<span class="built_in">size</span>();</span><br><span class="line">	a=a+<span class="string">&#x27;#&#x27;</span>+b;</span><br><span class="line">	n=a.<span class="built_in">size</span>();</span><br><span class="line">	c=(<span class="type">char</span>*)a.<span class="built_in">data</span>();</span><br><span class="line">	nico.<span class="built_in">construct</span>(c,n,<span class="number">256</span>);</span><br><span class="line">	<span class="type">int</span> ans=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(nico.sa[i]&gt;t&amp;&amp;nico.sa[i<span class="number">-1</span>]&lt;t) ans=<span class="built_in">max</span>(ans,nico.ht[i]);</span><br><span class="line">		<span class="keyword">if</span>(nico.sa[i]&lt;t&amp;&amp;nico.sa[i<span class="number">-1</span>]&gt;t) ans=<span class="built_in">max</span>(ans,nico.ht[i]);</span><br><span class="line">	&#125;</span><br><span class="line">	cout&lt;&lt;ans&lt;&lt;endl;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>小Hi平时的一大兴趣爱好就是演奏钢琴。我们知道一个音乐旋律被表示为长度为 N 的数构成的数列。小Hi在练习过很多曲子以后发现很多作品中的旋律有重复的部分。 我们把一段旋律称为(k,l)-重复的，如果它满足由一个长度为l的字符串重复了k次组成。 如旋律abaabaabaaba是(4,3)重复的，因为它由aba重复4次组成。 小Hi想知道一部作品中k最大的(k,l)-重复旋律。</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="http://hihocoder.com/problemset/problem/1419">http://hihocoder.com/problemset/problem/1419</a> 神奇的结论！</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">SuffixArray</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">const</span> <span class="type">static</span> <span class="type">int</span> MAXN = <span class="number">100000</span> + <span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> cnt[MAXN], tr[<span class="number">2</span>][MAXN], ts[MAXN];</span><br><span class="line">    <span class="type">int</span> sa[MAXN], rk[MAXN], ht[MAXN], len;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">construct</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *s, <span class="type">int</span> n, <span class="type">int</span> m=<span class="number">256</span>)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> i,j,k,*x=tr[<span class="number">0</span>],*y=tr[<span class="number">1</span>]; <span class="keyword">this</span>-&gt;len = n;</span><br><span class="line">        <span class="built_in">memset</span>(cnt,<span class="number">0</span>,<span class="built_in">sizeof</span>(cnt[<span class="number">0</span>])*m); <span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;n;++i) cnt[s[i]]++;</span><br><span class="line">        <span class="built_in">partial_sum</span>(cnt,cnt+m,cnt); <span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;n;++i) rk[i]=cnt[s[i]]<span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">for</span> (k=<span class="number">1</span>;k&lt;=n;k&lt;&lt;=<span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;n;++i) x[i]=rk[i],y[i]=i+k&lt;n?rk[i+k]<span class="number">+1</span>:<span class="number">0</span>;</span><br><span class="line">            <span class="built_in">fill</span>(cnt,cnt+n<span class="number">+1</span>,<span class="number">0</span>); <span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;n;++i) cnt[y[i]]++;</span><br><span class="line">            <span class="built_in">partial_sum</span>(cnt,cnt+n<span class="number">+1</span>,cnt);</span><br><span class="line">            <span class="keyword">for</span> (i=n<span class="number">-1</span>;i&gt;=<span class="number">0</span>;--i) ts[--cnt[y[i]]]=i;</span><br><span class="line">            <span class="built_in">fill</span>(cnt,cnt+n<span class="number">+1</span>,<span class="number">0</span>); <span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;n;++i) cnt[x[i]]++;</span><br><span class="line">            <span class="built_in">partial_sum</span>(cnt,cnt+n<span class="number">+1</span>,cnt);</span><br><span class="line">            <span class="keyword">for</span> (i=n<span class="number">-1</span>;i&gt;=<span class="number">0</span>;--i) sa[--cnt[x[ts[i]]]]=ts[i];</span><br><span class="line">            <span class="keyword">for</span> (i=rk[sa[<span class="number">0</span>]]=<span class="number">0</span>;i<span class="number">+1</span>&lt;n;++i) &#123;</span><br><span class="line">                rk[sa[i<span class="number">+1</span>]]=rk[sa[i]]+(x[sa[i]]!=x[sa[i<span class="number">+1</span>]]||y[sa[i]]!=y[sa[i<span class="number">+1</span>]]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (i=<span class="number">0</span>,k=<span class="number">0</span>;i&lt;n;++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!rk[i]) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">for</span> (j=sa[rk[i]<span class="number">-1</span>];i+k&lt;n&amp;&amp;j+k&lt;n&amp;&amp;s[i+k]==s[j+k];) k++;</span><br><span class="line">            ht[rk[i]]=k; <span class="keyword">if</span> (k) k--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">rmq_init</span>(n);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">lcp</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">        a=rk[a],b=rk[b];</span><br><span class="line">        <span class="keyword">if</span> (a == b) <span class="keyword">return</span> len - a + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (a&gt;b) <span class="built_in">swap</span>(a,b);</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">rmq</span>(a<span class="number">+1</span>,b);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">ff</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">    	<span class="type">int</span> ans=<span class="number">0</span>;</span><br><span class="line">    	<span class="keyword">for</span>(<span class="type">int</span> L=<span class="number">1</span>;L&lt;=len;L++)</span><br><span class="line">		&#123;</span><br><span class="line">		    <span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">0</span>;i+L&lt;len;i+=L)</span><br><span class="line">		    &#123;</span><br><span class="line">		        <span class="type">int</span> R=<span class="built_in">lcp</span>(i,i+L);</span><br><span class="line">		        ans=<span class="built_in">max</span>(ans,R/L<span class="number">+1</span>);</span><br><span class="line">		        <span class="keyword">if</span> (i&gt;=L-R%L)</span><br><span class="line">		        &#123;</span><br><span class="line">		            ans=<span class="built_in">max</span>(<span class="built_in">lcp</span>(i-L+R%L,i+R%L)/L<span class="number">+1</span>,ans);</span><br><span class="line">		        &#125;</span><br><span class="line">		    &#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> ans;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> mx[MAXN][<span class="number">20</span>], LOG[MAXN];</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">rmq_init</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i=-(LOG[<span class="number">0</span>]=<span class="number">-1</span>);i&lt;n;++i) LOG[i]=LOG[i&gt;&gt;<span class="number">1</span>]<span class="number">+1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;++i) mx[i][<span class="number">0</span>]=ht[i];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i,j=<span class="number">1</span>;(<span class="number">1</span>&lt;&lt;j)&lt;n;++j) &#123;</span><br><span class="line">            <span class="keyword">for</span> (i=<span class="number">0</span>;i+(<span class="number">1</span>&lt;&lt;j)&lt;=n;++i)</span><br><span class="line">                mx[i][j]=<span class="built_in">min</span>(mx[i][j<span class="number">-1</span>],mx[i+(<span class="number">1</span>&lt;&lt;(j<span class="number">-1</span>))][j<span class="number">-1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">rmq</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> k=LOG[b-a<span class="number">+1</span>];</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">min</span>(mx[a][k],mx[b-(<span class="number">1</span>&lt;&lt;k)<span class="number">+1</span>][k]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; nico;</span><br><span class="line"><span class="type">int</span> n,k;</span><br><span class="line"><span class="type">char</span> u[<span class="number">100010</span>]=&#123;&#125;;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%s&quot;</span>,u);</span><br><span class="line">	nico.<span class="built_in">construct</span>(u,<span class="built_in">strlen</span>(u),<span class="number">256</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,nico.<span class="built_in">ff</span>());</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wyc-ruiker.github.io/2016/12/22/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84%E5%A4%8D%E4%B9%A0/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wyc-ruiker.github.io/2016/12/22/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84%E5%A4%8D%E4%B9%A0/&text=后缀数组复习"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wyc-ruiker.github.io/2016/12/22/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84%E5%A4%8D%E4%B9%A0/&title=后缀数组复习"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyc-ruiker.github.io/2016/12/22/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84%E5%A4%8D%E4%B9%A0/&is_video=false&description=后缀数组复习"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=后缀数组复习&body=Check out this article: https://wyc-ruiker.github.io/2016/12/22/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84%E5%A4%8D%E4%B9%A0/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wyc-ruiker.github.io/2016/12/22/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84%E5%A4%8D%E4%B9%A0/&title=后缀数组复习"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wyc-ruiker.github.io/2016/12/22/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84%E5%A4%8D%E4%B9%A0/&title=后缀数组复习"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wyc-ruiker.github.io/2016/12/22/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84%E5%A4%8D%E4%B9%A0/&title=后缀数组复习"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wyc-ruiker.github.io/2016/12/22/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84%E5%A4%8D%E4%B9%A0/&title=后缀数组复习"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wyc-ruiker.github.io/2016/12/22/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84%E5%A4%8D%E4%B9%A0/&name=后缀数组复习&description=&lt;p&gt;&lt;a href=&#34;http://hihocoder.com/problemset/problem/1403&#34;&gt;http://hihocoder.com/problemset/problem/1403&lt;/a&gt;&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wyc-ruiker.github.io/2016/12/22/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84%E5%A4%8D%E4%B9%A0/&t=后缀数组复习"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    Reku
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'reku';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+<!-- utterances Comments -->
+
+</body>
+</html>

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="原文链接: https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;1887098218866794901  个人学习记录。这三个东西本质的原理都差不多，就是attention怎么沿着序列维度切。 online softmax 回顾一下最初的attention： \(O&#x3D;softmax(QK^T)V\) 先不考虑融合算子，对于原始的数学公式来说就是两次matmul+一次softmax。matu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[Attention]FlashAttention&#x2F;Ring-Attention&#x2F;混合序列并行的统一原理">
+<meta property="og:url" content="https://wyc-ruiker.github.io/2025/03/23/zhihu/[Attention]FlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="Reku">
+<meta property="og:description" content="原文链接: https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;1887098218866794901  个人学习记录。这三个东西本质的原理都差不多，就是attention怎么沿着序列维度切。 online softmax 回顾一下最初的attention： \(O&#x3D;softmax(QK^T)V\) 先不考虑融合算子，对于原始的数学公式来说就是两次matmul+一次softmax。matu">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%5BAttention%5DFlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86_img_0.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%5BAttention%5DFlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86_img_1.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%5BAttention%5DFlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86_img_2.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%5BAttention%5DFlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86_img_3.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%5BAttention%5DFlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86_img_4.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%5BAttention%5DFlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86_img_5.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%5BAttention%5DFlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86_img_6.jpg">
+<meta property="og:image" content="https://wyc-ruiker.github.io/zhihu/images/%5BAttention%5DFlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86_img_7.jpg">
+<meta property="article:published_time" content="2025-03-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-19T16:18:38.576Z">
+<meta property="article:author" content="Reku">
+<meta property="article:tag" content="zhihu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wyc-ruiker.github.io/zhihu/images/%5BAttention%5DFlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86_img_0.jpg">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>[Attention]FlashAttention/Ring-Attention/混合序列并行的统一原理</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="Reku" type="application/atom+xml" />
+    
+	<!-- mathjax -->
+	
+		<script>
+		MathJax = {
+			tex: {
+				inlineMath: [['$', '$'], ['\\(', '\\)']],
+				displayMath: [['$$', '$$'], ['\\[', '\\]']],
+				processEscapes: true,
+				processEnvironments: true
+			},
+			options: {
+				skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+			}
+		};
+		</script>
+		<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2025/06/10/zhihu/LLM-RL%E5%85%A5%E9%97%A8/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/03/11/zhihu/%E5%93%81%E9%89%B4%E4%B8%80%E4%B8%8BOpenRLHF%E5%92%8Cverl%E7%9A%84%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wyc-ruiker.github.io/2025/03/23/zhihu/[Attention]FlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wyc-ruiker.github.io/2025/03/23/zhihu/[Attention]FlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86/&text=[Attention]FlashAttention/Ring-Attention/混合序列并行的统一原理"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wyc-ruiker.github.io/2025/03/23/zhihu/[Attention]FlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86/&title=[Attention]FlashAttention/Ring-Attention/混合序列并行的统一原理"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyc-ruiker.github.io/2025/03/23/zhihu/[Attention]FlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86/&is_video=false&description=[Attention]FlashAttention/Ring-Attention/混合序列并行的统一原理"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=[Attention]FlashAttention/Ring-Attention/混合序列并行的统一原理&body=Check out this article: https://wyc-ruiker.github.io/2025/03/23/zhihu/[Attention]FlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wyc-ruiker.github.io/2025/03/23/zhihu/[Attention]FlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86/&title=[Attention]FlashAttention/Ring-Attention/混合序列并行的统一原理"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wyc-ruiker.github.io/2025/03/23/zhihu/[Attention]FlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86/&title=[Attention]FlashAttention/Ring-Attention/混合序列并行的统一原理"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wyc-ruiker.github.io/2025/03/23/zhihu/[Attention]FlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86/&title=[Attention]FlashAttention/Ring-Attention/混合序列并行的统一原理"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wyc-ruiker.github.io/2025/03/23/zhihu/[Attention]FlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86/&title=[Attention]FlashAttention/Ring-Attention/混合序列并行的统一原理"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wyc-ruiker.github.io/2025/03/23/zhihu/[Attention]FlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86/&name=[Attention]FlashAttention/Ring-Attention/混合序列并行的统一原理&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wyc-ruiker.github.io/2025/03/23/zhihu/[Attention]FlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86/&t=[Attention]FlashAttention/Ring-Attention/混合序列并行的统一原理"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#online-softmax"><span class="toc-number">1.</span> <span class="toc-text">online softmax</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#online-attention"><span class="toc-number">2.</span> <span class="toc-text">online attention</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C"><span class="toc-number">3.</span> <span class="toc-text">序列并行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C"><span class="toc-number">4.</span> <span class="toc-text">混合序列并行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        [Attention]FlashAttention/Ring-Attention/混合序列并行的统一原理
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Reku</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-03-22T16:00:00.000Z" class="dt-published" itemprop="datePublished">2025-03-23</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/zhihu/">zhihu</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/zhihu/" rel="tag">zhihu</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <blockquote>
+<p>原文链接: https://zhuanlan.zhihu.com/p/1887098218866794901</p>
+</blockquote>
+<p>个人学习记录。这三个东西本质的原理都差不多，就是<strong>attention怎么沿着序列维度切</strong>。</p>
+<h2 id="online-softmax">online softmax</h2>
+<p>回顾一下最初的attention：</p>
+<p><span class="math inline">\(O=softmax(QK^T)V\)</span></p>
+<p>先不考虑融合算子，对于原始的数学公式来说就是两次matmul+一次softmax。matul是最容易优化的，因为良好的数学定义，这个东西可以横着切也可以竖着切也可以分成一小块一小块的，无论是算子优化还是做分布式切分（其实算子优化就是在device内做并行，分布式切分就是在device间做并行），都非常方便。</p>
+<figure>
+<img src="/zhihu/images/%5BAttention%5DFlashAttention_Ring-Attention_混合序列并行的统一原理_img_0.jpg" alt="https://www.cs.sfu.ca/~ashriram/Courses/CS7ARCH/hw/hw4.html"><figcaption aria-hidden="true">https://www.cs.sfu.ca/~ashriram/Courses/CS7ARCH/hw/hw4.html</figcaption>
+</figure>
+<p>但是softmax就比较麻烦：</p>
+<p><span class="math display">\[softmax(x_i)=\frac{e^{x_i-m}}{\sum^{N}_{j=1}e^{x_j-m}},m=\underset{1\leq i \leq N}{\max}(x_j)\]</span></p>
+<p>如果用最naive的方式去算softmax，需要遍历三遍。第一次遍历求一下m，第二次遍历把分母求出来，第三次把每个元素求出来。如果基于这个计算模式去做分布式，整个的效率会特别的低。因为每次遍历都需要拿到整个N^2大小的矩阵，对于算子来说会频繁的做IO，对于分布式就是频繁的通信。</p>
+<p>但指数函数有个很棒的性质，可以只遍历一次数据，就同时得到m和分母：</p>
+<p><span class="math display">\[e^{x_j-m_{i-1}}e^{m_{i-1}-m_i}=e^{x_j-m_{i-1}+m_{i-1}-m_i}=e^{x_j-m_i}\]</span></p>
+<p>通过上面的式子，不停的基于新元素，更新分母和m即可。</p>
+<p>不仅如此，我们也基于这个性质把softmax分成两块去计算，用到的符号如下：</p>
+<p><span class="math inline">\(A_l\)</span> 左边一半的softmax分子，<span class="math inline">\(A_r\)</span> 右边一半的softmax分子，都是个向量</p>
+<p><span class="math inline">\(B_l\)</span> 左边一半的softmax分母，<span class="math inline">\(B_r\)</span> 右边一半的softmax分母，都是个数值</p>
+<p><span class="math inline">\(m_l\)</span> 左边一半的最大 xx ，<span class="math inline">\(m_r\)</span> 右边一半的最大 xx，很容易得到全局 xx 的最大值 mm</p>
+<p><span class="math display">\[softmax_{全局}=\frac{A_{全局}}{B_{全局}}=\frac{[e^{m_l-m}A_l,e^{m_r-m}A_r]}{e^{m_l-m}B_l+e^{m_r-m}B_r}\]</span></p>
+<p>通过这种方式，打开了softmax的并行空间。</p>
+<h2 id="online-attention">online attention</h2>
+<p>再回头看attention的公式，实际上他的物理意义在于基于QK矩阵乘的值，对V的每一列做一下线性组合。</p>
+<p><span class="math display">\[O=softmax(QK^T)V\]</span></p>
+<p>把线性组合展开一下，对于O的每一行来说：</p>
+<p><span class="math display">\[o=\sum_{i=1}^{N}(\frac{e^{x_i-m}}{\sum^{N}_{j=1}e^{x_j-m}} \times v_i)\]</span></p>
+<p>把这一步也分成两块：</p>
+<p><span class="math display">\[o_l=\frac{A_l\cdot v_l}{B_l},o_r=\frac{A_r \cdot v_r}{B_r}\]</span></p>
+<p>左右两边合并的方式如下，符号含义和softmax的合并一致：</p>
+<p><span class="math display">\[o=\frac{B_le^{m_l-m}o_l+B_re^{m_r-m}o_r}{B_le^{m_l-m}+B_re^{m_r-m}}\]</span></p>
+<p>结合上面softmax的并行方式，整个attention的计算也可以像matmul一样做纵向的切分了。</p>
+<p>再对着图理解一下，切Q的话，相对容易：</p>
+<p><img src="/zhihu/images/%5BAttention%5DFlashAttention_Ring-Attention_混合序列并行的统一原理_img_1.jpg"></p>
+<p>切KV，经过我们上面的推导，也是可以合并起来的：</p>
+<p><img src="/zhihu/images/%5BAttention%5DFlashAttention_Ring-Attention_混合序列并行的统一原理_img_2.jpg"></p>
+<p>RingAttention/FlashAttention正是基于上面的机制，实现了attention算子的device内并行和device间并行:</p>
+<ol type="1">
+<li><p>device间的并行可以减少N（seq长度）对于训练的限制，将训练拓展到更长的序列上去。对于RA来说，不同设备分别做一下seq切分后的attention，然后通过send/recv，在下一个卡上完成对上一个attention的合并。</p></li>
+<li><p>对于FA来说，就是利用切块去减小仿存，从而拿到融合算子的性能收益。</p></li>
+</ol>
+<p>这里突然想到一个手撕代码题，用线段树做区间softmax/attention，想用的大哥找我交一下版权费:)</p>
+<h2 id="序列并行">序列并行</h2>
+<p>说混合序列并行前，需要先了解一下Megatron和DeepSpeed两大巨头最开始是怎么做序列并行的。</p>
+<figure>
+<img src="/zhihu/images/%5BAttention%5DFlashAttention_Ring-Attention_混合序列并行的统一原理_img_3.jpg" alt="Megatron"><figcaption aria-hidden="true">Megatron</figcaption>
+</figure>
+<p>Megatron最开始的seq并行相对来说比较简单，transformer没切tp的地方都是element wise的。所以可以把tp的allreduce改成reducescatter，直接把N分到不同的卡上去做element wise的操作。序列并行转tensor并行的时候需要allgather，tensor并行转序列并行的时候需要reducescatter。这个方法的优点就是简单，缺点就是通信量比较大，而且序列并行的通信域被TP域的限制住，拓展不了特别大。</p>
+<figure>
+<img src="/zhihu/images/%5BAttention%5DFlashAttention_Ring-Attention_混合序列并行的统一原理_img_4.jpg" alt="deepspeed ulysses"><figcaption aria-hidden="true">deepspeed ulysses</figcaption>
+</figure>
+<p>DeepSpeed采用的方式叫做deepspeed ulysses。核心点就是除了attention之外的部分（rmsnorm、matmul）切N都比较方便，只有attention不好切N，切head比较方便。那就是在进出attention的时候做一下切N和切head的转换，这里转换的方式使用了alltoall的通信源语，就是个分布式转置：</p>
+<figure>
+<img src="/zhihu/images/%5BAttention%5DFlashAttention_Ring-Attention_混合序列并行的统一原理_img_5.jpg" alt="来自www.mindspore.cn"><figcaption aria-hidden="true">来自www.mindspore.cn</figcaption>
+</figure>
+<p>deepspeed ulysses的优点是通信量，成比例增加序列长度和device数量的时候，可以维持一个稳定的通信量。但和megatron的方式类似，切分数量被head num限制住，没法把序列切的特别小。</p>
+<h2 id="混合序列并行">混合序列并行</h2>
+<p>实际上megatron sp和deepspeed ulysses都可以叠加ring-attention，把attention做进一步细分。megatron官网给了一个tp2cp2的例子，cp和tp共用四张卡，可以发现同一个序列的attention被切到两个部分了，这里的合并就是借助ring-attention的方式：</p>
+<figure>
+<img src="/zhihu/images/%5BAttention%5DFlashAttention_Ring-Attention_混合序列并行的统一原理_img_6.jpg" alt="Megatron Context Parallelism"><figcaption aria-hidden="true">Megatron Context Parallelism</figcaption>
+</figure>
+<p>和deepspeed ulysses的结合思路也类似，在attention部分进一步切分。这样就可以解除head num对deepspeed ulysses的约束，可以把序列进一步细分。</p>
+<figure>
+<img src="/zhihu/images/%5BAttention%5DFlashAttention_Ring-Attention_混合序列并行的统一原理_img_7.jpg" alt="USP"><figcaption aria-hidden="true">USP</figcaption>
+</figure>
+<p>后面遇到其他并行优化，比如seqpp之类的，就知道attention部分是怎么切分，需要处理些什么了。当然想实现最好的性能还需要非常多的细节。</p>
+<h2 id="参考">参考</h2>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/668888063">DefTruth：[Attention优化][2w字] 原理篇: 从Online-Softmax到FlashAttention V1/V2/V3</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/683714620">朱小霖：ring attention + flash attention：超长上下文之路</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/698031151">方佳瑞：序列并行做大模型训练，你需要知道的六件事</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/4496065391">猛猿：图解大模型训练系列：序列并行2，DeepSpeed Ulysses</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/689067888">方佳瑞：大模型训练之序列并行双雄：DeepSpeed Ulysses &amp; Ring-Attention</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/5502876106">猛猿：图解大模型训练系列：序列并行4，Megatron Context Parallel</a></p>
+<p><a href="https://link.zhihu.com/?target=https%3A//github.com/deepspeedai/DeepSpeed/blob/master/blogs/deepspeed-ulysses/chinese/README.md">DeepSpeed/blogs/deepspeed-ulysses/chinese/README.md at master · deepspeedai/DeepSpeed</a></p>
+<p><a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/2405.07719">USP: A Unified Sequence Parallelism Approach for Long Context Generative AI</a></p>
+<p><a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/2205.05198">Reducing Activation Recomputation in Large Transformer Models</a></p>
+<p><a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/2310.01889">Ring Attention with Blockwise Transformers for Near-Infinite Context</a></p>
+<p><a href="https://link.zhihu.com/?target=https%3A//docs.nvidia.com/megatron-core/developer-guide/latest/api-guide/context_parallel.html">context_parallel package</a></p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#online-softmax"><span class="toc-number">1.</span> <span class="toc-text">online softmax</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#online-attention"><span class="toc-number">2.</span> <span class="toc-text">online attention</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C"><span class="toc-number">3.</span> <span class="toc-text">序列并行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C"><span class="toc-number">4.</span> <span class="toc-text">混合序列并行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wyc-ruiker.github.io/2025/03/23/zhihu/[Attention]FlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wyc-ruiker.github.io/2025/03/23/zhihu/[Attention]FlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86/&text=[Attention]FlashAttention/Ring-Attention/混合序列并行的统一原理"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wyc-ruiker.github.io/2025/03/23/zhihu/[Attention]FlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86/&title=[Attention]FlashAttention/Ring-Attention/混合序列并行的统一原理"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyc-ruiker.github.io/2025/03/23/zhihu/[Attention]FlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86/&is_video=false&description=[Attention]FlashAttention/Ring-Attention/混合序列并行的统一原理"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=[Attention]FlashAttention/Ring-Attention/混合序列并行的统一原理&body=Check out this article: https://wyc-ruiker.github.io/2025/03/23/zhihu/[Attention]FlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wyc-ruiker.github.io/2025/03/23/zhihu/[Attention]FlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86/&title=[Attention]FlashAttention/Ring-Attention/混合序列并行的统一原理"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wyc-ruiker.github.io/2025/03/23/zhihu/[Attention]FlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86/&title=[Attention]FlashAttention/Ring-Attention/混合序列并行的统一原理"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wyc-ruiker.github.io/2025/03/23/zhihu/[Attention]FlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86/&title=[Attention]FlashAttention/Ring-Attention/混合序列并行的统一原理"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wyc-ruiker.github.io/2025/03/23/zhihu/[Attention]FlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86/&title=[Attention]FlashAttention/Ring-Attention/混合序列并行的统一原理"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wyc-ruiker.github.io/2025/03/23/zhihu/[Attention]FlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86/&name=[Attention]FlashAttention/Ring-Attention/混合序列并行的统一原理&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wyc-ruiker.github.io/2025/03/23/zhihu/[Attention]FlashAttention_Ring-Attention_%E6%B7%B7%E5%90%88%E5%BA%8F%E5%88%97%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%BB%9F%E4%B8%80%E5%8E%9F%E7%90%86/&t=[Attention]FlashAttention/Ring-Attention/混合序列并行的统一原理"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    Reku
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'reku';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+<!-- utterances Comments -->
+
+</body>
+</html>

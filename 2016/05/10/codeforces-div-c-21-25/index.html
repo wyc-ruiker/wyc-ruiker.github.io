@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="http:&#x2F;&#x2F;codeforces.com&#x2F;problemset&#x2F;problem&#x2F;459&#x2F;C">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Codeforces Div 2 C 天梯 21——25">
+<meta property="og:url" content="https://wyc-ruiker.github.io/2016/05/10/codeforces-div-c-21-25/index.html">
+<meta property="og:site_name" content="Reku">
+<meta property="og:description" content="http:&#x2F;&#x2F;codeforces.com&#x2F;problemset&#x2F;problem&#x2F;459&#x2F;C">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-05-10T13:42:10.000Z">
+<meta property="article:modified_time" content="2020-06-11T11:14:02.000Z">
+<meta property="article:author" content="Reku">
+<meta property="article:tag" content="并查集">
+<meta property="article:tag" content="acm">
+<meta property="article:tag" content="codeforces">
+<meta property="article:tag" content="构造">
+<meta property="article:tag" content="正难则反">
+<meta property="article:tag" content="二分查找">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Codeforces Div 2 C 天梯 21——25</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="Reku" type="application/atom+xml" />
+    
+	<!-- mathjax -->
+	
+		<script>
+		MathJax = {
+			tex: {
+				inlineMath: [['$', '$'], ['\\(', '\\)']],
+				displayMath: [['$$', '$$'], ['\\[', '\\]']],
+				processEscapes: true,
+				processEnvironments: true
+			},
+			options: {
+				skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+			}
+		};
+		</script>
+		<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2016/05/11/codeforces-div-c-26-30/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2016/05/09/codeforces-div-2-c-16-20/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wyc-ruiker.github.io/2016/05/10/codeforces-div-c-21-25/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wyc-ruiker.github.io/2016/05/10/codeforces-div-c-21-25/&text=Codeforces Div 2 C 天梯 21——25"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wyc-ruiker.github.io/2016/05/10/codeforces-div-c-21-25/&title=Codeforces Div 2 C 天梯 21——25"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyc-ruiker.github.io/2016/05/10/codeforces-div-c-21-25/&is_video=false&description=Codeforces Div 2 C 天梯 21——25"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Codeforces Div 2 C 天梯 21——25&body=Check out this article: https://wyc-ruiker.github.io/2016/05/10/codeforces-div-c-21-25/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wyc-ruiker.github.io/2016/05/10/codeforces-div-c-21-25/&title=Codeforces Div 2 C 天梯 21——25"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wyc-ruiker.github.io/2016/05/10/codeforces-div-c-21-25/&title=Codeforces Div 2 C 天梯 21——25"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wyc-ruiker.github.io/2016/05/10/codeforces-div-c-21-25/&title=Codeforces Div 2 C 天梯 21——25"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wyc-ruiker.github.io/2016/05/10/codeforces-div-c-21-25/&title=Codeforces Div 2 C 天梯 21——25"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wyc-ruiker.github.io/2016/05/10/codeforces-div-c-21-25/&name=Codeforces Div 2 C 天梯 21——25&description=&lt;p&gt;&lt;a href=&#34;http://codeforces.com/problemset/problem/459/C&#34;&gt;http://codeforces.com/problemset/problem/459/C&lt;/a&gt;&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wyc-ruiker.github.io/2016/05/10/codeforces-div-c-21-25/&t=Codeforces Div 2 C 天梯 21——25"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Codeforces Div 2 C 天梯 21——25
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Reku</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2016-05-10T13:42:10.000Z" class="dt-published" itemprop="datePublished">2016-05-10</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/acm/">acm</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/acm/" rel="tag">acm</a>, <a class="p-category" href="/tags/codeforces/" rel="tag">codeforces</a>, <a class="p-category" href="/tags/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/" rel="tag">二分查找</a>, <a class="p-category" href="/tags/%E5%B9%B6%E6%9F%A5%E9%9B%86/" rel="tag">并查集</a>, <a class="p-category" href="/tags/%E6%9E%84%E9%80%A0/" rel="tag">构造</a>, <a class="p-category" href="/tags/%E6%AD%A3%E9%9A%BE%E5%88%99%E5%8F%8D/" rel="tag">正难则反</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p><a target="_blank" rel="noopener" href="http://codeforces.com/problemset/problem/459/C">http://codeforces.com/problemset/problem/459/C</a> <span id="more"></span> 这道题看上去是构造乱搞...这种题我一般都不是很懂... 然后思考了一下，发现没有思考出来，就看了题解...发现十分的巧妙。 一个非常易于理解的事情就是如果n小于k的d次方，那么就一定不会存在答案，如果n≤k的d次方，那么这堆数中一定存在d个数成立。 问题就在于，如何找到这d个数。 题解把这个问题转化为找到前n个d位的k进制数，然后按位输出 因为不会有两个d位数完全相同，所以就不会存在两个人在d天中做同一辆车... 好妙啊... <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">int</span> n,k,d;</span><br><span class="line"><span class="type">int</span> ans[<span class="number">1010</span>][<span class="number">1010</span>]=&#123;&#125;;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	cin&gt;&gt;n&gt;&gt;k&gt;&gt;d;</span><br><span class="line">	<span class="type">int</span> u=<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=d;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(u&gt;=n) <span class="keyword">break</span>;</span><br><span class="line">		u*=k;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(u&lt;n)</span><br><span class="line">	&#123;</span><br><span class="line">		cout&lt;&lt;<span class="number">-1</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>;j&lt;d;j++) ans[i][j]=ans[i<span class="number">-1</span>][j];</span><br><span class="line">		<span class="keyword">if</span>(i!=<span class="number">1</span>)</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j=d<span class="number">-1</span>;j&gt;=<span class="number">0</span>;j--)</span><br><span class="line">		&#123;</span><br><span class="line">			ans[i][j]=(ans[i][j]<span class="number">+1</span>)%k;</span><br><span class="line">			<span class="keyword">if</span>(ans[i][j]!=<span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;d;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>;j&lt;=n;j++)</span><br><span class="line">		&#123;</span><br><span class="line">			cout&lt;&lt;ans[j][i]<span class="number">+1</span>&lt;&lt;<span class="string">&quot; &quot;</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		cout&lt;&lt;endl;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><a target="_blank" rel="noopener" href="http://codeforces.com/problemset/problem/220/A">http://codeforces.com/problemset/problem/220/A</a> 傻逼题 排一下序然后看看有几个和原数组不一样就行了 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">int</span> n;</span><br><span class="line"><span class="type">int</span> a[<span class="number">100010</span>]=&#123;&#125;;</span><br><span class="line"><span class="type">int</span> b[<span class="number">100010</span>]=&#123;&#125;;</span><br><span class="line"><span class="type">int</span> u=<span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">cmp</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> x&lt;y;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	cin&gt;&gt;n;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++) cin&gt;&gt;a[i],b[i]=a[i];</span><br><span class="line">	<span class="built_in">sort</span>(a<span class="number">+1</span>,a+n<span class="number">+1</span>,cmp);</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(a[i]!=b[i]) u++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(u&lt;=<span class="number">2</span>) cout&lt;&lt;<span class="string">&quot;YES&quot;</span>&lt;&lt;endl;</span><br><span class="line">	<span class="keyword">else</span> cout&lt;&lt;<span class="string">&quot;NO&quot;</span>&lt;&lt;endl;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> <a target="_blank" rel="noopener" href="http://codeforces.com/problemset/problem/377/A">http://codeforces.com/problemset/problem/377/A</a> 还是正难则反的思想... 设所有可以走的块数为p 然后先求一个块数为p-k的联通块，然后联通块外的都变成X就行了 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">int</span> n,m,k;</span><br><span class="line"><span class="type">char</span> c[<span class="number">510</span>][<span class="number">510</span>]=&#123;&#125;;</span><br><span class="line"><span class="type">bool</span> v[<span class="number">510</span>][<span class="number">510</span>]=&#123;&#125;;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">pp</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> x,y;</span><br><span class="line">&#125;;</span><br><span class="line">queue&lt;pp&gt; q;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">pa</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> u=<span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> o=<span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> x,y;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>;j&lt;=m;j++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span>(c[i][j]==<span class="string">&#x27;.&#x27;</span>)</span><br><span class="line">			&#123;</span><br><span class="line">				u++;</span><br><span class="line">				x=i;</span><br><span class="line">				y=j;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	pp p;</span><br><span class="line">	p.x=x;</span><br><span class="line">	p.y=y;</span><br><span class="line">	q.<span class="built_in">push</span>(p);</span><br><span class="line">	o++;</span><br><span class="line">	v[x][y]=<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">if</span>(o==u-k) <span class="keyword">return</span>;</span><br><span class="line">	<span class="keyword">while</span>(!q.<span class="built_in">empty</span>())</span><br><span class="line">	&#123;</span><br><span class="line">		p=q.<span class="built_in">front</span>();</span><br><span class="line">		q.<span class="built_in">pop</span>();</span><br><span class="line">		pp t;</span><br><span class="line">		x=p.x;</span><br><span class="line">		y=p.y;</span><br><span class="line">		x++;</span><br><span class="line">		<span class="keyword">if</span>(v[x][y]==<span class="number">0</span>&amp;&amp;c[x][y]==<span class="string">&#x27;.&#x27;</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			t.x=x,t.y=y;</span><br><span class="line">			q.<span class="built_in">push</span>(t);</span><br><span class="line">			o++;</span><br><span class="line">			v[x][y]=<span class="number">1</span>;</span><br><span class="line">			<span class="keyword">if</span>(o==u-k) <span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		x--;</span><br><span class="line">		x--;</span><br><span class="line">		<span class="keyword">if</span>(v[x][y]==<span class="number">0</span>&amp;&amp;c[x][y]==<span class="string">&#x27;.&#x27;</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			t.x=x,t.y=y;</span><br><span class="line">			q.<span class="built_in">push</span>(t);</span><br><span class="line">			o++;</span><br><span class="line">			v[x][y]=<span class="number">1</span>;</span><br><span class="line">			<span class="keyword">if</span>(o==u-k) <span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		x++;</span><br><span class="line">		y++;</span><br><span class="line">		<span class="keyword">if</span>(v[x][y]==<span class="number">0</span>&amp;&amp;c[x][y]==<span class="string">&#x27;.&#x27;</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			t.x=x,t.y=y;</span><br><span class="line">			q.<span class="built_in">push</span>(t);</span><br><span class="line">			o++;</span><br><span class="line">			v[x][y]=<span class="number">1</span>;</span><br><span class="line">			<span class="keyword">if</span>(o==u-k) <span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		y--;</span><br><span class="line">		y--;</span><br><span class="line">		<span class="keyword">if</span>(v[x][y]==<span class="number">0</span>&amp;&amp;c[x][y]==<span class="string">&#x27;.&#x27;</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			t.x=x,t.y=y;</span><br><span class="line">			q.<span class="built_in">push</span>(t);</span><br><span class="line">			o++;</span><br><span class="line">			v[x][y]=<span class="number">1</span>;</span><br><span class="line">			<span class="keyword">if</span>(o==u-k) <span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		y++;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	cin&gt;&gt;n&gt;&gt;m&gt;&gt;k;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>;j&lt;=m;j++)</span><br><span class="line">		&#123;</span><br><span class="line">			cin&gt;&gt;c[i][j];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">pa</span>();</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>;j&lt;=m;j++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span>(c[i][j]==<span class="string">&#x27;.&#x27;</span>&amp;&amp;v[i][j]==<span class="number">0</span>) c[i][j]=<span class="string">&#x27;X&#x27;</span>;</span><br><span class="line">			cout&lt;&lt;c[i][j];</span><br><span class="line">		&#125;</span><br><span class="line">		cout&lt;&lt;endl;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> <a target="_blank" rel="noopener" href="http://codeforces.com/problemset/problem/217/A">http://codeforces.com/problemset/problem/217/A</a> 用并查集，把所有能够互相访问的点放到一个集合中 最后答案就是集合的个数-1 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">int</span> n;</span><br><span class="line"><span class="type">int</span> x[<span class="number">110</span>]=&#123;&#125;;</span><br><span class="line"><span class="type">int</span> y[<span class="number">110</span>]=&#123;&#125;;</span><br><span class="line"><span class="type">int</span> fa[<span class="number">110</span>]=&#123;&#125;;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">ff</span><span class="params">(<span class="type">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(x==fa[x]) <span class="keyword">return</span> x;</span><br><span class="line">	fa[x]=<span class="built_in">ff</span>(fa[x]);</span><br><span class="line">	<span class="keyword">return</span> fa[x];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	cin&gt;&gt;n;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		cin&gt;&gt;x[i]&gt;&gt;y[i];</span><br><span class="line">		fa[i]=i;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>;j&lt;=n;j++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span>(x[i]==x[j]||y[i]==y[j])</span><br><span class="line">			&#123;</span><br><span class="line">				fa[<span class="built_in">ff</span>(i)]=<span class="built_in">ff</span>(j);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="type">int</span> ans=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(fa[i]==i) ans++;</span><br><span class="line">	&#125;</span><br><span class="line">	cout&lt;&lt;ans<span class="number">-1</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> <a target="_blank" rel="noopener" href="http://codeforces.com/problemset/problem/371/C">http://codeforces.com/problemset/problem/371/C</a> 和前两天比赛的一道题好像啊... 就是二分查找验证一下就行了 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">long</span> <span class="type">long</span> nb,ns,nc;</span><br><span class="line"><span class="type">long</span> <span class="type">long</span> b,s,c;</span><br><span class="line"><span class="type">long</span> <span class="type">long</span> pb,ps,pc;</span><br><span class="line"><span class="type">long</span> <span class="type">long</span> r;</span><br><span class="line">string p;</span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">pa</span><span class="params">(<span class="type">long</span> <span class="type">long</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">long</span> <span class="type">long</span> u;</span><br><span class="line">	<span class="type">long</span> <span class="type">long</span> ans=<span class="number">0</span>;</span><br><span class="line">	u=b*x-nb;</span><br><span class="line">	<span class="keyword">if</span>(u&gt;<span class="number">0</span>) ans+=u*pb;</span><br><span class="line">	u=s*x-ns;</span><br><span class="line">	<span class="keyword">if</span>(u&gt;<span class="number">0</span>) ans+=u*ps;</span><br><span class="line">	u=c*x-nc;</span><br><span class="line">	<span class="keyword">if</span>(u&gt;<span class="number">0</span>) ans+=u*pc;</span><br><span class="line">	<span class="keyword">if</span>(ans&gt;r) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	cin&gt;&gt;p;</span><br><span class="line">	cin&gt;&gt;nb&gt;&gt;ns&gt;&gt;nc;</span><br><span class="line">	cin&gt;&gt;pb&gt;&gt;ps&gt;&gt;pc;</span><br><span class="line">	cin&gt;&gt;r;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;p.<span class="built_in">size</span>();i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(p[i]==<span class="string">&#x27;B&#x27;</span>) b++;</span><br><span class="line">		<span class="keyword">if</span>(p[i]==<span class="string">&#x27;S&#x27;</span>) s++;</span><br><span class="line">		<span class="keyword">if</span>(p[i]==<span class="string">&#x27;C&#x27;</span>) c++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="type">long</span> <span class="type">long</span> z,y;</span><br><span class="line">	z=<span class="number">0ll</span>; y=<span class="number">1e13</span>;</span><br><span class="line">	<span class="keyword">while</span>(z&lt;y)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="type">long</span> <span class="type">long</span> mid=(z+y)/<span class="number">2</span><span class="number">+1</span>;</span><br><span class="line">		<span class="keyword">if</span>(<span class="built_in">pa</span>(mid)==<span class="number">1</span>) z=mid;</span><br><span class="line">		<span class="keyword">else</span> y=mid<span class="number">-1</span>; </span><br><span class="line">	&#125;</span><br><span class="line">	cout&lt;&lt;z&lt;&lt;endl;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wyc-ruiker.github.io/2016/05/10/codeforces-div-c-21-25/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wyc-ruiker.github.io/2016/05/10/codeforces-div-c-21-25/&text=Codeforces Div 2 C 天梯 21——25"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wyc-ruiker.github.io/2016/05/10/codeforces-div-c-21-25/&title=Codeforces Div 2 C 天梯 21——25"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyc-ruiker.github.io/2016/05/10/codeforces-div-c-21-25/&is_video=false&description=Codeforces Div 2 C 天梯 21——25"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Codeforces Div 2 C 天梯 21——25&body=Check out this article: https://wyc-ruiker.github.io/2016/05/10/codeforces-div-c-21-25/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wyc-ruiker.github.io/2016/05/10/codeforces-div-c-21-25/&title=Codeforces Div 2 C 天梯 21——25"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wyc-ruiker.github.io/2016/05/10/codeforces-div-c-21-25/&title=Codeforces Div 2 C 天梯 21——25"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wyc-ruiker.github.io/2016/05/10/codeforces-div-c-21-25/&title=Codeforces Div 2 C 天梯 21——25"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wyc-ruiker.github.io/2016/05/10/codeforces-div-c-21-25/&title=Codeforces Div 2 C 天梯 21——25"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wyc-ruiker.github.io/2016/05/10/codeforces-div-c-21-25/&name=Codeforces Div 2 C 天梯 21——25&description=&lt;p&gt;&lt;a href=&#34;http://codeforces.com/problemset/problem/459/C&#34;&gt;http://codeforces.com/problemset/problem/459/C&lt;/a&gt;&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wyc-ruiker.github.io/2016/05/10/codeforces-div-c-21-25/&t=Codeforces Div 2 C 天梯 21——25"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    Reku
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wyc-ruiker">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'reku';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+<!-- utterances Comments -->
+
+</body>
+</html>
